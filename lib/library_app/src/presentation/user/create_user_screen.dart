@@ -53,7 +53,6 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
         Spacer(),
         ElevatedButton(
             onPressed: () {
-              print('등록 수행 서비스에 요청해야함');
               widget.userController.createUser(
                   name: nameTextController.text,
                   address: addressTextController.text,

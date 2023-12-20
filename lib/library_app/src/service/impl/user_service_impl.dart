@@ -8,8 +8,8 @@ class UserServiceImpl implements UserService {
   final DatabaseRepository repository;
 
   @override
-  Future<User> createUser({required User user}) {
- return await repository.createUser();  }
+  Future<User> createUser({required User user})async {
+ return await repository.createUser(user: user);  }
 
   @override
   void deleteUser({required User user}) {

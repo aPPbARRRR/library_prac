@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:path/path.dart' as p;
+
 import 'package:library_manage_app/library_app/src/data/repository/database_repository.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 import 'package:library_manage_app/library_app/src/entity/user.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../entity/book.dart';
 
@@ -18,40 +23,85 @@ class CSVdatabaseRepositoryImpl implements DatabaseRepository {
 
   @override
   Future<List<User>> getUsers() async {
+      final dbFolder = await getApplicationDocumentsDirectory();
+    final File userCSV =  File(p.join(dbFolder.path, 'user.csv'));
+    try {
+      await userCSV.readAsString().then((value) => print(jsonDecode(value)));
+          
+    } catch (e) {
+      throw Exception(e);
+    }
+    
     return mockUserList;
   }
 
-    @override
+  @override
   Future<List<BookLoan>> getBookLoans() async {
-   return [];
+    return [];
   }
-  
+
   @override
   Future<BookLoan> executeLoan({required User user, required Book book}) {
     // TODO: implement executeLoan
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> returnBookLoan({required BookLoan bookLoan}) {
     // TODO: implement returnBookLoan
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<void> saveBackUpData({required List<User> users, required List<Book> books, required List<BookLoan> bookLoans}) {
+  Future<void> saveBackUpData(
+      {required List<User> users,
+      required List<Book> books,
+      required List<BookLoan> bookLoans}) {
     // TODO: implement saveBackUpData
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<User> createUser({required User user}) {
-    // TODO: implement createUser
+  Future<User> createUser({required User user}) async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final File userCSV =  File(p.join(dbFolder.path, 'user.csv'));
+    try {
+      await userCSV.writeAsString(jsonEncode(user.toJson()),
+          mode: FileMode.append);
+          
+    } catch (e) {
+      throw Exception(e);
+    }
+    return user;
+  }
+
+  @override
+  Future<Book> registerBook({required Book book}) {
+    // TODO: implement registerBook
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<User> removeUser({required User user}) {
+    // TODO: implement removeUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<File> saveBackUpDataAsCSV(
+      {required List<User> users,
+      required List<Book> books,
+      required List<BookLoan> bookLoans}) {
+    // TODO: implement saveBackUpDataAsCSV
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> unregisterBook({required Book book}) {
+    // TODO: implement unregisterBook
     throw UnimplementedError();
   }
 }
-
-
 
 List<Book> mockBookList = List.generate(
     5,

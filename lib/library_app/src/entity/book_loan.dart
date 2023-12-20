@@ -6,7 +6,7 @@ part 'book_loan.g.dart'; // json_serializable 설치 확인요
 class BookLoan with _$BookLoan {
 factory BookLoan({
 required String bookName,
-required String userUid,
+required String loanUid,
 required DateTime loanDate,
 required DateTime dueDate,
 required int remainingLoanDays
