@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:library_manage_app/library_app/src/enums/fileter.dart';
 
 import '../../entity/user.dart';
 import '../../service/interface/loan_service.dart';
@@ -11,22 +12,23 @@ import '../../service/interface/user_service.dart';
 class LoanController {
   final UserService userService;
   final LoanService loanService;
-  LoanController({
-    required this.userService,required this.loanService
-  });
+  LoanController({required this.userService, required this.loanService});
 
   List<User>? users;
 
-  Future<void> retrieveUsers () async =>
-    users = await userService.getUsers();
   
 
-  Future refreshUsers ({String? name}) async {
-    if(name != null && name != '') return userService.retrieveUserFromName(name: name);
+  Future refreshUsers({String? name}) async {
     return userService.getUsers();
   }
 
-  void loanRequest () {
-    
-  }
+  Future<List<User>>? retrieveUsers({
+    required List<User> users,
+    required UserSearchFilter searchFilter,
+    SortFilter? sortFilter,
+    String? searchString,
+  }) async =>
+      await userService.retrieveUsers(users: users, searchFilter: searchFilter);
+
+  void loanRequest() {}
 }

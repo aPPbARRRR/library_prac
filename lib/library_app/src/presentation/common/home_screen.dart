@@ -20,7 +20,7 @@ late final LoanController loanController = LoanController(
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: loanController.retrieveUsers(),
+        future: loanController.refreshUsers(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done)
             return LoadingScreen();

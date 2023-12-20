@@ -1,4 +1,5 @@
 import 'package:library_manage_app/library_app/src/data/repository/database_repository.dart';
+import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 import 'package:library_manage_app/library_app/src/entity/user.dart';
 
 import '../../entity/book.dart';
@@ -19,6 +20,11 @@ class CSVdatabaseRepositoryImpl implements DatabaseRepository {
   Future<List<User>> getUsers() async {
     return mockUserList;
   }
+
+  @override
+  Future<List<BookLoan>> getBookLoans() async {
+    return mockLoans;
+  }
 }
 
 List<Book> mockBookList = List.generate(
@@ -38,3 +44,12 @@ List<User> mockUserList = List.generate(
         birthDate: DateTime(2000, 11, 23),
         registrationDate: DateTime(2020, 11, 23),
         loaningBooks: []));
+
+List<BookLoan> mockLoans = List.generate(
+    5,
+    (i) => BookLoan(
+        bookName: i.toString(),
+        userUid: i.toString(),
+        loanDate: DateTime(2023, 12, 23),
+        dueDate: DateTime(2023, 12, 30),
+        remainingLoanDays: 7));

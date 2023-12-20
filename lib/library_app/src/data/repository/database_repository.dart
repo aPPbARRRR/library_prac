@@ -1,4 +1,5 @@
 import '../../entity/book.dart';
+import '../../entity/book_loan.dart';
 import '../../entity/user.dart';
 
 abstract interface class DatabaseRepository {
@@ -9,4 +10,6 @@ abstract interface class DatabaseRepository {
   Future<List<Book>> getBooks();
 
   Future<List<User>> getUsers();
+
+  Future<List<BookLoan>> getBookLoans();
 }
