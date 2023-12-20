@@ -21,6 +21,7 @@ Book _$BookFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Book {
   String get bookName => throw _privateConstructorUsedError;
+  String get bookUid => throw _privateConstructorUsedError;
   DateTime get publishDate => throw _privateConstructorUsedError;
   bool get isBookLoaned => throw _privateConstructorUsedError;
   int? get loanRemainingDays => throw _privateConstructorUsedError;
@@ -37,6 +38,7 @@ abstract class $BookCopyWith<$Res> {
   @useResult
   $Res call(
       {String bookName,
+      String bookUid,
       DateTime publishDate,
       bool isBookLoaned,
       int? loanRemainingDays});
@@ -56,6 +58,7 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
   @override
   $Res call({
     Object? bookName = null,
+    Object? bookUid = null,
     Object? publishDate = null,
     Object? isBookLoaned = null,
     Object? loanRemainingDays = freezed,
@@ -64,6 +67,10 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
       bookName: null == bookName
           ? _value.bookName
           : bookName // ignore: cast_nullable_to_non_nullable
+              as String,
+      bookUid: null == bookUid
+          ? _value.bookUid
+          : bookUid // ignore: cast_nullable_to_non_nullable
               as String,
       publishDate: null == publishDate
           ? _value.publishDate
@@ -90,6 +97,7 @@ abstract class _$$BookImplCopyWith<$Res> implements $BookCopyWith<$Res> {
   @useResult
   $Res call(
       {String bookName,
+      String bookUid,
       DateTime publishDate,
       bool isBookLoaned,
       int? loanRemainingDays});
@@ -106,6 +114,7 @@ class __$$BookImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? bookName = null,
+    Object? bookUid = null,
     Object? publishDate = null,
     Object? isBookLoaned = null,
     Object? loanRemainingDays = freezed,
@@ -114,6 +123,10 @@ class __$$BookImplCopyWithImpl<$Res>
       bookName: null == bookName
           ? _value.bookName
           : bookName // ignore: cast_nullable_to_non_nullable
+              as String,
+      bookUid: null == bookUid
+          ? _value.bookUid
+          : bookUid // ignore: cast_nullable_to_non_nullable
               as String,
       publishDate: null == publishDate
           ? _value.publishDate
@@ -136,6 +149,7 @@ class __$$BookImplCopyWithImpl<$Res>
 class _$BookImpl implements _Book {
   _$BookImpl(
       {required this.bookName,
+      required this.bookUid,
       required this.publishDate,
       required this.isBookLoaned,
       this.loanRemainingDays});
@@ -146,6 +160,8 @@ class _$BookImpl implements _Book {
   @override
   final String bookName;
   @override
+  final String bookUid;
+  @override
   final DateTime publishDate;
   @override
   final bool isBookLoaned;
@@ -154,7 +170,7 @@ class _$BookImpl implements _Book {
 
   @override
   String toString() {
-    return 'Book(bookName: $bookName, publishDate: $publishDate, isBookLoaned: $isBookLoaned, loanRemainingDays: $loanRemainingDays)';
+    return 'Book(bookName: $bookName, bookUid: $bookUid, publishDate: $publishDate, isBookLoaned: $isBookLoaned, loanRemainingDays: $loanRemainingDays)';
   }
 
   @override
@@ -164,6 +180,7 @@ class _$BookImpl implements _Book {
             other is _$BookImpl &&
             (identical(other.bookName, bookName) ||
                 other.bookName == bookName) &&
+            (identical(other.bookUid, bookUid) || other.bookUid == bookUid) &&
             (identical(other.publishDate, publishDate) ||
                 other.publishDate == publishDate) &&
             (identical(other.isBookLoaned, isBookLoaned) ||
@@ -174,8 +191,8 @@ class _$BookImpl implements _Book {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, bookName, publishDate, isBookLoaned, loanRemainingDays);
+  int get hashCode => Object.hash(runtimeType, bookName, bookUid, publishDate,
+      isBookLoaned, loanRemainingDays);
 
   @JsonKey(ignore: true)
   @override
@@ -194,6 +211,7 @@ class _$BookImpl implements _Book {
 abstract class _Book implements Book {
   factory _Book(
       {required final String bookName,
+      required final String bookUid,
       required final DateTime publishDate,
       required final bool isBookLoaned,
       final int? loanRemainingDays}) = _$BookImpl;
@@ -202,6 +220,8 @@ abstract class _Book implements Book {
 
   @override
   String get bookName;
+  @override
+  String get bookUid;
   @override
   DateTime get publishDate;
   @override

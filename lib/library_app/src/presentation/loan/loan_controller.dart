@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:library_manage_app/library_app/src/service/interface/book_service.dart';
 
+import '../../entity/book.dart';
 import '../../entity/user.dart';
 import '../../service/interface/loan_service.dart';
 import '../../service/interface/user_service.dart';
@@ -11,22 +13,37 @@ import '../../service/interface/user_service.dart';
 class LoanController {
   final UserService userService;
   final LoanService loanService;
-  LoanController({
-    required this.userService,required this.loanService
-  });
+  final BookService bookService;
+  LoanController(
+      {required this.userService,
+      required this.loanService,
+      required this.bookService});
 
   List<User>? users;
+  List<Book>? books;
 
-  Future<void> retrieveUsers () async =>
-    users = await userService.getUsers();
-  
+  Future<void> retrieveUsers() async => users = await userService.getUsers();
 
-  Future refreshUsers ({String? name}) async {
-    if(name != null && name != '') return userService.retrieveUserFromName(name: name);
+  Future<void> retrieveBooks() async => books = await bookService.getBooks();
+
+  Future getUsers() async {
     return userService.getUsers();
   }
 
-  void loanRequest () {
-    
+  Future getBooks() async {
+    return bookService.getBooks();
   }
+  
+
+  List<User> retrieveUserFromName({String? name}) {
+    return userService.retrieveUserFromName(
+        users: this.users ?? [], name: name ?? '');
+  }
+
+  List<Book> retrieveBooksFromName({String? bookName}) {
+    return bookService.retrieveBooksFromName(
+        books: this.books ?? [], bookName: bookName ?? '');
+  }
+
+  void loanRequest() {}
 }

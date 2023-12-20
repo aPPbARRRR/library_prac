@@ -1,4 +1,5 @@
 import 'package:library_manage_app/library_app/src/data/repository/database_repository.dart';
+import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 import 'package:library_manage_app/library_app/src/entity/user.dart';
 
 import '../../entity/book.dart';
@@ -19,12 +20,44 @@ class CSVdatabaseRepositoryImpl implements DatabaseRepository {
   Future<List<User>> getUsers() async {
     return mockUserList;
   }
+
+    @override
+  Future<List<BookLoan>> getBookLoans() async {
+   return [];
+  }
+  
+  @override
+  Future<BookLoan> executeLoan({required User user, required Book book}) {
+    // TODO: implement executeLoan
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> returnBookLoan({required BookLoan bookLoan}) {
+    // TODO: implement returnBookLoan
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> saveBackUpData({required List<User> users, required List<Book> books, required List<BookLoan> bookLoans}) {
+    // TODO: implement saveBackUpData
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<User> createUser({required User user}) {
+    // TODO: implement createUser
+    throw UnimplementedError();
+  }
 }
+
+
 
 List<Book> mockBookList = List.generate(
     5,
     (i) => Book(
         bookName: i.toString(),
+        bookUid: i.toString(),
         publishDate: DateTime(2023, 10, 5),
         isBookLoaned: false));
 

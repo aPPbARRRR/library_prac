@@ -1,12 +1,15 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/search_screen.dart';
-import 'package:library_manage_app/library_app/src/presentation/loan/loan_controller.dart';
+import 'package:library_manage_app/library_app/src/presentation/loan/loan_execute_screen.dart';
+import 'package:library_manage_app/library_app/src/presentation/loan/loan_return_screen.dart';
 
-import '../../entity/book.dart';
-import '../../entity/user.dart';
+import 'loan_controller.dart';
 
 class LoanManageScreen extends StatefulWidget {
-  const LoanManageScreen({super.key, required this.loanController});
+  const LoanManageScreen({
+    Key? key,
+    required this.loanController,
+  }) : super(key: key);
   final LoanController loanController;
 
   @override
@@ -14,40 +17,39 @@ class LoanManageScreen extends StatefulWidget {
 }
 
 class _LoanManageScreenState extends State<LoanManageScreen> {
-  User? user;
-  Book? book;
+  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            
-             GestureDetector(
-              onTap: ()async {
-                user = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen(loanController: widget.loanController)));
-                setState(() {
-                  
-                });
-              }, // 회원 검색으로
-              child: Container(
-                child: Center(child: Text(user?.name?? '회원을 선택해주세요.'),),
-              )),
-              GestureDetector(
-              onTap: (){}, // 책 검색으로
-              child: Container(
-                child: Center(child: Text(book?.bookName?? '책을 선택해주세요.'),),
-              )),
-              ElevatedButton(onPressed: (){
-      
-              }, child: Text('대출수행'))
-            
-          
-          ],
-        ),
+        child: Scaffold(
+      appBar: AppBar(title: Text(currentPageIndex == 0 ? '대출 실행' : '반납 실행'),),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        indicatorColor: Colors.amber,
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            icon: Icon(Icons.output),
+            label: '대출',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.input),
+            label: '반납',
+          ),
+         
+        ],
       ),
+       body:[LoanExecuteScreen(loanController: widget.loanController),
+       LoanReturnScreen()
+       ][currentPageIndex],
+
+      ),
+     
     );
   }
 }

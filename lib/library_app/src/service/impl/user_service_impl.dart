@@ -8,9 +8,8 @@ class UserServiceImpl implements UserService {
   final DatabaseRepository repository;
 
   @override
-  void createUser({required User user}) {
-    // TODO: implement createUser
-  }
+  Future<User> createUser({required User user}) {
+ return await repository.createUser();  }
 
   @override
   void deleteUser({required User user}) {
@@ -26,12 +25,10 @@ class UserServiceImpl implements UserService {
 
   @override
   void updateUser({required User user}) {}
-  
-  @override
-  Future<List<User>> retrieveUserFromName({required String name})  =>
-      getUsers().then(
-          (users) => users.where((user) => user.name.contains(name)).toList());
-}
 
-@override
-void updateUser({required User user}) {}
+  @override
+  List<User> retrieveUserFromName(
+          {required List<User> users, required String name}) =>
+      users.where((user) => user.name.contains(name)).toList();
+
+}

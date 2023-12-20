@@ -7,6 +7,7 @@ part 'book.g.dart';
 class Book with _$Book {
 factory Book({
 required   String bookName,
+required String bookUid,
   required DateTime publishDate,
   required bool isBookLoaned,
   int? loanRemainingDays,

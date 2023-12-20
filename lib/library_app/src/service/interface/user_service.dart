@@ -14,5 +14,5 @@ abstract interface class UserService {
   Future<List<User>> getUsers();
 
   // 회원 이름으로 검색
-  Future<List<User>> retrieveUserFromName({required String name});
+ List<User> retrieveUserFromName({required List<User> users, required String name});
 }

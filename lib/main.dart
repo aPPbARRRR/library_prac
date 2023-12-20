@@ -7,11 +7,11 @@ void main() {
   // db에 crud 하는 시점은 백업이 수행되는 시점임. 항상 통으로 백업 진행.
   // 앱 성능 봐서 결정 -> 모든 task 수행시 백업을 진행 || 요청시에만 백업을 진행
 
-  runApp(const MyApp());
+  runApp(const LibraryApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class LibraryApp extends StatelessWidget {
+  const LibraryApp({super.key});
 
   @override
   Widget build(BuildContext context) {
