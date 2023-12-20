@@ -37,6 +37,7 @@ class CSVdatabaseRepositoryImpl implements DatabaseRepository {
 
   @override
   Future<List<BookLoan>> getBookLoans() async {
+<<<<<<< HEAD
     return [];
   }
 
@@ -100,6 +101,9 @@ class CSVdatabaseRepositoryImpl implements DatabaseRepository {
   Future<void> unregisterBook({required Book book}) {
     // TODO: implement unregisterBook
     throw UnimplementedError();
+=======
+    return mockLoans;
+>>>>>>> main
   }
 }
 
@@ -121,3 +125,12 @@ List<User> mockUserList = List.generate(
         birthDate: DateTime(2000, 11, 23),
         registrationDate: DateTime(2020, 11, 23),
         loaningBooks: []));
+
+List<BookLoan> mockLoans = List.generate(
+    5,
+    (i) => BookLoan(
+        bookName: i.toString(),
+        userUid: i.toString(),
+        loanDate: DateTime(2023, 12, 23),
+        dueDate: DateTime(2023, 12, 30),
+        remainingLoanDays: 7));

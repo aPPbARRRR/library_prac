@@ -27,9 +27,14 @@ class LoanServiceImpl implements LoanService {
   }
 
   @override
+<<<<<<< HEAD
   Future<List<BookLoan>> getAllLoans() async {
     List<BookLoan> allLoans = await repository.getBookLoans();
     allLoans.sort((a, b) => a.remainingLoanDays.compareTo(b.remainingLoanDays)); // 대출기간 짧은 대출이 앞으로 가게 반환함.
     return allLoans;
+=======
+  Future<List<BookLoan>> getbookLoans() {
+   return repository.getBookLoans();
+>>>>>>> main
   }
 }

@@ -34,8 +34,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
+<<<<<<< HEAD
         future: Future.wait(
             [loanController.retrieveBooks(), loanController.retrieveUsers()]),
+=======
+        future: loanController.refreshUsers(),
+>>>>>>> main
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done)
             return LoadingScreen();

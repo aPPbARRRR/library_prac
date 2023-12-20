@@ -1,6 +1,7 @@
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 
 import '../../entity/book.dart';
+import '../../entity/book_loan.dart';
 import '../../entity/user.dart';
 
 abstract interface class LoanService {
@@ -13,7 +14,12 @@ abstract interface class LoanService {
   // 대출 연장 수행
   void extendLoan({required Book book});
   
+<<<<<<< HEAD
   // 모든 대출 목록 반환
   Future<List<BookLoan>> getAllLoans ();
   
+=======
+  // 대출 목록 반환
+  Future<List<BookLoan>> getbookLoans ();
+>>>>>>> main
 }

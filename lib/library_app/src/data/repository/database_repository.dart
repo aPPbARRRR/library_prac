@@ -14,6 +14,7 @@ abstract interface class DatabaseRepository {
   // 도서관 전체 회원 목록 반환
   Future<List<User>> getUsers();
 
+<<<<<<< HEAD
   // 도서관 전체 대출 목록 반환
   Future<List<BookLoan>> getBookLoans();
 
@@ -41,3 +42,7 @@ abstract interface class DatabaseRepository {
       required List<Book> books,
       required List<BookLoan> bookLoans});
 }
+=======
+  Future<List<BookLoan>> getBookLoans();
+}
+>>>>>>> main
