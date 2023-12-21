@@ -14,6 +14,7 @@ class User with _$User {
       required int phoneNum,
       required DateTime birthDate,
       required DateTime registrationDate,
-      required List<Book> loaningBooks}) = _User;
+      @Default([]) List<Book> loaningBooks}) = _User;
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
+

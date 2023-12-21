@@ -18,6 +18,7 @@ class UserTable extends Table {
   IntColumn get phoneNum => integer()();
   DateTimeColumn get birthDate => dateTime()();
   DateTimeColumn get resistrationDate => dateTime()();
+  
 }
 
 class BookTable extends Table {

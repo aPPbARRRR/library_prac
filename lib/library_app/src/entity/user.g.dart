@@ -13,9 +13,10 @@ _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
       phoneNum: json['phoneNum'] as int,
       birthDate: DateTime.parse(json['birthDate'] as String),
       registrationDate: DateTime.parse(json['registrationDate'] as String),
-      loaningBooks: (json['loaningBooks'] as List<dynamic>)
-          .map((e) => Book.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      loaningBooks: (json['loaningBooks'] as List<dynamic>?)
+              ?.map((e) => Book.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>

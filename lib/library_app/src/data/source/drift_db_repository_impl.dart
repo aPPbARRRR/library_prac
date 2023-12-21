@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
@@ -8,35 +9,23 @@ import 'package:library_manage_app/library_app/src/entity/book.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 import 'package:library_manage_app/library_app/src/entity/user.dart';
 import 'package:drift/drift.dart' as d;
+import 'package:library_manage_app/library_app/src/entity/user_extention.dart';
 
 class DriftDBRepositoryImpl implements DatabaseRepository {
   AppDatabase db = AppDatabase();
+
   @override
   Future<User> createUser({required User user}) async {
-    var result = await db.createUser(UserTableCompanion(
-        userUid: d.Value(user.userUid),
-        name: d.Value(user.name),
-        address: d.Value(user.address),
-        birthDate: d.Value(user.birthDate),
-        phoneNum: d.Value(user.phoneNum),
-        resistrationDate: d.Value(user.registrationDate)));
-
-    List<UserTableData> res =
-        await db.getUser(user.userUid); // uid 일치하면 모두 같은 유저이므로 [0]만 건지면 됨.
-    UserTableData userTableData = res[0];
-
-    // dto 만들 필요 없이 바로 매핑...?
-    user = User(
-        userUid: userTableData.userUid,
-        name: userTableData.name,
-        address: userTableData.address,
-        phoneNum: userTableData.phoneNum,
-        birthDate: userTableData.birthDate,
-        registrationDate: userTableData.resistrationDate,
-        loaningBooks: []);
-
-    return user;
-    // throw UnimplementedError();
+    UserTableData? data;
+    var result = await db.createUser(user.toTableCompanion());
+    if (result == null)
+      throw Exception('repository / createUser / result : Failed');
+    await db.getUser(user.userUid).then((value) => value.length < 1
+        ? throw Exception('repository / createUser / getUser : Failed'): data = value[0]);
+        print(data);
+        print(data!.toJson()['birthDate'].runtimeType);
+        print(User.fromJson(data!.toJson()));
+    throw Exception('repository / createUser / ? : Failed');
   }
 
   @override

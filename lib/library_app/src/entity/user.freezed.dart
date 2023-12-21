@@ -180,7 +180,7 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
       required this.phoneNum,
       required this.birthDate,
       required this.registrationDate,
-      required final List<Book> loaningBooks})
+      final List<Book> loaningBooks = const []})
       : _loaningBooks = loaningBooks;
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
@@ -200,6 +200,7 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
   final DateTime registrationDate;
   final List<Book> _loaningBooks;
   @override
+  @JsonKey()
   List<Book> get loaningBooks {
     if (_loaningBooks is EqualUnmodifiableListView) return _loaningBooks;
     // ignore: implicit_dynamic_type
@@ -277,7 +278,7 @@ abstract class _User implements User {
       required final int phoneNum,
       required final DateTime birthDate,
       required final DateTime registrationDate,
-      required final List<Book> loaningBooks}) = _$UserImpl;
+      final List<Book> loaningBooks}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 
