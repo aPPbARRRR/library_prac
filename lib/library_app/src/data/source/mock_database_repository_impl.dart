@@ -16,17 +16,17 @@ class MockDatabaseRepositoryImpl implements DatabaseRepository {
     return user;
   }
 
-  @override
-  Future<BookLoan> executeLoan({required User user, required Book book}) async {
-    BookLoan newLoan = BookLoan(
-        bookName: book.bookName,
-        loanUid: user.userUid,
-        loanDate: DateTime.now(),
-        dueDate: DateTime.now().add(Duration(days: 14)),
-        remainingLoanDays: 14);
-    mockLoanDB.add(newLoan);
-    return newLoan;
-  }
+  // @override
+  // Future<BookLoan>? executeLoan({required User user, required Book book}) async {
+  //   BookLoan newLoan = BookLoan(
+  //       bookName: book.bookName,
+  //       loanUid: user.userUid,
+  //       loanDate: DateTime.now(),
+  //       dueDate: DateTime.now().add(Duration(days: 14)),
+  //       remainingLoanDays: 14);
+  //   mockLoanDB.add(newLoan);
+  //   return newLoan;
+  // }
 
   @override
   Future<List<BookLoan>> getBookLoans() async {

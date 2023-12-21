@@ -21,7 +21,6 @@ class BookServiceImpl implements BookService {
 
   @override
   Future<List<Book>> getBooks() async {
-    await Future.delayed(Duration(seconds: 2));
     return await repository.getBooks();
   }
   

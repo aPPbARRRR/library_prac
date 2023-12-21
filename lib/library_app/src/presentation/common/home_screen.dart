@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/data/repository/database_repository.dart';
+import 'package:library_manage_app/library_app/src/data/source/drift_db_repository_impl.dart';
 import 'package:library_manage_app/library_app/src/data/source/mock_database_repository_impl.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/loading_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/loan/loan_execute_screen.dart';
@@ -19,7 +20,8 @@ import '../user/user_manage_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
-  final DatabaseRepository repository = MockDatabaseRepositoryImpl();
+  // final DatabaseRepository repository = MockDatabaseRepositoryImpl();
+  final DatabaseRepository repository = DriftDBRepositoryImpl();
   late final BookService bookService = BookServiceImpl(repository: repository);
   late final UserService userService = UserServiceImpl(repository: repository);
   late final LoanService loanService = LoanServiceImpl(repository: repository);

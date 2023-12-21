@@ -18,7 +18,7 @@ abstract interface class DatabaseRepository {
   Future<List<BookLoan>> getBookLoans();
 
   // 대출 실행시 데이터베이스에 저장 후 대출모델로 반환
-  Future<BookLoan> executeLoan({required User user, required Book book});
+  // Future<BookLoan> executeLoan({required User user, required Book book});
 
   // 반납시 데이터베이스에 저장
   Future<void> returnBookLoan({required BookLoan bookLoan});

@@ -18,7 +18,6 @@ final UserViewController controller;
           Text('유저 싱글 뷰. 유저 정보, 유저 삭제, 유저 정보 수정 등 제공'),
           ElevatedButton(onPressed: ()async {
             await controller.removeUser(user);
-            
             Navigator.pop(context);
           }, child: Text('회원 삭제'))
         ]),
