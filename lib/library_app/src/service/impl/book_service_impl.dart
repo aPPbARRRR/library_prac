@@ -8,9 +8,8 @@ class BookServiceImpl implements BookService {
 
   final DatabaseRepository repository;
   @override
-  Future<void> createBook({required Book book}) {
-    print('등록되었심');
-    throw UnimplementedError();
+  Future<Book> resisterBook({required Book book})async {
+ return await repository.resisterBook(book: book);  
   }
 
   @override

@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/data/repository/database_repository.dart';
 import 'package:library_manage_app/library_app/src/data/source/drift_db_repository_impl.dart';
-import 'package:library_manage_app/library_app/src/data/source/mock_database_repository_impl.dart';
+import 'package:library_manage_app/library_app/src/presentation/book/book_manage_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/loading_screen.dart';
-import 'package:library_manage_app/library_app/src/presentation/loan/loan_execute_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/user/user_view_controller.dart';
 import 'package:library_manage_app/library_app/src/service/impl/book_service_impl.dart';
 import 'package:library_manage_app/library_app/src/service/impl/loan_service_impl.dart';
 import 'package:library_manage_app/library_app/src/service/interface/book_service.dart';
 import 'package:library_manage_app/library_app/src/service/interface/user_service.dart';
 
-import '../../data/source/csv_database_repository_impl.dart';
 import '../../service/impl/user_service_impl.dart';
 import '../../service/interface/loan_service.dart';
-import '../book/book_controller.dart';
+import '../book/book_view_controller.dart';
 import '../loan/loan_view_controller.dart';
 import '../loan/loan_manage_screen.dart';
 import '../user/user_manage_screen.dart';
@@ -35,7 +33,9 @@ class HomeScreen extends StatelessWidget {
       bookService: bookService,
       loanService: loanService);
   late final BookViewController bookController =
-      BookViewController(bookService: bookService);
+      BookViewController(userService: userService,
+      bookService: bookService,
+      loanService: loanService);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,9 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   
                   children: [
-                    ElevatedButton(onPressed: () {}, child: Text('도서관리')),
+                    ElevatedButton(onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => BookManageScreen(bookViewController: bookController)));
+                    }, child: Text('도서관리')),
                     ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -63,7 +65,10 @@ class HomeScreen extends StatelessWidget {
                         },
                         child: Text('회원관리')),
                     ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          // await loanController.retrieveBooks();
+                          await loanController.retrieveUsers();
+                          // await loanController.retrieveLoans();
                           Navigator.push(
                               context,
                               MaterialPageRoute(

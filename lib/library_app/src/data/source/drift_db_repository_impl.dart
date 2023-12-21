@@ -66,9 +66,21 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<Book> registerBook({required Book book}) {
-    // TODO: implement registerBook
-    throw UnimplementedError();
+  Future<Book> registerBook({required Book book}) async {
+  BookTableData? data;
+    var result = await db.into(db.bookTable).insert(book.toTableCompanion());
+    if (result == null)
+      throw Exception('repository / resisterBook / result : Failed');
+    // await db.getUser(user.userUid).then((value) => value.length < 1
+    //     ? throw Exception('repository / createUser / getUser : Failed')
+    //     : data = value[0]);
+    // return User(
+    //     userUid: data!.userUid,
+    //     name: data!.name,
+    //     address: data!.address,
+    //     phoneNum: data!.phoneNum,
+    //     birthDate: data!.birthDate,
+    //     registrationDate: data!.resistrationDate);
   }
 
   @override
