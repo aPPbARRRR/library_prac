@@ -19,7 +19,6 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
   User? user;
   Book? book;
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,9 +40,14 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                 child: Container(
                   child: Center(
                       child: user != null
-                          ? UserTile(user: user!, onTap: (){setState(() {
-                            user = null;
-                          });},)
+                          ? UserTile(
+                              user: user!,
+                              onTap: (_) {
+                                setState(() {
+                                  user = null;
+                                });
+                              },
+                            )
                           : Text('대상 회원을 선택합니다.')),
                 )),
             GestureDetector(
@@ -60,17 +64,17 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                 child: Container(
                   child: Center(
                       child: book != null
-                          ? BookTile(book: book!, onTap: (){setState(() {
+                          ? BookTile(book: book!, onTap: (_){setState(() {
                             book = null;
                           });},)
                           : Text('대상 도서를 선택합니다.')),
                 )),
             ElevatedButton(
                 onPressed: () => user != null && book != null
-                    ?  ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('대출실행'))) :ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('대상 회원과 도서를 선택해주세요.')))
-                    ,
+                    ? ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('대출실행')))
+                    : ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('대상 회원과 도서를 선택해주세요.'))),
                 child: Text('대출수행'))
           ],
         ),

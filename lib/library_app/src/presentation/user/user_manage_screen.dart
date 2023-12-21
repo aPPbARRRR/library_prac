@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/search_screen.dart';
-import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_controller.dart';
 import 'package:library_manage_app/library_app/src/presentation/user/create_user_screen.dart';
-import 'package:library_manage_app/library_app/src/presentation/user/remove_user_screen.dart';
-import 'package:library_manage_app/library_app/src/presentation/user/user_single_view.dart';
 import 'package:library_manage_app/library_app/src/presentation/user/user_view_controller.dart';
+
+import 'user_single_view.dart';
 
 class UserManageScreen extends StatefulWidget {
   const UserManageScreen({super.key, required this.userController});
@@ -50,15 +49,19 @@ class _UserManageScreenState extends State<UserManageScreen> {
           SearchScreen(
             controller: widget.userController,
             searchType: SearchType.user,
-            onTileTapped: () {
+            onTileTapped: (user) {
               // 유저 상세 페이지로 이동(회원관리 / 회원검색 / 회원타일 에 한해서 onTileTapped가 그렇게 작동하는 것임.)
-              // Navigator.of(context).push(MaterialPageRoute(
-              //     builder: (context) => UserSingleView(user: user)));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => UserSingleView(user: user, controller: widget.userController,)));
             },
           )
         ][currentPageIndex],
       ),
     );
-    ;
+    
   }
+}
+
+void testFunc (int i) {
+  i++;
 }

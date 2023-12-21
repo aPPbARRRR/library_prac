@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:library_manage_app/library_app/src/presentation/user/user_view_controller.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
@@ -39,6 +40,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
               nameTextController: phoneNumTextController,
               label: '전화번호(숫자만)',
               keyboardType: TextInputType.phone,
+              isDigitOnly: true,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -87,18 +89,23 @@ class CustomTextFieldWithLabel extends StatelessWidget {
       {super.key,
       required this.nameTextController,
       required this.label,
-      this.keyboardType});
+      this.validator,
+      this.keyboardType,
+      this.isDigitOnly});
 
   final TextEditingController nameTextController;
   final String label;
   final TextInputType? keyboardType;
+  final String? Function(String?)? validator;
+  final bool? isDigitOnly;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: TextFormField(
-        validator: (value) {
+        inputFormatters: isDigitOnly!= null && isDigitOnly! ? [FilteringTextInputFormatter.digitsOnly] : null,
+        validator: validator ?? (value) {
           if (value == null || value.isEmpty) {
             return '값을 입력해주세요.'; // 입력값이 없을 경우 에러 메시지 반환
           }

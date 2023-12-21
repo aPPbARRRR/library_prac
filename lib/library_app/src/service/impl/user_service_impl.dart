@@ -12,8 +12,8 @@ class UserServiceImpl implements UserService {
  return await repository.createUser(user: user);  }
 
   @override
-  void deleteUser({required User user}) {
-    // TODO: implement deleteUser
+  Future<void> deleteUser({required User user}) async {
+    await repository.removeUser(user: user);
   }
 
   @override
@@ -25,7 +25,7 @@ class UserServiceImpl implements UserService {
   // 테스트용 딜레이 삭제할 것...
 
   @override
-  void updateUser({required User user}) {}
+  Future<void> updateUser({required User user}) async {}
 
   @override
   List<User> retrieveUserFromName(

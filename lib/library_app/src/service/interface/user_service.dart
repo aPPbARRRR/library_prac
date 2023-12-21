@@ -2,13 +2,13 @@ import '../../entity/user.dart';
 
 abstract interface class UserService {
   // 회원 등록
-  void createUser({required User user});
+  Future<void> createUser({required User user});
 
   // 회원 정보 수정
-  void updateUser({required User user});
+  Future<void> updateUser({required User user});
 
   // 회원 탈퇴
-  void deleteUser({required User user});
+  Future<void> deleteUser({required User user});
 
   // 회원 목록 리스트로 제공
   Future<List<User>> getUsers();

@@ -6,11 +6,11 @@ class BookTile extends StatelessWidget {
   const BookTile({super.key, required this.book, this.onTap});
 
   final Book book;
-  final VoidCallback? onTap;
+  final Function? onTap; 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ??
+     onTap: onTap != null ? ()=> onTap!(book) :
           () {
             Navigator.pop(context, book);
           },

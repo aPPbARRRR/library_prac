@@ -6,11 +6,11 @@ class UserTile extends StatelessWidget {
   const UserTile({super.key, required this.user, this.onTap});
 
   final User user;
-  final VoidCallback? onTap;
+  final Function? onTap;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ??
+      onTap: onTap != null ? ()=> onTap!(user) :
           () {
             Navigator.pop(context, user);
           },
@@ -23,8 +23,3 @@ class UserTile extends StatelessWidget {
   }
 }
 
-// ListTile(
-//         leading: Text(user.name),
-//         title: Text(user.userUid),
-//         subtitle: Text('${user.address}\n${user.phoneNum}'),
-//       ),

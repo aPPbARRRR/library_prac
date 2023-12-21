@@ -34,7 +34,7 @@ class UserViewController extends ViewController {
      userService.createUser(user: tempUser);
   }
 
-  void removeUser(User user) {
-    userService.deleteUser(user: user);
+  Future<void> removeUser(User user) async {
+    await userService.deleteUser(user: user);
   }
 }

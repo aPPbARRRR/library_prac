@@ -17,7 +17,7 @@ class SearchScreen extends StatefulWidget {
 
   final ViewController controller;
   final SearchType searchType;
-  final VoidCallback? onTileTapped;
+  final Function? onTileTapped;
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -77,13 +77,13 @@ class _SearchScreenState extends State<SearchScreen> {
                             if (resultUsers != null &&
                                 widget.searchType == SearchType.user)
                               ...resultUsers!
-                                  .map((user) => UserTile(user: user , onTap: widget.onTileTapped  ))
+                                  .map((user) => UserTile(user: user , onTap:  widget.onTileTapped))
                                   .toList()
-                            else if (resultBooks != null &&
-                                widget.searchType == SearchType.book)
-                              ...resultBooks!
-                                  .map((book) => BookTile(book: book, onTap: widget.onTileTapped))
-                                  .toList()
+                            // else if (resultBooks != null &&
+                            //     widget.searchType == SearchType.book)
+                            //   ...resultBooks!
+                            //       .map((book) => BookTile(book: book, onTap: widget.onTileTapped))
+                            //       .toList()
                           ],
                         ),
                       )
