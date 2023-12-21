@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/search_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/book_tile.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/user_tile.dart';
-import 'package:library_manage_app/library_app/src/presentation/loan/loan_controller.dart';
+import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_controller.dart';
 
 import '../../entity/book.dart';
 import '../../entity/user.dart';
 
 class LoanExecuteScreen extends StatefulWidget {
   const LoanExecuteScreen({super.key, required this.loanController});
-  final LoanController loanController;
+  final LoanViewController loanController;
 
   @override
   State<LoanExecuteScreen> createState() => _LoanExecuteScreenState();
@@ -18,6 +18,7 @@ class LoanExecuteScreen extends StatefulWidget {
 class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
   User? user;
   Book? book;
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => SearchScreen(
-                                loanController: widget.loanController,
+                                controller: widget.loanController,
                                 searchType: SearchType.user,
                               )));
                   setState(() {});
@@ -40,7 +41,9 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                 child: Container(
                   child: Center(
                       child: user != null
-                          ? UserTile(user: user!)
+                          ? UserTile(user: user!, onTap: (){setState(() {
+                            user = null;
+                          });},)
                           : Text('대상 회원을 선택합니다.')),
                 )),
             GestureDetector(
@@ -49,7 +52,7 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => SearchScreen(
-                                loanController: widget.loanController,
+                                controller: widget.loanController,
                                 searchType: SearchType.book,
                               )));
                   setState(() {});
@@ -57,7 +60,9 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                 child: Container(
                   child: Center(
                       child: book != null
-                          ? BookTile(book: book!)
+                          ? BookTile(book: book!, onTap: (){setState(() {
+                            book = null;
+                          });},)
                           : Text('대상 도서를 선택합니다.')),
                 )),
             ElevatedButton(

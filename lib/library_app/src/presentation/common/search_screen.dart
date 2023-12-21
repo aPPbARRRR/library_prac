@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
+import 'package:library_manage_app/library_app/src/presentation/common/view_controller.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/user_tile.dart';
-import 'package:library_manage_app/library_app/src/presentation/loan/loan_controller.dart';
+import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_controller.dart';
 
 import '../../entity/book.dart';
 import '../../entity/user.dart';
 import 'widget/book_tile.dart';
 
-enum SearchType { user, book }
+enum SearchType { user, book, loan }
 
 class SearchScreen extends StatefulWidget {
   SearchScreen(
-      {super.key, required this.loanController, required this.searchType});
+      {super.key, required this.controller, required this.searchType, this.onTileTapped});
 
-  final LoanController loanController;
+  final ViewController controller;
   final SearchType searchType;
+  final VoidCallback? onTileTapped;
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -22,18 +26,20 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   List<User>? resultUsers;
   List<Book>? resultBooks;
+  List<BookLoan>? reslutLoans;
   final TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
-    resultUsers = widget.loanController.users;
-    resultBooks = widget.loanController.books;
+    resultUsers = widget.controller.users;
+    resultBooks = widget.controller.books;
+    reslutLoans = widget.controller.loans;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final LoanController loanController = widget.loanController;
+    final ViewController controller = widget.controller;
 
     return SafeArea(
       child: Scaffold(
@@ -49,10 +55,13 @@ class _SearchScreenState extends State<SearchScreen> {
                     onChanged: (val) {
                       if (widget.searchType == SearchType.user)
                         resultUsers =
-                            loanController.retrieveUserFromName(name: val);
+                            controller.retrieveUserFromName(name: val);
                       if (widget.searchType == SearchType.book)
                         resultBooks =
-                            loanController.retrieveBooksFromName(bookName: val);
+                            controller.retrieveBooksFromName(bookName: val);
+                        //     if (widget.searchType == SearchType.loan)
+                        // reslutLoans =
+                        //     controller.retrieveLoansFromBookName(bookName: val);
                       setState(() {});
                     },
                   ),
@@ -68,12 +77,12 @@ class _SearchScreenState extends State<SearchScreen> {
                             if (resultUsers != null &&
                                 widget.searchType == SearchType.user)
                               ...resultUsers!
-                                  .map((user) => UserTile(user: user))
+                                  .map((user) => UserTile(user: user , onTap: widget.onTileTapped  ))
                                   .toList()
                             else if (resultBooks != null &&
                                 widget.searchType == SearchType.book)
                               ...resultBooks!
-                                  .map((book) => BookTile(book: book))
+                                  .map((book) => BookTile(book: book, onTap: widget.onTileTapped))
                                   .toList()
                           ],
                         ),

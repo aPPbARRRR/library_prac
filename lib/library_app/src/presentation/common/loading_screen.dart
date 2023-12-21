@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/data/source/csv_database_repository_impl.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/home_screen.dart';
-import 'package:library_manage_app/library_app/src/presentation/loan/loan_controller.dart';
+import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_controller.dart';
 import 'package:library_manage_app/library_app/src/service/impl/user_service_impl.dart';
 
 class LoadingScreen extends StatefulWidget {

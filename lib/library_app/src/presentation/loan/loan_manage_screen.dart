@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/presentation/loan/loan_execute_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/loan/loan_return_screen.dart';
 
-import 'loan_controller.dart';
+import 'loan_view_controller.dart';
 
 class LoanManageScreen extends StatefulWidget {
   const LoanManageScreen({
     Key? key,
     required this.loanController,
   }) : super(key: key);
-  final LoanController loanController;
+  final LoanViewController loanController;
 
   @override
   State<LoanManageScreen> createState() => _LoanManageScreenState();

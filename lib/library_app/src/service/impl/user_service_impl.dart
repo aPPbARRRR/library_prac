@@ -18,6 +18,7 @@ class UserServiceImpl implements UserService {
 
   @override
   Future<List<User>> getUsers() async {
+      print('fetchData, UserServiceIpl > getUsers()');
     await Future.delayed(Duration(seconds: 2));
     return await repository.getUsers();
   }
