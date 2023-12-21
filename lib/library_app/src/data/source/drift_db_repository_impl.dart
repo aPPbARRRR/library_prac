@@ -14,11 +14,6 @@ import 'package:library_manage_app/library_app/src/entity/user_extention.dart';
 class DriftDBRepositoryImpl implements DatabaseRepository {
   final AppDatabase db = AppDatabase();
 
-  //   await db.into(db.todoItems).insert(TodoItemsCompanion.insert(
-  //       title: 'todo: finish drift setup',
-  //       content: 'We can now write queries and define our own tables.',
-  //     ));
-  // List<TodoItem> allItems = await db.select(db.todoItems).get();
 
   @override
   Future<User> createUser({required User user}) async {
@@ -77,9 +72,8 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<void> removeUser({required User user}) {
-    // TODO: implement removeUser
-    throw UnimplementedError();
+  Future<void> removeUser({required User user}) async {
+    await (db.delete(db.userTable)..where((tbl) => tbl.userUid.equals(user.userUid))).go();
   }
 
   @override

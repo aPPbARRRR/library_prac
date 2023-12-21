@@ -38,5 +38,6 @@ class UserViewController extends ViewController {
 
   Future<void> removeUser(User user) async {
     await userService.deleteUser(user: user);
+    await super.retrieveUsers();
   }
 }
