@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:library_manage_app/library_app/src/presentation/user/user_view_controller.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 
+import 'user_single_view.dart';
+
 class CreateUserScreen extends StatefulWidget {
   CreateUserScreen({super.key, required this.userController});
   final UserViewController userController;
@@ -63,13 +65,15 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             
             // Spacer(),
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    widget.userController.createUser(
+                    await widget.userController.createUser(
                         name: nameTextController.text,
                         address: addressTextController.text,
                         phoneNum: int.parse(phoneNumTextController.text),
-                        birthDate: birthDate);
+                        birthDate: birthDate).then((newUser) => Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => UserSingleView(user: newUser, controller: widget.userController,))));
+                  widget.userController.retrieveUsers();
                         //등록 완료시 화면 전환 필요
                   }
                 },

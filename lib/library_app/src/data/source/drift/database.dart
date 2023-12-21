@@ -54,9 +54,7 @@ class AppDatabase extends _$AppDatabase {
   // 유저 삭제
   Future removeUser(UserTableCompanion user) => (delete(userTable)..where((tbl) => tbl.userUid.equals(user.userUid.value))).go();
   Future getUser(String userUid) =>  (select(userTable)..where((tbl) => tbl.userUid.equals(userUid))).get();
-  // 선택한 id의 단일 스케줄 가져오기
-  //     (delete(schedule)..where((tbl) => tbl.id.equals(id))).go();
-   Future selectAllUsers() => (select(userTable)).get();
+   Future selectAllUsers() => select(this.userTable).get();
 
   //  Stream<List<TodoItem>> watchEntriesInCategory(Category c) {
   //   return (select(todos)..where((t) => t.category.equals(c.id))).watch();

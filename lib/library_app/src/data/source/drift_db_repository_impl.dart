@@ -12,7 +12,13 @@ import 'package:drift/drift.dart' as d;
 import 'package:library_manage_app/library_app/src/entity/user_extention.dart';
 
 class DriftDBRepositoryImpl implements DatabaseRepository {
-  AppDatabase db = AppDatabase();
+  final AppDatabase db = AppDatabase();
+
+  //   await db.into(db.todoItems).insert(TodoItemsCompanion.insert(
+  //       title: 'todo: finish drift setup',
+  //       content: 'We can now write queries and define our own tables.',
+  //     ));
+  // List<TodoItem> allItems = await db.select(db.todoItems).get();
 
   @override
   Future<User> createUser({required User user}) async {
@@ -21,21 +27,29 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
     if (result == null)
       throw Exception('repository / createUser / result : Failed');
     await db.getUser(user.userUid).then((value) => value.length < 1
-        ? throw Exception('repository / createUser / getUser : Failed'): data = value[0]);
-        print(data);
-        print(data!.toJson()['birthDate'].runtimeType);
-        print(User.fromJson(data!.toJson()));
-    throw Exception('repository / createUser / ? : Failed');
+        ? throw Exception('repository / createUser / getUser : Failed')
+        : data = value[0]);
+    return User(
+        userUid: data!.userUid,
+        name: data!.name,
+        address: data!.address,
+        phoneNum: data!.phoneNum,
+        birthDate: data!.birthDate,
+        registrationDate: data!.resistrationDate);
   }
 
   @override
   Future<List<User>> getUsers() async {
-    DataTable allUsersDataTable = await db.selectAllUsers();
-    print(allUsersDataTable);
-    print(allUsersDataTable.runtimeType);
-
-    return [];
-    throw UnimplementedError();
+    print('drift repository / getUsers');
+    // var allUsersDataTable =await db.select(db.userTable).get();
+    List<UserTableData> allUsersDataTable = await db.selectAllUsers();
+   return allUsersDataTable.map((userdataTable) => User(
+        userUid: userdataTable.userUid,
+        name: userdataTable.name,
+        address: userdataTable.address,
+        phoneNum: userdataTable.phoneNum,
+        birthDate: userdataTable.birthDate,
+        registrationDate: userdataTable.resistrationDate)).toList();
   }
 
   @override

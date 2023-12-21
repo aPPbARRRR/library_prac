@@ -16,7 +16,7 @@ class LoanViewController extends ViewController {
 
 
   Future getUsers() async {
-    return userService.getUsers();
+    return await userService.getUsers();
   }
 
   Future getBooks() async {

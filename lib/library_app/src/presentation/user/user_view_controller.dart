@@ -18,11 +18,11 @@ class UserViewController extends ViewController {
     required this.bookService,
   }) : super(userService: userService, loanService: loanService, bookService: bookService);
 
-  void createUser(
+  Future<User> createUser(
       {required String name,
       required String address,
       required int phoneNum,
-      required DateTime birthDate}) {
+      required DateTime birthDate}) async {
     final User tempUser = User(
         userUid: Uuid().v4(),
         name: name,
@@ -31,7 +31,9 @@ class UserViewController extends ViewController {
         birthDate: birthDate,
         registrationDate: DateTime.now(),
         loaningBooks: []);
-     userService.createUser(user: tempUser);
+     return await userService.createUser(user: tempUser);
+     
+
   }
 
   Future<void> removeUser(User user) async {
