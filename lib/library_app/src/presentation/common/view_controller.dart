@@ -28,6 +28,8 @@ class ViewController {
   Future<void> retrieveBooks() async => books = await bookService.getBooks();
   Future<void> retrieveLoans() async => loans = await loanService.getAllLoans();
 
+  Future<void> refreshAllDataFromDB() async => Future.wait([retrieveBooks(), retrieveLoans(), retrieveUsers()]);
+
   List<User> retrieveUserFromName({String? name}) {
     return userService.retrieveUserFromName(
         users: this.users ?? [], name: name ?? '');

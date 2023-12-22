@@ -51,6 +51,7 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
         .toList();
   }
 
+  // 책 대출 실행
   @override
   Future<BookLoan> executeLoan({required User user, required Book book}) async {
     BookLoan loan = BookLoan(
@@ -60,14 +61,20 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
         loanDate: DateTime.now(),
         dueDate: DateTime.now().add(Duration(days: 14)));
     LoanTableData? data;
-    print(loan);
-    var result = await db.into(db.loanTable).insert(loan.toTableCompanion());
-    if (result == null)
-      throw Exception('repository / executeLoan / result : Failed');
+
+    // 로컬 db에 데이터 저장
+    await db.into(db.loanTable).insert(loan.toTableCompanion());
+
+    // 저장된 데이터를 db에서 꺼내서 return할 지역변수에 저장
     await db.getLoan(loan.loanUid).then((value) => value.length < 1
         ? throw Exception('repository / executeLoan / getLoan : Failed')
         : data = value[0]);
-        print(data);
+
+    // return 전 데이터베이스 최신화 : 도서(서고보관중 -> 대여중)
+    (db.update(db.bookTable)..where((tbl) => tbl.bookUid.equals(data!.bookUid)))
+        .write(BookTableCompanion(isBookLoaned: d.Value(true)));
+
+    // BookLoan 객체 생성하여 return
     return BookLoan(
         loanUid: data!.loanUid,
         bookUid: data!.bookUid,
@@ -77,19 +84,18 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<List<BookLoan>> getBookLoans() async{
+  Future<List<BookLoan>> getBookLoans() async {
     print('drift repository / getBookLoans');
     // var allUsersDataTable =await db.select(db.userTable).get();
     List<LoanTableData> allLoansDataTable = await db.selectAllLoans();
     print('done');
     return allLoansDataTable
         .map((loanDataTable) => BookLoan(
-          bookUid: loanDataTable.bookUid,
-          dueDate: loanDataTable.dueDate,
-          loanDate: loanDataTable.loanDate,
-          loanUid: loanDataTable.loanUid,
-          userUid: loanDataTable.userUid
-        ))
+            bookUid: loanDataTable.bookUid,
+            dueDate: loanDataTable.dueDate,
+            loanDate: loanDataTable.loanDate,
+            loanUid: loanDataTable.loanUid,
+            userUid: loanDataTable.userUid))
         .toList();
   }
 

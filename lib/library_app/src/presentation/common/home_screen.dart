@@ -44,10 +44,9 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: FutureBuilder(
           future: Future.wait([
-            bookController.retrieveBooks(),
-            loanController.retrieveLoans(),
-            loanController.retrieveBooks(),
-            userController.retrieveUsers()
+            bookController.refreshAllDataFromDB(),
+            loanController.refreshAllDataFromDB(),
+            userController.refreshAllDataFromDB()
           ]),
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done)
@@ -55,13 +54,87 @@ class HomeScreen extends StatelessWidget {
             return Scaffold(
               body: CustomScrollView(
                 slivers: [
-                  CustomAppBar(
-                    bookController: bookController,loanController: loanController,userController: userController,
+                  SliverAppBar(
+                    expandedHeight: MediaQuery.of(context).size.height / 3,
+                    bottom: AppBar(title: Text('afdas')),
+                    automaticallyImplyLeading: false,
+                    pinned: true,
+                    backgroundColor: Colors.black,
+                    flexibleSpace: FlexibleSpaceBar(
+                      
+                      centerTitle: true,
+                      title: Text('도서 대출 관리 프로그램',),
+                      background: Opacity(
+                        opacity: 1.0,
+                        child: Image.asset(
+                          '/Users/anjongjun/FlutterProjects/orm/library_prac/asset/images/app_bar_back_image.png',
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
                   ),
-                  SliverToBoxAdapter(child: SizedBox(height: 20),),
-                  
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 800,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                CustomTappableButton(
+                                  onTap: () async {
+                                    await loanController.retrieveUsers();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoanManageScreen(
+                                                    loanController:
+                                                        loanController)));
+                                  },
+                                  text: '대출관리',
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      CustomTappableButton(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      UserManageScreen(
+                                                          userController:
+                                                              userController)));
+                                        },
+                                        text: '회원관리',
+                                      ),
+                                      CustomTappableButton(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      BookManageScreen(
+                                                          bookViewController:
+                                                              bookController)));
+                                        },
+                                        text: '도서관리',
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   SliverGrid(
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 250,
                     ),
                     delegate: SliverChildBuilderDelegate(
@@ -71,13 +144,11 @@ class HomeScreen extends StatelessWidget {
                           child: Container(
                             height: 200,
                             width: 200,
-                           child: Center(),
-                           decoration: BoxDecoration(
-                             borderRadius: BorderRadius.circular(10),
-                             color: Colors.brown[100],
-      
-                             
-                           ),
+                            child: Center(),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.brown[100],
+                            ),
                           ),
                         );
                       },
@@ -114,96 +185,15 @@ class CustomTappableButton extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-            color: Colors.brown,
+              color: Colors.brown,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if(imgUrl!=null) Image.asset(imgUrl!),
+                if (imgUrl != null) Image.asset(imgUrl!),
                 Expanded(child: Center(child: Text(text)))
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({
-    Key? key,
-    required this.loanController,
-    required this.bookController,
-    required this.userController,
-  }) : super(key: key);
-
-  final LoanViewController loanController;
-  final BookViewController bookController;
-  final UserViewController userController;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      expandedHeight: MediaQuery.of(context).size.height/3,
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        title:Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CustomTappableButton(
-                    onTap: () async {
-                    // await loanController.retrieveBooks();
-                    await loanController.retrieveUsers();
-                    // await loanController.retrieveLoans();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LoanManageScreen(
-                                loanController: loanController)));
-                  },
-                    text: '대출관리',
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        CustomTappableButton(
-                      onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => UserManageScreen(
-                                userController: userController)));
-                  },
-                      text: '회원관리',
-                    ),
-                    CustomTappableButton(
-                      onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => BookManageScreen(
-                            bookViewController: bookController)));
-                  },
-                      text: '도서관리',
-                    ),
-                      ],
-                    ),
-                  )
-                  
-                ],
-              ),
-            ),
-          ],
-        ), 
-        // Text('도서 대출 관리 프로그램'),
-        background: Opacity(
-          opacity: 1.0,
-          child: Image.asset(
-            '/Users/anjongjun/FlutterProjects/orm/library_prac/asset/images/app_bar_back_image.png',
-            fit: BoxFit.fill,
           ),
         ),
       ),

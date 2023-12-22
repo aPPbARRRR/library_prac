@@ -23,39 +23,51 @@ class _LoanManageScreenState extends State<LoanManageScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(title: Text(currentPageIndex == 0 ? '대출 실행' : '반납 실행'),),
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        indicatorColor: Colors.amber,
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.output),
-            label: '대출',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.input),
-            label: '반납',
-          ),
-         
-        ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(currentPageIndex == 0 ? '대출 실행' : '반납 실행'),
+        ),
+        bottomNavigationBar: NavigationBar(
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          indicatorColor: Colors.amber,
+          selectedIndex: currentPageIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              icon: Icon(Icons.output),
+              label: '대출',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.input),
+              label: '반납',
+            ),
+          ],
+        ),
+        body: FutureBuilder(
+            future: widget.loanController.refreshAllDataFromDB(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done)
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              return [
+                LoanExecuteScreen(loanController: widget.loanController),
+                SearchScreen(
+                    controller: widget.loanController,
+                    searchType: SearchType.loan,
+                    onTileTapped: (loan) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => LoanSingleView(
+                                loan: loan,
+                                loanViewController: widget.loanController,
+                              )));
+                    })
+              ][currentPageIndex];
+            }),
       ),
-       body:[LoanExecuteScreen(loanController: widget.loanController),
-       SearchScreen(controller: widget.loanController, searchType: SearchType.loan, onTileTapped: (loan) {
-              // 유저 상세 페이지로 이동(회원관리 / 회원검색 / 회원타일 에 한해서 onTileTapped가 그렇게 작동하는 것임.)
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => LoanSingleView(loan: loan, loanViewController: widget.loanController,)));
-            })
-      //  LoanReturnScreen(loanController: widget.loanController,)
-       ][currentPageIndex],
-
-      ),
-     
     );
   }
 }

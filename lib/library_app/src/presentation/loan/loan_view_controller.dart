@@ -13,8 +13,10 @@ import '../../service/interface/user_service.dart';
 // view에 필요한 부분을 제공
 
 class LoanViewController extends ViewController {
-  LoanViewController({required super.userService, required super.loanService, required super.bookService});
-
+  LoanViewController(
+      {required super.userService,
+      required super.loanService,
+      required super.bookService});
 
   Future getUsers() async {
     return await userService.getUsers();
@@ -23,11 +25,13 @@ class LoanViewController extends ViewController {
   Future getBooks() async {
     return bookService.getBooks();
   }
-  
-
 
   Future<BookLoan> loanRequest({required User user, required Book book}) async {
-    return await loanService.loanBook(user: user, book: book);
+    return await loanService
+        .loanBook(user: user, book: book)
+        .then((value) async { // 대출 실행시 loan controller의 users, books, loans 최신화시킴
+      await refreshAllDataFromDB();
+      return value;
+    });
   }
-
 }
