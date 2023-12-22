@@ -1,8 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:library_manage_app/library_app/src/presentation/common/search_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/loan/loan_execute_screen.dart';
-import 'package:library_manage_app/library_app/src/presentation/loan/loan_return_screen.dart';
 
+import 'loan_singl_view.dart';
 import 'loan_view_controller.dart';
 
 class LoanManageScreen extends StatefulWidget {
@@ -45,7 +46,12 @@ class _LoanManageScreenState extends State<LoanManageScreen> {
         ],
       ),
        body:[LoanExecuteScreen(loanController: widget.loanController),
-       LoanReturnScreen()
+       SearchScreen(controller: widget.loanController, searchType: SearchType.loan, onTileTapped: (loan) {
+              // 유저 상세 페이지로 이동(회원관리 / 회원검색 / 회원타일 에 한해서 onTileTapped가 그렇게 작동하는 것임.)
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => LoanSingleView(loan: loan, loanViewController: widget.loanController,)));
+            })
+      //  LoanReturnScreen(loanController: widget.loanController,)
        ][currentPageIndex],
 
       ),

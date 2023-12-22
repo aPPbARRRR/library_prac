@@ -44,8 +44,9 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: FutureBuilder(
           future: Future.wait([
+            bookController.retrieveBooks(),
+            loanController.retrieveLoans(),
             loanController.retrieveBooks(),
-            loanController.retrieveUsers(),
             userController.retrieveUsers()
           ]),
           builder: (context, snapshot) {

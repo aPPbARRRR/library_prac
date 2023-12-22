@@ -77,14 +77,25 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<List<BookLoan>> getBookLoans() {
-    // TODO: implement getBookLoans
-    throw UnimplementedError();
+  Future<List<BookLoan>> getBookLoans() async{
+    print('drift repository / getBookLoans');
+    // var allUsersDataTable =await db.select(db.userTable).get();
+    List<LoanTableData> allLoansDataTable = await db.selectAllLoans();
+    print('done');
+    return allLoansDataTable
+        .map((loanDataTable) => BookLoan(
+          bookUid: loanDataTable.bookUid,
+          dueDate: loanDataTable.dueDate,
+          loanDate: loanDataTable.loanDate,
+          loanUid: loanDataTable.loanUid,
+          userUid: loanDataTable.userUid
+        ))
+        .toList();
   }
 
   @override
   Future<List<Book>> getBooks() async {
-    print('drift repository / getUsers');
+    print('drift repository / getBooks');
     // var allUsersDataTable =await db.select(db.userTable).get();
     List<BookTableData> allBooksDataTable = await db.selectAllBooks();
     return allBooksDataTable

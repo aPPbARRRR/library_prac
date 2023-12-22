@@ -29,4 +29,5 @@ class LoanViewController extends ViewController {
   Future<BookLoan> loanRequest({required User user, required Book book}) async {
     return await loanService.loanBook(user: user, book: book);
   }
+
 }

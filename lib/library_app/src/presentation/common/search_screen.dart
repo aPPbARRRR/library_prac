@@ -8,6 +8,7 @@ import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_c
 import '../../entity/book.dart';
 import '../../entity/user.dart';
 import 'widget/book_tile.dart';
+import 'widget/loan_tile.dart';
 
 enum SearchType { user, book, loan }
 
@@ -29,7 +30,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   List<User>? resultUsers;
   List<Book>? resultBooks;
-  List<BookLoan>? reslutLoans;
+  List<BookLoan>? resultLoans;
   final TextEditingController textController = TextEditingController();
   late final String searchHintText;
 
@@ -37,10 +38,10 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     resultUsers = widget.controller.users;
     resultBooks = widget.controller.books;
-    reslutLoans = widget.controller.loans;
-    if(widget.searchType == SearchType.book) searchHintText = '도서명을 입력해주세요.';
-    if(widget.searchType == SearchType.user) searchHintText = '회원 이름을 입력해주세요.';
-    if(widget.searchType == SearchType.loan) searchHintText = '대출번호를 입력해주세요.';
+    resultLoans = widget.controller.loans;
+    if (widget.searchType == SearchType.book) searchHintText = '도서명을 입력해주세요.';
+    if (widget.searchType == SearchType.user) searchHintText = '회원 이름을 입력해주세요.';
+    if (widget.searchType == SearchType.loan) searchHintText = '대출번호를 입력해주세요.';
     super.initState();
   }
 
@@ -66,19 +67,16 @@ class _SearchScreenState extends State<SearchScreen> {
                       if (widget.searchType == SearchType.book)
                         resultBooks =
                             controller.retrieveBooksFromName(bookName: val);
-                      //       if (widget.searchType == SearchType.loan)
-                      //   reslutLoans =
-                      //       controller.retrieveLoansFromLoanUid(bookName: val);
-                      // setState(() {});
+                      if (widget.searchType == SearchType.loan)
+                        resultLoans =
+                            controller.retrieveLoansFromLoanUid(loanUid: val);
+                      setState(() {});
                     },
                   ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                // resultUsers == null && resultBooks == null && reslutLoans == null
-                //     ? CircularProgressIndicator()
-                //     :
                 Expanded(
                   child: ListView(
                     children: [
@@ -94,11 +92,12 @@ class _SearchScreenState extends State<SearchScreen> {
                             .map((book) => BookTile(
                                 book: book, onTap: widget.onTileTapped))
                             .toList()
-                      //       else if (resultLoans != null &&
-                      //   widget.searchType == SearchType.loan)
-                      // ...resultLoans!
-                      //     .map((loan) => LoanTile(loan: loan, onTap: widget.onTileTapped))
-                      //     .toList()
+                      else if (resultLoans != null &&
+                          widget.searchType == SearchType.loan)
+                        ...resultLoans!
+                            .map((loan) => LoanTile(
+                                loan: loan, onTap: widget.onTileTapped))
+                            .toList()
                     ],
                   ),
                 )

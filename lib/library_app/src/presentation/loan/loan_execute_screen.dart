@@ -6,7 +6,7 @@ import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_c
 
 import '../../entity/book.dart';
 import '../../entity/user.dart';
-import 'book_loan_singl_view.dart';
+import 'loan_singl_view.dart';
 
 class LoanExecuteScreen extends StatefulWidget {
   const LoanExecuteScreen({super.key, required this.loanController});
@@ -79,7 +79,7 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                 onPressed: () => user != null && book != null
                     ? widget.loanController
                         .loanRequest(book: book!, user: user!).then((loan) => Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                          return BookLoanSingleView(loan: loan,loanViewController: widget.loanController,);
+                          return LoanSingleView(loan: loan,loanViewController: widget.loanController);
                         })))
                     // ScaffoldMessenger.of(context)
                     //     .showSnackBar(SnackBar(content: Text('대출실행')))

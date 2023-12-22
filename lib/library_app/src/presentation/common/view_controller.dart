@@ -28,7 +28,7 @@ class ViewController {
   Future<void> retrieveBooks() async => books = await bookService.getBooks();
   Future<void> retrieveLoans() async => loans = await loanService.getAllLoans();
 
-    List<User> retrieveUserFromName({String? name}) {
+  List<User> retrieveUserFromName({String? name}) {
     return userService.retrieveUserFromName(
         users: this.users ?? [], name: name ?? '');
   }
@@ -36,5 +36,10 @@ class ViewController {
   List<Book> retrieveBooksFromName({String? bookName}) {
     return bookService.retrieveBooksFromName(
         books: this.books ?? [], bookName: bookName ?? '');
+  }
+
+  List<BookLoan> retrieveLoansFromLoanUid({String? loanUid}) {
+    return loanService.retrieveLoansFromLoanUid(
+        loans: this.loans ?? [], loanUid: loanUid ?? '');
   }
 }

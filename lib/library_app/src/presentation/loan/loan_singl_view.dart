@@ -6,8 +6,8 @@ import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_c
 
 import '../../entity/book_loan.dart';
 
-class BookLoanSingleView extends StatelessWidget {
-  const BookLoanSingleView({
+class LoanSingleView extends StatelessWidget {
+  const LoanSingleView({
     Key? key,
     required this.loanViewController,
     required this.loan,

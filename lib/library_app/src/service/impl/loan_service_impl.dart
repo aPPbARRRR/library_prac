@@ -11,27 +11,30 @@ class LoanServiceImpl implements LoanService {
     required this.repository,
   });
 
-
-
   @override
   Future<List<BookLoan>> getAllLoans() async {
     List<BookLoan> allLoans = await repository.getBookLoans();
     // allLoans.sort((a, b) => a.remainingLoanDays.compareTo(b.remainingLoanDays)); // 대출기간 짧은 대출이 앞으로 가게 반환함.
     return allLoans;
   }
-  
+
   @override
   void extendLoan({required BookLoan loan}) {
     // TODO: implement extendLoan
   }
-  
+
   @override
   Future<BookLoan> loanBook({required User user, required Book book}) async {
     return await repository.executeLoan(user: user, book: book);
   }
-  
+
   @override
   void returnBook({required BookLoan loan}) {
     // TODO: implement returnBook
   }
+
+  @override
+  List<BookLoan> retrieveLoansFromLoanUid(
+          {required List<BookLoan> loans, required String loanUid}) =>
+      loans.where((loan) => loan.loanUid.contains(loanUid)).toList();
 }

@@ -55,6 +55,7 @@ class AppDatabase extends _$AppDatabase {
   Future getLoan(String loanUid) =>  (select(loanTable)..where((tbl) => tbl.loanUid.equals(loanUid))).get();
    Future selectAllUsers() => select(this.userTable).get();
    Future selectAllBooks() => select(this.bookTable).get();
+   Future selectAllLoans() => select(this.loanTable).get();
 
   //  Stream<List<TodoItem>> watchEntriesInCategory(Category c) {
   //   return (select(todos)..where((t) => t.category.equals(c.id))).watch();

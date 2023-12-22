@@ -15,5 +15,8 @@ abstract interface class LoanService {
   
   // 모든 대출 목록 반환
   Future<List<BookLoan>> getAllLoans ();
+
+    // 대출 이름으로 검색
+ List<BookLoan> retrieveLoansFromLoanUid({required List<BookLoan> loans, required String loanUid});
   
 }
