@@ -21,7 +21,7 @@ class _UserManageScreenState extends State<UserManageScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(currentPageIndex == 0 ? '회원 등록' : '회원 삭제'),
+          title: Text(currentPageIndex == 0 ? '회원 등록' : '회원 검색'),
         ),
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: (int index) {

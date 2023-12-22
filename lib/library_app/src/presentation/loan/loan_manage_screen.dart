@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/search_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/loan/loan_execute_screen.dart';
 
-import 'loan_singl_view.dart';
+import 'loan_single_view.dart';
 import 'loan_view_controller.dart';
 
 class LoanManageScreen extends StatefulWidget {
