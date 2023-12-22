@@ -6,6 +6,7 @@ import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_c
 
 import '../../entity/book.dart';
 import '../../entity/user.dart';
+import 'book_loan_singl_view.dart';
 
 class LoanExecuteScreen extends StatefulWidget {
   const LoanExecuteScreen({super.key, required this.loanController});
@@ -64,15 +65,25 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                 child: Container(
                   child: Center(
                       child: book != null
-                          ? BookTile(book: book!, onTap: (_){setState(() {
-                            book = null;
-                          });},)
+                          ? BookTile(
+                              book: book!,
+                              onTap: (_) {
+                                setState(() {
+                                  book = null;
+                                });
+                              },
+                            )
                           : Text('대상 도서를 선택합니다.')),
                 )),
             ElevatedButton(
                 onPressed: () => user != null && book != null
-                    ? ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('대출실행')))
+                    ? widget.loanController
+                        .loanRequest(book: book!, user: user!).then((loan) => Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                          return BookLoanSingleView(loan: loan,loanViewController: widget.loanController,);
+                        })))
+                    // ScaffoldMessenger.of(context)
+                    //     .showSnackBar(SnackBar(content: Text('대출실행')))
+
                     : ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('대상 회원과 도서를 선택해주세요.'))),
                 child: Text('대출수행'))

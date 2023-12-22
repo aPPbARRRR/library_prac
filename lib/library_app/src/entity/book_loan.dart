@@ -13,9 +13,6 @@ required String bookUid,
 required String userUid,
 required DateTime loanDate,
 required DateTime dueDate,
-required int remainingLoanDays,
-required User user,
-required Book book,
 }) = _BookLoan;
 factory BookLoan.fromJson(Map<String, dynamic> json) => _$BookLoanFromJson(json);
 }

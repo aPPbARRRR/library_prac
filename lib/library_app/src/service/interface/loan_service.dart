@@ -5,13 +5,13 @@ import '../../entity/user.dart';
 
 abstract interface class LoanService {
   // 도서 대출 수행
-  void loanBook({required User user, required Book book});
+  Future<BookLoan> loanBook({required User user, required Book book});
 
   // 도서 반납 수행
-  void returnBook({required Book book});
+  void returnBook({required BookLoan loan});
 
   // 대출 연장 수행
-  void extendLoan({required Book book});
+  void extendLoan({required BookLoan loan});
   
   // 모든 대출 목록 반환
   Future<List<BookLoan>> getAllLoans ();

@@ -40,8 +40,9 @@ class _ResisterBookScreenState extends State<ResisterBookScreen> {
                               context: context,
                               firstDate: DateTime(1900, 1, 1),
                               lastDate: DateTime.now())
-                          .then((value) =>
-                              value != null ? publishDate = value : publishDate);
+                          .then((value) => value != null
+                              ? publishDate = value
+                              : publishDate);
                       setState(() {});
                     },
                     child: Text('출간일 입력')),
@@ -52,26 +53,23 @@ class _ResisterBookScreenState extends State<ResisterBookScreen> {
                 ),
               ],
             ),
-
             ElevatedButton(
                 onPressed: () async {
-                  // if (_formKey.currentState!.validate()) {
-                  //   await widget.bookViewController
-                  //       .createBook(
-                  //           name: nameTextController.text,
-                  //           address: addressTextController.text,
-                  //           phoneNum: int.parse(phoneNumTextController.text),
-                  //           birthDate: birthDate)
-                  //       .then((newBook) {
-                  //     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  //         builder: (context) => BookSingleView(
-                  //               book: newBook,
-                  //               controller: widget.bookViewController,
-                  //             )));
-                  //   });
-                  //   widget.bookViewController.retrieveUsers();
-                  //   //등록 완료시 화면 전환 필요
-                  // }
+                  if (_formKey.currentState!.validate()) {
+                    await widget.bookViewController
+                        .resisterBook(
+                            bookName: bookNameTextController.text,
+                            publishDate: publishDate)
+                        .then((newBook) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => BookSingleView(
+                                book: newBook,
+                                controller: widget.bookViewController,
+                              )));
+                    });
+                    widget.bookViewController.retrieveBooks();
+                    //등록 완료시 화면 전환 필요
+                  }
                 },
                 child: Text('등록')),
             SizedBox(

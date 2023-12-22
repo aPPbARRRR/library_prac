@@ -9,7 +9,7 @@ class BookServiceImpl implements BookService {
   final DatabaseRepository repository;
   @override
   Future<Book> resisterBook({required Book book})async {
- return await repository.resisterBook(book: book);  
+ return await repository.registerBook(book: book);  
   }
 
   @override

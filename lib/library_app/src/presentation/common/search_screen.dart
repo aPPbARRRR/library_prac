@@ -13,7 +13,10 @@ enum SearchType { user, book, loan }
 
 class SearchScreen extends StatefulWidget {
   SearchScreen(
-      {super.key, required this.controller, required this.searchType, this.onTileTapped});
+      {super.key,
+      required this.controller,
+      required this.searchType,
+      this.onTileTapped});
 
   final ViewController controller;
   final SearchType searchType;
@@ -28,12 +31,16 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Book>? resultBooks;
   List<BookLoan>? reslutLoans;
   final TextEditingController textController = TextEditingController();
+  late final String searchHintText;
 
   @override
   void initState() {
     resultUsers = widget.controller.users;
     resultBooks = widget.controller.books;
     reslutLoans = widget.controller.loans;
+    if(widget.searchType == SearchType.book) searchHintText = '도서명을 입력해주세요.';
+    if(widget.searchType == SearchType.user) searchHintText = '회원 이름을 입력해주세요.';
+    if(widget.searchType == SearchType.loan) searchHintText = '대출번호를 입력해주세요.';
     super.initState();
   }
 
@@ -51,7 +58,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
                     controller: textController,
-                    decoration: const InputDecoration(hintText: '검색어를 입력해주세요.'),
+                    decoration: InputDecoration(hintText: searchHintText),
                     onChanged: (val) {
                       if (widget.searchType == SearchType.user)
                         resultUsers =
@@ -59,34 +66,42 @@ class _SearchScreenState extends State<SearchScreen> {
                       if (widget.searchType == SearchType.book)
                         resultBooks =
                             controller.retrieveBooksFromName(bookName: val);
-                        //     if (widget.searchType == SearchType.loan)
-                        // reslutLoans =
-                        //     controller.retrieveLoansFromBookName(bookName: val);
-                      setState(() {});
+                      //       if (widget.searchType == SearchType.loan)
+                      //   reslutLoans =
+                      //       controller.retrieveLoansFromLoanUid(bookName: val);
+                      // setState(() {});
                     },
                   ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                resultUsers == null
-                    ? CircularProgressIndicator()
-                    : Expanded(
-                        child: ListView(
-                          children: [
-                            if (resultUsers != null &&
-                                widget.searchType == SearchType.user)
-                              ...resultUsers!
-                                  .map((user) => UserTile(user: user , onTap:  widget.onTileTapped))
-                                  .toList()
-                            // else if (resultBooks != null &&
-                            //     widget.searchType == SearchType.book)
-                            //   ...resultBooks!
-                            //       .map((book) => BookTile(book: book, onTap: widget.onTileTapped))
-                            //       .toList()
-                          ],
-                        ),
-                      )
+                // resultUsers == null && resultBooks == null && reslutLoans == null
+                //     ? CircularProgressIndicator()
+                //     :
+                Expanded(
+                  child: ListView(
+                    children: [
+                      if (resultUsers != null &&
+                          widget.searchType == SearchType.user)
+                        ...resultUsers!
+                            .map((user) => UserTile(
+                                user: user, onTap: widget.onTileTapped))
+                            .toList()
+                      else if (resultBooks != null &&
+                          widget.searchType == SearchType.book)
+                        ...resultBooks!
+                            .map((book) => BookTile(
+                                book: book, onTap: widget.onTileTapped))
+                            .toList()
+                      //       else if (resultLoans != null &&
+                      //   widget.searchType == SearchType.loan)
+                      // ...resultLoans!
+                      //     .map((loan) => LoanTile(loan: loan, onTap: widget.onTileTapped))
+                      //     .toList()
+                    ],
+                  ),
+                )
               ],
             ),
           )),

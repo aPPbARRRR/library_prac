@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/data/repository/database_repository.dart';
 import 'package:library_manage_app/library_app/src/data/source/drift/database.dart';
 import 'package:library_manage_app/library_app/src/entity/book.dart';
+import 'package:library_manage_app/library_app/src/entity/book_extention.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
+import 'package:library_manage_app/library_app/src/entity/book_loan_extention.dart';
 import 'package:library_manage_app/library_app/src/entity/user.dart';
 import 'package:drift/drift.dart' as d;
 import 'package:library_manage_app/library_app/src/entity/user_extention.dart';
+import 'package:uuid/uuid.dart';
 
 class DriftDBRepositoryImpl implements DatabaseRepository {
   final AppDatabase db = AppDatabase();
-
 
   @override
   Future<User> createUser({required User user}) async {
@@ -38,19 +40,40 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
     print('drift repository / getUsers');
     // var allUsersDataTable =await db.select(db.userTable).get();
     List<UserTableData> allUsersDataTable = await db.selectAllUsers();
-   return allUsersDataTable.map((userdataTable) => User(
-        userUid: userdataTable.userUid,
-        name: userdataTable.name,
-        address: userdataTable.address,
-        phoneNum: userdataTable.phoneNum,
-        birthDate: userdataTable.birthDate,
-        registrationDate: userdataTable.resistrationDate)).toList();
+    return allUsersDataTable
+        .map((userdataTable) => User(
+            userUid: userdataTable.userUid,
+            name: userdataTable.name,
+            address: userdataTable.address,
+            phoneNum: userdataTable.phoneNum,
+            birthDate: userdataTable.birthDate,
+            registrationDate: userdataTable.resistrationDate))
+        .toList();
   }
 
   @override
-  Future<BookLoan> executeLoan({required User user, required Book book}) {
-    // TODO: implement executeLoan
-    throw UnimplementedError();
+  Future<BookLoan> executeLoan({required User user, required Book book}) async {
+    BookLoan loan = BookLoan(
+        loanUid: Uuid().v4(),
+        bookUid: book.bookUid,
+        userUid: user.userUid,
+        loanDate: DateTime.now(),
+        dueDate: DateTime.now().add(Duration(days: 14)));
+    LoanTableData? data;
+    print(loan);
+    var result = await db.into(db.loanTable).insert(loan.toTableCompanion());
+    if (result == null)
+      throw Exception('repository / executeLoan / result : Failed');
+    await db.getLoan(loan.loanUid).then((value) => value.length < 1
+        ? throw Exception('repository / executeLoan / getLoan : Failed')
+        : data = value[0]);
+        print(data);
+    return BookLoan(
+        loanUid: data!.loanUid,
+        bookUid: data!.bookUid,
+        userUid: data!.userUid,
+        loanDate: data!.loanDate,
+        dueDate: data!.dueDate);
   }
 
   @override
@@ -60,32 +83,41 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<List<Book>> getBooks() {
-    // TODO: implement getBooks
-    throw UnimplementedError();
+  Future<List<Book>> getBooks() async {
+    print('drift repository / getUsers');
+    // var allUsersDataTable =await db.select(db.userTable).get();
+    List<BookTableData> allBooksDataTable = await db.selectAllBooks();
+    return allBooksDataTable
+        .map((bookDataTable) => Book(
+            bookName: bookDataTable.bookName,
+            bookUid: bookDataTable.bookUid,
+            publishDate: bookDataTable.publishDate,
+            isBookLoaned: bookDataTable.isBookLoaned))
+        .toList();
   }
 
   @override
   Future<Book> registerBook({required Book book}) async {
-  BookTableData? data;
+    BookTableData? data;
     var result = await db.into(db.bookTable).insert(book.toTableCompanion());
     if (result == null)
       throw Exception('repository / resisterBook / result : Failed');
-    // await db.getUser(user.userUid).then((value) => value.length < 1
-    //     ? throw Exception('repository / createUser / getUser : Failed')
-    //     : data = value[0]);
-    // return User(
-    //     userUid: data!.userUid,
-    //     name: data!.name,
-    //     address: data!.address,
-    //     phoneNum: data!.phoneNum,
-    //     birthDate: data!.birthDate,
-    //     registrationDate: data!.resistrationDate);
+    await db.getBook(book.bookUid).then((value) => value.length < 1
+        ? throw Exception('repository / resisterBook / getBook : Failed')
+        : data = value[0]);
+
+    return Book(
+        bookName: data!.bookName,
+        bookUid: data!.bookUid,
+        publishDate: data!.publishDate,
+        isBookLoaned: data!.isBookLoaned);
   }
 
   @override
   Future<void> removeUser({required User user}) async {
-    await (db.delete(db.userTable)..where((tbl) => tbl.userUid.equals(user.userUid))).go();
+    await (db.delete(db.userTable)
+          ..where((tbl) => tbl.userUid.equals(user.userUid)))
+        .go();
   }
 
   @override

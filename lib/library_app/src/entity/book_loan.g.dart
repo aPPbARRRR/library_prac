@@ -13,9 +13,6 @@ _$BookLoanImpl _$$BookLoanImplFromJson(Map<String, dynamic> json) =>
       userUid: json['userUid'] as String,
       loanDate: DateTime.parse(json['loanDate'] as String),
       dueDate: DateTime.parse(json['dueDate'] as String),
-      remainingLoanDays: json['remainingLoanDays'] as int,
-      user: User.fromJson(json['user'] as Map<String, dynamic>),
-      book: Book.fromJson(json['book'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$BookLoanImplToJson(_$BookLoanImpl instance) =>
@@ -25,7 +22,4 @@ Map<String, dynamic> _$$BookLoanImplToJson(_$BookLoanImpl instance) =>
       'userUid': instance.userUid,
       'loanDate': instance.loanDate.toIso8601String(),
       'dueDate': instance.dueDate.toIso8601String(),
-      'remainingLoanDays': instance.remainingLoanDays,
-      'user': instance.user,
-      'book': instance.book,
     };

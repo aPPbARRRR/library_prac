@@ -48,7 +48,7 @@ class _BookManageScreenState extends State<BookManageScreen> {
           ),
           SearchScreen(
             controller: widget.bookViewController,
-            searchType: SearchType.user,
+            searchType: SearchType.book,
             onTileTapped: (book) {
               // 유저 상세 페이지로 이동(회원관리 / 회원검색 / 회원타일 에 한해서 onTileTapped가 그렇게 작동하는 것임.)
               Navigator.of(context).push(MaterialPageRoute(

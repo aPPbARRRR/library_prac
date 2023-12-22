@@ -35,9 +35,6 @@ class LoanTable extends Table {
   TextColumn get userUid => text()();
   DateTimeColumn get loanDate => dateTime()();
   DateTimeColumn get dueDate => dateTime()();
-    IntColumn get remainingLoanDays => integer()();
-
-
 }
 
 
@@ -54,7 +51,10 @@ class AppDatabase extends _$AppDatabase {
   // 유저 삭제
   Future removeUser(UserTableCompanion user) => (delete(userTable)..where((tbl) => tbl.userUid.equals(user.userUid.value))).go();
   Future getUser(String userUid) =>  (select(userTable)..where((tbl) => tbl.userUid.equals(userUid))).get();
+  Future getBook(String bookUid) =>  (select(bookTable)..where((tbl) => tbl.bookUid.equals(bookUid))).get();
+  Future getLoan(String loanUid) =>  (select(loanTable)..where((tbl) => tbl.loanUid.equals(loanUid))).get();
    Future selectAllUsers() => select(this.userTable).get();
+   Future selectAllBooks() => select(this.bookTable).get();
 
   //  Stream<List<TodoItem>> watchEntriesInCategory(Category c) {
   //   return (select(todos)..where((t) => t.category.equals(c.id))).watch();

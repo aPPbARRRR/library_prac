@@ -689,15 +689,9 @@ class $LoanTableTable extends LoanTable
   late final GeneratedColumn<DateTime> dueDate = GeneratedColumn<DateTime>(
       'due_date', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _remainingLoanDaysMeta =
-      const VerificationMeta('remainingLoanDays');
-  @override
-  late final GeneratedColumn<int> remainingLoanDays = GeneratedColumn<int>(
-      'remaining_loan_days', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [loanUid, bookUid, userUid, loanDate, dueDate, remainingLoanDays];
+      [loanUid, bookUid, userUid, loanDate, dueDate];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -738,14 +732,6 @@ class $LoanTableTable extends LoanTable
     } else if (isInserting) {
       context.missing(_dueDateMeta);
     }
-    if (data.containsKey('remaining_loan_days')) {
-      context.handle(
-          _remainingLoanDaysMeta,
-          remainingLoanDays.isAcceptableOrUnknown(
-              data['remaining_loan_days']!, _remainingLoanDaysMeta));
-    } else if (isInserting) {
-      context.missing(_remainingLoanDaysMeta);
-    }
     return context;
   }
 
@@ -765,8 +751,6 @@ class $LoanTableTable extends LoanTable
           .read(DriftSqlType.dateTime, data['${effectivePrefix}loan_date'])!,
       dueDate: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}due_date'])!,
-      remainingLoanDays: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}remaining_loan_days'])!,
     );
   }
 
@@ -782,14 +766,12 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
   final String userUid;
   final DateTime loanDate;
   final DateTime dueDate;
-  final int remainingLoanDays;
   const LoanTableData(
       {required this.loanUid,
       required this.bookUid,
       required this.userUid,
       required this.loanDate,
-      required this.dueDate,
-      required this.remainingLoanDays});
+      required this.dueDate});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -798,7 +780,6 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
     map['user_uid'] = Variable<String>(userUid);
     map['loan_date'] = Variable<DateTime>(loanDate);
     map['due_date'] = Variable<DateTime>(dueDate);
-    map['remaining_loan_days'] = Variable<int>(remainingLoanDays);
     return map;
   }
 
@@ -809,7 +790,6 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
       userUid: Value(userUid),
       loanDate: Value(loanDate),
       dueDate: Value(dueDate),
-      remainingLoanDays: Value(remainingLoanDays),
     );
   }
 
@@ -822,7 +802,6 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
       userUid: serializer.fromJson<String>(json['userUid']),
       loanDate: serializer.fromJson<DateTime>(json['loanDate']),
       dueDate: serializer.fromJson<DateTime>(json['dueDate']),
-      remainingLoanDays: serializer.fromJson<int>(json['remainingLoanDays']),
     );
   }
   @override
@@ -834,7 +813,6 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
       'userUid': serializer.toJson<String>(userUid),
       'loanDate': serializer.toJson<DateTime>(loanDate),
       'dueDate': serializer.toJson<DateTime>(dueDate),
-      'remainingLoanDays': serializer.toJson<int>(remainingLoanDays),
     };
   }
 
@@ -843,15 +821,13 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
           String? bookUid,
           String? userUid,
           DateTime? loanDate,
-          DateTime? dueDate,
-          int? remainingLoanDays}) =>
+          DateTime? dueDate}) =>
       LoanTableData(
         loanUid: loanUid ?? this.loanUid,
         bookUid: bookUid ?? this.bookUid,
         userUid: userUid ?? this.userUid,
         loanDate: loanDate ?? this.loanDate,
         dueDate: dueDate ?? this.dueDate,
-        remainingLoanDays: remainingLoanDays ?? this.remainingLoanDays,
       );
   @override
   String toString() {
@@ -860,15 +836,13 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
           ..write('bookUid: $bookUid, ')
           ..write('userUid: $userUid, ')
           ..write('loanDate: $loanDate, ')
-          ..write('dueDate: $dueDate, ')
-          ..write('remainingLoanDays: $remainingLoanDays')
+          ..write('dueDate: $dueDate')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      loanUid, bookUid, userUid, loanDate, dueDate, remainingLoanDays);
+  int get hashCode => Object.hash(loanUid, bookUid, userUid, loanDate, dueDate);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -877,8 +851,7 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
           other.bookUid == this.bookUid &&
           other.userUid == this.userUid &&
           other.loanDate == this.loanDate &&
-          other.dueDate == this.dueDate &&
-          other.remainingLoanDays == this.remainingLoanDays);
+          other.dueDate == this.dueDate);
 }
 
 class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
@@ -887,7 +860,6 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
   final Value<String> userUid;
   final Value<DateTime> loanDate;
   final Value<DateTime> dueDate;
-  final Value<int> remainingLoanDays;
   final Value<int> rowid;
   const LoanTableCompanion({
     this.loanUid = const Value.absent(),
@@ -895,7 +867,6 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
     this.userUid = const Value.absent(),
     this.loanDate = const Value.absent(),
     this.dueDate = const Value.absent(),
-    this.remainingLoanDays = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   LoanTableCompanion.insert({
@@ -904,21 +875,18 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
     required String userUid,
     required DateTime loanDate,
     required DateTime dueDate,
-    required int remainingLoanDays,
     this.rowid = const Value.absent(),
   })  : loanUid = Value(loanUid),
         bookUid = Value(bookUid),
         userUid = Value(userUid),
         loanDate = Value(loanDate),
-        dueDate = Value(dueDate),
-        remainingLoanDays = Value(remainingLoanDays);
+        dueDate = Value(dueDate);
   static Insertable<LoanTableData> custom({
     Expression<String>? loanUid,
     Expression<String>? bookUid,
     Expression<String>? userUid,
     Expression<DateTime>? loanDate,
     Expression<DateTime>? dueDate,
-    Expression<int>? remainingLoanDays,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -927,7 +895,6 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
       if (userUid != null) 'user_uid': userUid,
       if (loanDate != null) 'loan_date': loanDate,
       if (dueDate != null) 'due_date': dueDate,
-      if (remainingLoanDays != null) 'remaining_loan_days': remainingLoanDays,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -938,7 +905,6 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
       Value<String>? userUid,
       Value<DateTime>? loanDate,
       Value<DateTime>? dueDate,
-      Value<int>? remainingLoanDays,
       Value<int>? rowid}) {
     return LoanTableCompanion(
       loanUid: loanUid ?? this.loanUid,
@@ -946,7 +912,6 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
       userUid: userUid ?? this.userUid,
       loanDate: loanDate ?? this.loanDate,
       dueDate: dueDate ?? this.dueDate,
-      remainingLoanDays: remainingLoanDays ?? this.remainingLoanDays,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -969,9 +934,6 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
     if (dueDate.present) {
       map['due_date'] = Variable<DateTime>(dueDate.value);
     }
-    if (remainingLoanDays.present) {
-      map['remaining_loan_days'] = Variable<int>(remainingLoanDays.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -986,7 +948,6 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
           ..write('userUid: $userUid, ')
           ..write('loanDate: $loanDate, ')
           ..write('dueDate: $dueDate, ')
-          ..write('remainingLoanDays: $remainingLoanDays, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

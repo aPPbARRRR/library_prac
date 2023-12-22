@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/view_controller.dart';
 import 'package:library_manage_app/library_app/src/service/interface/book_service.dart';
 
@@ -25,5 +26,7 @@ class LoanViewController extends ViewController {
   
 
 
-  void loanRequest() {}
+  Future<BookLoan> loanRequest({required User user, required Book book}) async {
+    return await loanService.loanBook(user: user, book: book);
+  }
 }
