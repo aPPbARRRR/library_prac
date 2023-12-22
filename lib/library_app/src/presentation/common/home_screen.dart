@@ -41,151 +41,147 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: FutureBuilder(
-          future: Future.wait([
-            bookController.refreshAllDataFromDB(),
-            loanController.refreshAllDataFromDB(),
-            userController.refreshAllDataFromDB()
-          ]),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done)
-              return LoadingScreen();
-            return Scaffold(
-              body: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    expandedHeight: MediaQuery.of(context).size.height / 3,
-                    bottom: AppBar(title: Text('afdas')),
-                    automaticallyImplyLeading: false,
-                    pinned: true,
-                    backgroundColor: Colors.black,
-                    flexibleSpace: FlexibleSpaceBar(
-                      
-                      centerTitle: true,
-                      title: Text('도서 대출 관리 프로그램',),
-                      background: Opacity(
-                        opacity: 1.0,
-                        child: Image.asset(
-                          '/Users/anjongjun/FlutterProjects/orm/library_prac/asset/images/app_bar_back_image.png',
-                          fit: BoxFit.fill,
-                        ),
-                      ),
+    return FutureBuilder(
+        future: Future.wait([
+          bookController.refreshAllDataFromDB(),
+          loanController.refreshAllDataFromDB(),
+          userController.refreshAllDataFromDB()
+        ]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done)
+            return LoadingScreen();
+          return Scaffold(
+            body: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                   title: Text(
+                      '도서 대출 관리 프로그램',
+                    ),
+                    
+                  backgroundColor: Colors.black,
+                  expandedHeight: MediaQuery.of(context).size.height / 3,
+                  automaticallyImplyLeading: false,
+                  pinned: true,
+                  flexibleSpace: FlexibleSpaceBar(                      
+                    background: Image.asset(
+                      '/Users/anjongjun/FlutterProjects/orm/library_prac/asset/images/app_bar_back_image.png',
+                      fit: BoxFit.fill,
                     ),
                   ),
-                  SliverToBoxAdapter(
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
-                      height: 800,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                CustomTappableButton(
-                                  onTap: () async {
-                                    await loanController.retrieveUsers();
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                LoanManageScreen(
-                                                    loanController:
-                                                        loanController)));
-                                  },
-                                  text: '대출관리',
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      CustomTappableButton(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      UserManageScreen(
-                                                          userController:
-                                                              userController)));
-                                        },
-                                        text: '회원관리',
-                                      ),
-                                      CustomTappableButton(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      BookManageScreen(
-                                                          bookViewController:
-                                                              bookController)));
-                                        },
-                                        text: '도서관리',
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                      height: MediaQuery.of(context).size.height*2/3-kToolbarHeight,
+                      child: AppTaskButtonSection(loanController: loanController, userController: userController, bookController: bookController),
                     ),
                   ),
-                  SliverGrid(
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 250,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 200,
-                            width: 200,
-                            child: Center(),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.brown[100],
-                            ),
-                          ),
-                        );
-                      },
-                      childCount: 20,
-                    ),
+                ),
+                SliverGrid(
+                  gridDelegate:
+                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 250,
                   ),
-                ],
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 200,
+                          width: 200,
+                          child: Center(),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.brown[100],
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: 20,
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+}
+
+class AppTaskButtonSection extends StatelessWidget {
+  const AppTaskButtonSection({
+    super.key,
+    required this.loanController,
+    required this.userController,
+    required this.bookController,
+  });
+
+  final LoanViewController loanController;
+  final UserViewController userController;
+  final BookViewController bookController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CustomTappableButton(
+                targetScreen: LoanManageScreen(
+                    loanController: loanController),
+                text: '대출관리',
               ),
-            );
-          }),
+              Expanded(
+                child: Column(
+                  children: [
+                    CustomTappableButton(
+                      targetScreen: UserManageScreen(
+                          userController: userController),
+                      text: '회원관리',
+                    ),
+                    CustomTappableButton(
+                      targetScreen: BookManageScreen(
+                          bookViewController: bookController),
+                      text: '도서관리',
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
 
 class CustomTappableButton extends StatelessWidget {
-  const CustomTappableButton({
-    Key? key,
-    required this.text,
-    this.imgUrl,
-    required this.onTap,
-  }) : super(key: key);
+  const CustomTappableButton(
+      {Key? key, required this.text, this.imgUrl, required this.targetScreen})
+      : super(key: key);
 
   final String text;
   final String? imgUrl;
-  final VoidCallback onTap;
+  final Widget targetScreen;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
-        onTap: onTap,
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => targetScreen));
+        },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: Colors.brown,
+              border: Border.all(color:Colors.white, width: 1)
+              // color: Colors.brown,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
