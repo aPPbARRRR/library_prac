@@ -127,7 +127,7 @@ class CustomFlexibleSpaceBar extends StatelessWidget {
       background: ColorFiltered(
         colorFilter: ColorFilter.mode(Colors.black, BlendMode.color),
         child: Image.asset(
-          '/Users/anjongjun/FlutterProjects/orm/library_prac/asset/images/app_bar_back_image.png',
+          'asset/images/app_bar_back_image.png',
           fit: BoxFit.fill,
         ),
       ),
