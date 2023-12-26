@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/data/source/csv_database_repository_impl.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/home_screen.dart';
@@ -12,19 +13,25 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-
   @override
   Widget build(BuildContext context) {
     // 필요한 코드 실행(db 통신 등)
 
-
-
     return Scaffold(
-      body: Center(child: Column(
+      body: Center(
+          child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text('loading...'), CircularProgressIndicator()],
+        children: [
+          FadeIn(
+              child: Image.asset(
+            'asset/images/logo_color_2.png',
+          )),
+          LinearProgressIndicator(
+            color: Colors.orange[700],
+
+          )
+        ],
       )),
     );
   }
 }
-

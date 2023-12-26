@@ -1,10 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 import 'package:library_manage_app/library_app/src/data/repository/database_repository.dart';
 import 'package:library_manage_app/library_app/src/data/source/drift_db_repository_impl.dart';
 import 'package:library_manage_app/library_app/src/presentation/book/book_manage_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/loading_screen.dart';
+import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
 import 'package:library_manage_app/library_app/src/presentation/user/user_view_controller.dart';
 import 'package:library_manage_app/library_app/src/service/impl/book_service_impl.dart';
 import 'package:library_manage_app/library_app/src/service/impl/loan_service_impl.dart';
@@ -20,8 +22,6 @@ import '../user/user_manage_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
-  
-
 
   final DatabaseRepository repository = DriftDBRepositoryImpl();
   late final BookService bookService = BookServiceImpl(repository: repository);
@@ -45,6 +45,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: Future.wait([
+          Future.delayed(Duration(milliseconds: 2000)),
           bookController.refreshAllDataFromDB(),
           loanController.refreshAllDataFromDB(),
           userController.refreshAllDataFromDB()
@@ -52,86 +53,16 @@ class HomeScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done)
             return LoadingScreen();
-          return Scaffold(
-            body: CustomScrollView(
-              
-              slivers: [
-                SliverAppBar(
-                  backgroundColor: Colors.black,
-                  expandedHeight: MediaQuery.of(context).size.height / 3,
-                  automaticallyImplyLeading: false,
-                  pinned: true,
-                  flexibleSpace: CustomFlexibleSpaceBar(),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 2 / 3 -
-                          kToolbarHeight,
-                      child: AppTaskButtonSection(
-                          loanController: loanController,
-                          userController: userController,
-                          bookController: bookController),
-                    ),
-                  ),
-                ),
-                BottomSectionSliverGrid(),
-              ],
-            ),
+          return SafeArea(
+            child: Scaffold(
+              appBar: AppBar(title: Text('도서 대출 관리'),),
+                body: AppTaskButtonSection(
+              bookController: bookController,
+              loanController: loanController,
+              userController: userController,
+            )),
           );
         });
-  }
-}
-
-class BottomSectionSliverGrid extends StatelessWidget {
-  const BottomSectionSliverGrid({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 250,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 200,
-              width: 200,
-              child: Center(),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.brown[100],
-              ),
-            ),
-          );
-        },
-        childCount: 20,
-      ),
-    );
-  }
-}
-
-class CustomFlexibleSpaceBar extends StatelessWidget {
-  const CustomFlexibleSpaceBar({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return FlexibleSpaceBar(
-      background: ColorFiltered(
-        colorFilter: ColorFilter.mode(Colors.black, BlendMode.color),
-        child: Image.asset(
-          'asset/images/app_bar_back_image.png',
-          fit: BoxFit.fill,
-        ),
-      ),
-    );
   }
 }
 
@@ -149,73 +80,172 @@ class AppTaskButtonSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
+    return ListView(
+      scrollDirection: height > width ? Axis.vertical : Axis.horizontal,
       children: [
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CustomTappableButton(
-                targetScreen: LoanManageScreen(loanController: loanController),
-                text: '대출관리',
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    CustomTappableButton(
-                      targetScreen:
-                          UserManageScreen(userController: userController),
-                      text: '회원관리',
-                    ),
-                    CustomTappableButton(
-                      targetScreen:
-                          BookManageScreen(bookViewController: bookController),
-                      text: '도서관리',
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+        HomeScreenButton(
+          padding: 30,
+          assetUri: 'asset/images/open-book.png',
+          leadingText: '도서관리',
+          contentText: '도서를 등록/삭제합니다.',
+          targetScreen: BookManageScreen(bookViewController: bookController),
+        ),
+        HomeScreenButton(
+          padding: 30,
+          assetUri: 'asset/images/group.png',
+          leadingText: '회원관리',
+          contentText: '회원을 등록/삭제합니다.',
+          targetScreen: UserManageScreen(userController: userController),
+        ),
+        HomeScreenButton(
+          padding: 30,
+          assetUri: 'asset/images/digital-library.png',
+          leadingText: '대출관리',
+          contentText: '대출/반납을 실행합니다.',
+          targetScreen: LoanManageScreen(loanController: loanController),
         ),
       ],
     );
   }
 }
 
-class CustomTappableButton extends StatelessWidget {
-  const CustomTappableButton(
-      {Key? key, required this.text, this.imgUrl, required this.targetScreen})
+class HomeScreenButton extends StatelessWidget {
+  const HomeScreenButton(
+      {Key? key,
+      required this.leadingText,
+      required this.contentText,
+      required this.padding,
+      required this.targetScreen,
+      this.assetUri})
       : super(key: key);
-
-  final String text;
-  final String? imgUrl;
+  final String leadingText;
+  final String contentText;
   final Widget targetScreen;
-
+  final String? assetUri;
+  final double padding;
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
+    return Padding(
+      padding: EdgeInsets.all(padding),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => targetScreen));
         },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+        child: FadeIn(
           child: Container(
+            height: height / 6 < 150 ? 150 : height / 6,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white, width: 1)
-              
-                ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (imgUrl != null) Image.asset(imgUrl!),
-                Expanded(child: Center(child: Text(text)))
-              ],
+              color: Colors.orange[700],
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                  colors: [Colors.orange[700]!, Colors.orange[900]!]),
             ),
+            child: height > width
+                ? Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: width / 5,
+                          height: height / 6,
+                          child: assetUri != null
+                              ? Image.asset(
+                                  assetUri!,
+                                )
+                              : null,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: VerticalDivider(
+                          thickness: 1,
+                          color: Colors.orange[900],
+                        ),
+                      ),
+                      DefaultTextStyle(
+                        style: TextStyle(
+                            fontSize: width / 32 < 16 ? 16 : width / 32,
+                            color: Colors.black),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              leadingText,
+                              style: TextStyle(
+                                  fontSize: width / 28 < 20 ? 20 : width / 28,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(contentText),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                : SizedBox(
+                    width: width / 5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            width: width / 5,
+                            height: height / 6,
+                            child: assetUri != null
+                                ? Image.asset(
+                                    assetUri!,
+                                  )
+                                : null,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Divider(
+                              indent: 20,
+                              endIndent: 20,
+                              color: Colors.black),
+                        ),
+                        DefaultTextStyle(
+                          style: TextStyle(
+                              fontSize: width / 40 < 16 ? 16 : width / 40,
+                              color: Colors.black),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  leadingText,
+                                  style: TextStyle(
+                                      fontSize: width / 28 < 20 ? 20 : width / 28,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(contentText),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
           ),
         ),
       ),

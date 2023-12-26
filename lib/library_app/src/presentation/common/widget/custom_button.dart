@@ -20,8 +20,9 @@ class CustomButton extends StatelessWidget {
         },
         child: Text(text),
         style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             backgroundColor: Colors.orange[900],
-            foregroundColor: Colors.grey[350],
+            foregroundColor: Colors.black,
             textStyle:
                 TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize ?? 20)),
       ),
