@@ -1,7 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
+import 'package:library_manage_app/library_app/src/entity/book_loan_extention.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/view_controller.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/user_tile.dart';
 import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_controller.dart';
@@ -37,7 +39,9 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController textController = TextEditingController();
   late final String searchHintText;
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-    bool isSelected = false;
+  // bool isLoanDateBasedSort = false;
+  bool isExpirationDateBasedSort = true;
+  bool isAscendingSorted = false;
 
   @override
   void initState() {
@@ -53,37 +57,84 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final ViewController controller = widget.controller;
-  
 
     return SafeArea(
       child: Scaffold(
           key: _key,
           drawer: resultLoans != null && widget.searchType == SearchType.loan
               ? Drawer(
-                  child: Column(children: [
-                    Text('디테일한 설정들'),
-                    Text('디테일한 설정들'),
-                    Text('디테일한 설정들'),
-                    Text('data'),
-                    Text('data'),
-                    Text('data'),
-                    Text('data'),
-                    Text('data'),
-                    Row(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Switch(
-                          value: isSelected,
-                          activeColor: Colors.red,
-                          onChanged: (bool value) {
-                            // This is called when the user toggles the switch.
-                            setState(() {
-                              isSelected = !isSelected;
-                            });
-                          },
-                        )
-                      ],
-                    )
-                  ]),
+                        Text('정렬방식',
+                            style: TextStyle(
+                                fontSize: 26, fontWeight: FontWeight.bold)),
+                        TextButton(
+                            onPressed: () {
+                              setState(() {
+                                resultLoans = resultLoans?.sorted((a, b) =>
+                                    a.remainingDays.compareTo(b.remainingDays));
+
+                                isAscendingSorted = true;
+                              });
+                            },
+                            child: Text(
+                              '오름차순',
+                              style: isAscendingSorted
+                                  ? TextStyle(
+                                      fontSize: 24, fontWeight: FontWeight.bold)
+                                  : null,
+                            )),
+                        TextButton(
+                            onPressed: () {
+                              setState(() {
+                                resultLoans = resultLoans?.sorted((a, b) =>
+                                    b.remainingDays.compareTo(a.remainingDays));
+                                isAscendingSorted = false;
+                              });
+                            },
+                            child: Text(
+                              '내림차순',
+                              style: !isAscendingSorted
+                                  ? TextStyle(
+                                      fontSize: 24, fontWeight: FontWeight.bold)
+                                  : null,
+                            )),
+                        Divider(),
+                        Text('정렬기준',
+                            style: TextStyle(
+                                fontSize: 26, fontWeight: FontWeight.bold)),
+                        TextButton(
+                            onPressed: () {
+                              setState(() {
+                                resultLoans?.sort(
+                                    (a, b) => a.loanDate.compareTo(b.loanDate));
+                                isExpirationDateBasedSort = false;
+                              });
+                            },
+                            child: Text(
+                              '대출 실행일 기준',
+                              style: !isExpirationDateBasedSort
+                                  ? TextStyle(
+                                      fontSize: 24, fontWeight: FontWeight.bold)
+                                  : null,
+                            )),
+                        TextButton(
+                            onPressed: () {
+                              setState(() {
+                                resultLoans?.sort((a, b) =>
+                                    a.remainingDays.compareTo(b.remainingDays));
+                                isExpirationDateBasedSort = true;
+                              });
+                            },
+                            child: Text(
+                              '대출 잔여일 기준',
+                              style: isExpirationDateBasedSort
+                                  ? TextStyle(
+                                      fontSize: 24, fontWeight: FontWeight.bold)
+                                  : null,
+                            )),
+                      ]),
                 )
               : null,
           appBar: AppBar(
@@ -100,18 +151,40 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 if ((resultLoans != null &&
                     widget.searchType == SearchType.loan))
-                  Row(
-                    children: [
-                      IconButton(
-                          onPressed: () => _key.currentState?.openDrawer(),
-                          icon: Icon(Icons.tune)),
-                      Text('체크박스 등 간단한 설정들'),
-                      ElevatedButton(onPressed: (){
-                        setState(() {
-                          isSelected = !isSelected;
-                        });
-                      }, child: Text('test'))
-                    ],
+                  GestureDetector(
+                    onTap: () => _key.currentState?.openDrawer(),
+                    child: SizedBox(
+                      height: 70,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Chip(
+                              label: Text(
+                                isAscendingSorted ? '오름차순 정렬' : '내림차순 정렬',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              backgroundColor: Colors.orange[900],
+                              side: BorderSide.none,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Chip(
+                              label: Text(
+                                isExpirationDateBasedSort
+                                    ? '대출 잔여일 기준'
+                                    : '대출 시행일 기준',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              backgroundColor: Colors.orange[900],
+                              side: BorderSide.none,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

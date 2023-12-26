@@ -15,4 +15,6 @@ required DateTime loanDate,
 required DateTime dueDate,
 }) = _BookLoan;
 factory BookLoan.fromJson(Map<String, dynamic> json) => _$BookLoanFromJson(json);
+
+
 }

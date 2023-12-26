@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:collection/collection.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
+import 'package:library_manage_app/library_app/src/entity/book_loan_extention.dart';
 
 import '../../entity/book.dart';
 import '../../entity/user.dart';
@@ -43,5 +45,9 @@ class ViewController {
   List<BookLoan> retrieveLoansFromLoanUid({String? loanUid}) {
     return loanService.retrieveLoansFromLoanUid(
         loans: this.loans ?? [], loanUid: loanUid ?? '');
+  }
+
+  List<BookLoan>? sortByExperationDate ({required List<BookLoan>? loans}){
+    return loans?.sorted((a, b) => a.remainingDays.compareTo(b.remainingDays))??[];
   }
 }

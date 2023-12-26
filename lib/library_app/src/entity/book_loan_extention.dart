@@ -24,4 +24,6 @@ extension BookLoanExtention on BookLoan {
       dueDate: d.Value(dueDate)
     );
   }
+
+  int get remainingDays => this.dueDate.difference(DateTime.now()).inDays;
 }
