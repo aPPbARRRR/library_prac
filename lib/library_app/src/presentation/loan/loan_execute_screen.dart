@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:library_manage_app/library_app/src/presentation/common/search_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/book_tile.dart';
+import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/user_tile.dart';
 import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_controller.dart';
 
@@ -54,7 +55,7 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                                   });
                                 },
                               )
-                            : LoanExecuteSearchButton(text:'대상 회원을 선택합니다.')),
+                            : LoanExecuteSearchButton(text: '대상 회원을 선택합니다.')),
                   )),
             ),
             Padding(
@@ -85,19 +86,19 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                             : LoanExecuteSearchButton(text: '대상 도서를 선택합니다.')),
                   )),
             ),
-            ElevatedButton(
-              
-                onPressed: () => user != null && book != null
+            CustomButton(
+                onTap: () => user != null && book != null
                     ? widget.loanController
-                        .loanRequest(book: book!, user: user!).then((loan) => Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                          return LoanSingleView(loan: loan,loanViewController: widget.loanController);
-                        })))
-                    // ScaffoldMessenger.of(context)
-                    //     .showSnackBar(SnackBar(content: Text('대출실행')))
-
+                        .loanRequest(book: book!, user: user!)
+                        .then((loan) => Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return LoanSingleView(
+                                  loan: loan,
+                                  loanViewController: widget.loanController);
+                            })))
                     : ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('대상 회원과 도서를 선택해주세요.'))),
-                child: Text('대출 실행'))
+                text: '대출 실행')
           ],
         ),
       ),
@@ -111,16 +112,16 @@ class LoanExecuteSearchButton extends StatelessWidget {
     required this.text,
   }) : super(key: key);
 
-final String text;
+  final String text;
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20),
-      height: MediaQuery.of(context).size.height/5,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.grey,
-      ),
-      child: Center(child: Text(text)));
+        margin: EdgeInsets.all(20),
+        height: MediaQuery.of(context).size.height / 5,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.grey,
+        ),
+        child: Center(child: Text(text)));
   }
 }

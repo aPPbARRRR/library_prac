@@ -1,10 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
 
 import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_controller.dart';
 
+import '../../entity/book.dart';
 import '../../entity/book_loan.dart';
+import '../../entity/user.dart';
 
 class LoanSingleView extends StatelessWidget {
   const LoanSingleView({
@@ -20,11 +24,29 @@ final LoanViewController loanViewController;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('대출 상세'),),
-      // body: FutureBuilder(future: loanViewController.getLoanDetailInfo, builder: (context, snapshot){
-      //   retrun Column();
-      // }),
+    LoanViewController controller = loanViewController;
+    User user = controller.users!.where((user) => user.userUid == loan.userUid).first; // ! 사용 주의
+    Book book = controller.books!.where((book)=> book.bookUid == loan.bookUid).first; // ! 사용 주의
+  
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(title: Text('대출 상세'),),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Text('대출자 : ${user.name}, (${user.userUid})',overflow: TextOverflow.ellipsis),
+              Text('대출도서 : ${book.bookName}, (${book.bookUid})', overflow: TextOverflow.ellipsis,),
+              Text('대출 실행일 : ${DateFormat('yyyy년 M월 d일').format(loan.loanDate)}'),
+              Text('반납 예정일 : ${DateFormat('yyyy년 M월 d일').format(loan.dueDate)}'),
+              Spacer(),
+              CustomButton(onTap: (){}, text: '대출 연장')
+              
+                
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
