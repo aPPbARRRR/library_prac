@@ -46,4 +46,11 @@ class LoanViewController extends ViewController {
           .showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
+
+  Future<BookLoan?> returnLoan({required BookLoan loan, required BuildContext context}) async {
+    try{
+      return await loanService.returnBook(loan: loan);
+    }catch(e){  ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));}
+  }
 }

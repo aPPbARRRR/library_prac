@@ -39,7 +39,7 @@ int remainingDays = loan.dueDate.difference(DateTime.now()).inDays;
           leading: Text(user.name),
           title: Text(book.bookName),
           subtitle: Text('${DateFormat('yy년 M월 d일 대출 실행').format(loan.loanDate)}\n${loan.loanUid}'),
-          trailing: Text('대출 잔여일 : ${remainingDays}일',),
+          trailing: loan.isReturned? Text('반납완료', style: TextStyle(color: Colors.black),) : Text('대출 잔여일 : ${remainingDays}일',),
         ),
       ),
     );

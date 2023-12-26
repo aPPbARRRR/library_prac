@@ -5,23 +5,26 @@ class CustomButton extends StatelessWidget {
   final Function onTap;
   final String text;
   final double? fontSize;
+  final double? padding;
   const CustomButton(
-      {Key? key, required this.onTap, required this.text, this.fontSize})
+      {Key? key, required this.onTap, required this.text, this.fontSize, this.padding})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        onTap();
-      },
-      child: Text(text),
-      style: ElevatedButton.styleFrom(
-        
-          backgroundColor: Colors.orange[900],
-          foregroundColor: Colors.grey[350],
-          textStyle:
-              TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize ?? 20)),
+    return Padding(
+      padding: EdgeInsets.all(padding??0),
+      child: ElevatedButton(
+        onPressed: () {
+          onTap();
+        },
+        child: Text(text),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange[900],
+            foregroundColor: Colors.grey[350],
+            textStyle:
+                TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize ?? 20)),
+      ),
     );
   }
 }

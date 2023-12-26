@@ -8,7 +8,7 @@ abstract interface class LoanService {
   Future<BookLoan> loanBook({required User user, required Book book});
 
   // 도서 반납 수행
-  void returnBook({required BookLoan loan});
+  Future<BookLoan> returnBook({required BookLoan loan});
 
   // 대출 연장 수행
   Future<BookLoan> extendLoan({required BookLoan loan, int? day});

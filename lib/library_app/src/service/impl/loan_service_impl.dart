@@ -31,8 +31,9 @@ class LoanServiceImpl implements LoanService {
   }
 
   @override
-  void returnBook({required BookLoan loan}) {
-    // TODO: implement returnBook
+  Future<BookLoan> returnBook({required BookLoan loan}) async {
+     if(loan.isReturned) throw Exception('이미 반납된 대출입니다. 다시 연장할 수 없습니다.');
+  return await repository.returnBookLoan(loan: loan);
   }
 
   @override

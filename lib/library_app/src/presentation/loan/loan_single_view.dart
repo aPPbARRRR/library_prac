@@ -35,11 +35,25 @@ class LoanSingleView extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: 80,
           title: Text('대출 상세'),
+          actions: [
+            CustomButton(
+              onTap: () async {
+                await controller.returnLoan(loan: loan, context: context).then(
+                    (value) =>
+                        value != null ? Navigator.of(context).pop() : null);
+              },
+              text: '반납처리',
+              fontSize: 17,
+              padding: 10,
+            )
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text('대출자 : ${user.name}, (${user.userUid})',
                   overflow: TextOverflow.ellipsis),
@@ -57,18 +71,21 @@ class LoanSingleView extends StatelessWidget {
                 children: [
                   Text('연장일 :'),
                   DropdownButton(
-                    value: day,
+                      value: day,
                       items: List.generate(7, (index) => index + 1)
-                          .map((e) =>
-                              DropdownMenuItem(child: Text(e.toString()), value: e,))
+                          .map((e) => DropdownMenuItem(
+                                child: Text(e.toString()),
+                                value: e,
+                              ))
                           .toList(),
                       onChanged: (value) {
-                        if(value!=null)day= value;
+                        if (value != null) day = value;
                         print(day);
                       }),
                   CustomButton(
                       onTap: () async {
-                        await controller.extendLoan(loan: loan, day: day, context: context);
+                        await controller.extendLoan(
+                            loan: loan, day: day, context: context);
                         Navigator.pop(context);
                       },
                       text: '대출 연장'),

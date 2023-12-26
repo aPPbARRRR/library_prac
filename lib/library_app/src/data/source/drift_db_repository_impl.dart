@@ -139,8 +139,29 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<BookLoan> returnBookLoan({required BookLoan bookLoan}) {
-    throw UnimplementedError();
+  Future<BookLoan> returnBookLoan({required BookLoan loan}) async {
+    LoanTableData? data;
+
+    await (db.update(db.loanTable)
+          ..where((tbl) => tbl.loanUid.equals(loan.loanUid)))
+        .write(LoanTableCompanion(isReturned: d.Value(true)));
+
+    // return 전 데이터베이스 최신화 : 도서(대여중 -> 서고보관중)
+    await (db.update(db.bookTable)
+          ..where((tbl) => tbl.bookUid.equals(loan.bookUid)))
+        .write(BookTableCompanion(isBookLoaned: d.Value(false)));
+
+    await db.getLoan(loan.loanUid).then((value) => value.length < 1
+        ? throw Exception('repository / executeLoan / getLoan : Failed')
+        : data = value[0]);
+    return BookLoan(
+        loanUid: data!.loanUid,
+        bookUid: data!.bookUid,
+        userUid: data!.userUid,
+        loanDate: data!.loanDate,
+        dueDate: data!.dueDate,
+        isReturned: data!.isReturned,
+        isExtended: data!.isExtended);
   }
 
   @override
