@@ -25,6 +25,8 @@ mixin _$BookLoan {
   String get userUid => throw _privateConstructorUsedError;
   DateTime get loanDate => throw _privateConstructorUsedError;
   DateTime get dueDate => throw _privateConstructorUsedError;
+  bool get isReturned => throw _privateConstructorUsedError;
+  bool get isExtended => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,7 +44,9 @@ abstract class $BookLoanCopyWith<$Res> {
       String bookUid,
       String userUid,
       DateTime loanDate,
-      DateTime dueDate});
+      DateTime dueDate,
+      bool isReturned,
+      bool isExtended});
 }
 
 /// @nodoc
@@ -63,6 +67,8 @@ class _$BookLoanCopyWithImpl<$Res, $Val extends BookLoan>
     Object? userUid = null,
     Object? loanDate = null,
     Object? dueDate = null,
+    Object? isReturned = null,
+    Object? isExtended = null,
   }) {
     return _then(_value.copyWith(
       loanUid: null == loanUid
@@ -85,6 +91,14 @@ class _$BookLoanCopyWithImpl<$Res, $Val extends BookLoan>
           ? _value.dueDate
           : dueDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      isReturned: null == isReturned
+          ? _value.isReturned
+          : isReturned // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isExtended: null == isExtended
+          ? _value.isExtended
+          : isExtended // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -102,7 +116,9 @@ abstract class _$$BookLoanImplCopyWith<$Res>
       String bookUid,
       String userUid,
       DateTime loanDate,
-      DateTime dueDate});
+      DateTime dueDate,
+      bool isReturned,
+      bool isExtended});
 }
 
 /// @nodoc
@@ -121,6 +137,8 @@ class __$$BookLoanImplCopyWithImpl<$Res>
     Object? userUid = null,
     Object? loanDate = null,
     Object? dueDate = null,
+    Object? isReturned = null,
+    Object? isExtended = null,
   }) {
     return _then(_$BookLoanImpl(
       loanUid: null == loanUid
@@ -143,6 +161,14 @@ class __$$BookLoanImplCopyWithImpl<$Res>
           ? _value.dueDate
           : dueDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      isReturned: null == isReturned
+          ? _value.isReturned
+          : isReturned // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isExtended: null == isExtended
+          ? _value.isExtended
+          : isExtended // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -155,7 +181,9 @@ class _$BookLoanImpl with DiagnosticableTreeMixin implements _BookLoan {
       required this.bookUid,
       required this.userUid,
       required this.loanDate,
-      required this.dueDate});
+      required this.dueDate,
+      required this.isReturned,
+      required this.isExtended});
 
   factory _$BookLoanImpl.fromJson(Map<String, dynamic> json) =>
       _$$BookLoanImplFromJson(json);
@@ -170,10 +198,14 @@ class _$BookLoanImpl with DiagnosticableTreeMixin implements _BookLoan {
   final DateTime loanDate;
   @override
   final DateTime dueDate;
+  @override
+  final bool isReturned;
+  @override
+  final bool isExtended;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BookLoan(loanUid: $loanUid, bookUid: $bookUid, userUid: $userUid, loanDate: $loanDate, dueDate: $dueDate)';
+    return 'BookLoan(loanUid: $loanUid, bookUid: $bookUid, userUid: $userUid, loanDate: $loanDate, dueDate: $dueDate, isReturned: $isReturned, isExtended: $isExtended)';
   }
 
   @override
@@ -185,7 +217,9 @@ class _$BookLoanImpl with DiagnosticableTreeMixin implements _BookLoan {
       ..add(DiagnosticsProperty('bookUid', bookUid))
       ..add(DiagnosticsProperty('userUid', userUid))
       ..add(DiagnosticsProperty('loanDate', loanDate))
-      ..add(DiagnosticsProperty('dueDate', dueDate));
+      ..add(DiagnosticsProperty('dueDate', dueDate))
+      ..add(DiagnosticsProperty('isReturned', isReturned))
+      ..add(DiagnosticsProperty('isExtended', isExtended));
   }
 
   @override
@@ -198,13 +232,17 @@ class _$BookLoanImpl with DiagnosticableTreeMixin implements _BookLoan {
             (identical(other.userUid, userUid) || other.userUid == userUid) &&
             (identical(other.loanDate, loanDate) ||
                 other.loanDate == loanDate) &&
-            (identical(other.dueDate, dueDate) || other.dueDate == dueDate));
+            (identical(other.dueDate, dueDate) || other.dueDate == dueDate) &&
+            (identical(other.isReturned, isReturned) ||
+                other.isReturned == isReturned) &&
+            (identical(other.isExtended, isExtended) ||
+                other.isExtended == isExtended));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, loanUid, bookUid, userUid, loanDate, dueDate);
+  int get hashCode => Object.hash(runtimeType, loanUid, bookUid, userUid,
+      loanDate, dueDate, isReturned, isExtended);
 
   @JsonKey(ignore: true)
   @override
@@ -226,7 +264,9 @@ abstract class _BookLoan implements BookLoan {
       required final String bookUid,
       required final String userUid,
       required final DateTime loanDate,
-      required final DateTime dueDate}) = _$BookLoanImpl;
+      required final DateTime dueDate,
+      required final bool isReturned,
+      required final bool isExtended}) = _$BookLoanImpl;
 
   factory _BookLoan.fromJson(Map<String, dynamic> json) =
       _$BookLoanImpl.fromJson;
@@ -241,6 +281,10 @@ abstract class _BookLoan implements BookLoan {
   DateTime get loanDate;
   @override
   DateTime get dueDate;
+  @override
+  bool get isReturned;
+  @override
+  bool get isExtended;
   @override
   @JsonKey(ignore: true)
   _$$BookLoanImplCopyWith<_$BookLoanImpl> get copyWith =>

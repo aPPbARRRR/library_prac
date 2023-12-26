@@ -21,7 +21,10 @@ abstract interface class DatabaseRepository {
   Future<BookLoan> executeLoan({required User user, required Book book});
 
   // 반납시 데이터베이스에 저장
-  Future<void> returnBookLoan({required BookLoan bookLoan});
+  Future<BookLoan> returnBookLoan({required BookLoan bookLoan});
+
+  // 대출 연장
+  Future<BookLoan> extendLoanDueDate({required BookLoan loan, int? day});
 
   // 회원 등록
   Future<User> createUser({required User user});

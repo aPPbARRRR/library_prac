@@ -19,8 +19,10 @@ class LoanServiceImpl implements LoanService {
   }
 
   @override
-  void extendLoan({required BookLoan loan}) {
-    // TODO: implement extendLoan
+  Future<BookLoan> extendLoan({required BookLoan loan, int? day}) async {
+    if(loan.isExtended) throw Exception('이미 연장된 대출입니다. 다시 연장할 수 없습니다.');
+    BookLoan tempLoan = await repository.extendLoanDueDate(loan: loan);
+    return tempLoan;
   }
 
   @override

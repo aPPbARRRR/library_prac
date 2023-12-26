@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/view_controller.dart';
 import 'package:library_manage_app/library_app/src/service/interface/book_service.dart';
@@ -29,9 +30,20 @@ class LoanViewController extends ViewController {
   Future<BookLoan> loanRequest({required User user, required Book book}) async {
     return await loanService
         .loanBook(user: user, book: book)
-        .then((value) async { // 대출 실행시 loan controller의 users, books, loans 최신화시킴
+        .then((value) async {
+      // 대출 실행시 loan controller의 users, books, loans 최신화시킴
       await refreshAllDataFromDB();
       return value;
     });
+  }
+
+  Future<BookLoan?> extendLoan(
+      {required BookLoan loan, int? day, required BuildContext context}) async {
+    try {
+      return await loanService.extendLoan(loan: loan, day: day);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
 }

@@ -8,6 +8,7 @@ class Book with _$Book {
 factory Book({
 required   String bookName,
 required String bookUid,
+required String author,
   required DateTime publishDate,
   required bool isBookLoaned,
   int? loanRemainingDays,

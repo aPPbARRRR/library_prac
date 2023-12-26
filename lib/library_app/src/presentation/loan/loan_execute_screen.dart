@@ -87,17 +87,27 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                   )),
             ),
             CustomButton(
-                onTap: () => user != null && book != null
-                    ? widget.loanController
+                onTap: () {
+                  if (user != null && book != null && !book!.isBookLoaned) {
+                    widget.loanController
                         .loanRequest(book: book!, user: user!)
                         .then((loan) => Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
                               return LoanSingleView(
                                   loan: loan,
                                   loanViewController: widget.loanController);
-                            })))
-                    : ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('대상 회원과 도서를 선택해주세요.'))),
+                            })));
+                  }
+                  else if (book !=null && book!.isBookLoaned) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('이미 대출중인 도서입니다.')));
+                  }
+                  
+                  else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('대상 회원과 도서를 선택해주세요.')));
+                  }
+                },
                 text: '대출 실행')
           ],
         ),

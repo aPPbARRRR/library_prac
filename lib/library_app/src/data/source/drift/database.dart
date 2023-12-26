@@ -24,6 +24,7 @@ class UserTable extends Table {
 class BookTable extends Table {
   TextColumn get bookUid => text()();
   TextColumn get bookName => text()();
+  TextColumn get author => text()();
   DateTimeColumn get publishDate => dateTime()();
   BoolColumn get isBookLoaned => boolean()();
   IntColumn get loanRemainingDays => integer()();
@@ -35,6 +36,8 @@ class LoanTable extends Table {
   TextColumn get userUid => text()();
   DateTimeColumn get loanDate => dateTime()();
   DateTimeColumn get dueDate => dateTime()();
+  BoolColumn get isReturned => boolean()();
+  BoolColumn get isExtended => boolean()();
 }
 
 

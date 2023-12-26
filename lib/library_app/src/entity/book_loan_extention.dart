@@ -21,7 +21,9 @@ extension BookLoanExtention on BookLoan {
       userUid: d.Value(userUid),
       loanUid: d.Value(loanUid),
       loanDate: d.Value(loanDate),
-      dueDate: d.Value(dueDate)
+      dueDate: d.Value(dueDate),
+      isReturned: d.Value(isReturned),
+      isExtended: d.Value(isExtended),
     );
   }
 

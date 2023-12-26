@@ -360,6 +360,11 @@ class $BookTableTable extends BookTable
   late final GeneratedColumn<String> bookName = GeneratedColumn<String>(
       'book_name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _authorMeta = const VerificationMeta('author');
+  @override
+  late final GeneratedColumn<String> author = GeneratedColumn<String>(
+      'author', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _publishDateMeta =
       const VerificationMeta('publishDate');
   @override
@@ -383,7 +388,7 @@ class $BookTableTable extends BookTable
       type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [bookUid, bookName, publishDate, isBookLoaned, loanRemainingDays];
+      [bookUid, bookName, author, publishDate, isBookLoaned, loanRemainingDays];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -405,6 +410,12 @@ class $BookTableTable extends BookTable
           bookName.isAcceptableOrUnknown(data['book_name']!, _bookNameMeta));
     } else if (isInserting) {
       context.missing(_bookNameMeta);
+    }
+    if (data.containsKey('author')) {
+      context.handle(_authorMeta,
+          author.isAcceptableOrUnknown(data['author']!, _authorMeta));
+    } else if (isInserting) {
+      context.missing(_authorMeta);
     }
     if (data.containsKey('publish_date')) {
       context.handle(
@@ -443,6 +454,8 @@ class $BookTableTable extends BookTable
           .read(DriftSqlType.string, data['${effectivePrefix}book_uid'])!,
       bookName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}book_name'])!,
+      author: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}author'])!,
       publishDate: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}publish_date'])!,
       isBookLoaned: attachedDatabase.typeMapping
@@ -461,12 +474,14 @@ class $BookTableTable extends BookTable
 class BookTableData extends DataClass implements Insertable<BookTableData> {
   final String bookUid;
   final String bookName;
+  final String author;
   final DateTime publishDate;
   final bool isBookLoaned;
   final int loanRemainingDays;
   const BookTableData(
       {required this.bookUid,
       required this.bookName,
+      required this.author,
       required this.publishDate,
       required this.isBookLoaned,
       required this.loanRemainingDays});
@@ -475,6 +490,7 @@ class BookTableData extends DataClass implements Insertable<BookTableData> {
     final map = <String, Expression>{};
     map['book_uid'] = Variable<String>(bookUid);
     map['book_name'] = Variable<String>(bookName);
+    map['author'] = Variable<String>(author);
     map['publish_date'] = Variable<DateTime>(publishDate);
     map['is_book_loaned'] = Variable<bool>(isBookLoaned);
     map['loan_remaining_days'] = Variable<int>(loanRemainingDays);
@@ -485,6 +501,7 @@ class BookTableData extends DataClass implements Insertable<BookTableData> {
     return BookTableCompanion(
       bookUid: Value(bookUid),
       bookName: Value(bookName),
+      author: Value(author),
       publishDate: Value(publishDate),
       isBookLoaned: Value(isBookLoaned),
       loanRemainingDays: Value(loanRemainingDays),
@@ -497,6 +514,7 @@ class BookTableData extends DataClass implements Insertable<BookTableData> {
     return BookTableData(
       bookUid: serializer.fromJson<String>(json['bookUid']),
       bookName: serializer.fromJson<String>(json['bookName']),
+      author: serializer.fromJson<String>(json['author']),
       publishDate: serializer.fromJson<DateTime>(json['publishDate']),
       isBookLoaned: serializer.fromJson<bool>(json['isBookLoaned']),
       loanRemainingDays: serializer.fromJson<int>(json['loanRemainingDays']),
@@ -508,6 +526,7 @@ class BookTableData extends DataClass implements Insertable<BookTableData> {
     return <String, dynamic>{
       'bookUid': serializer.toJson<String>(bookUid),
       'bookName': serializer.toJson<String>(bookName),
+      'author': serializer.toJson<String>(author),
       'publishDate': serializer.toJson<DateTime>(publishDate),
       'isBookLoaned': serializer.toJson<bool>(isBookLoaned),
       'loanRemainingDays': serializer.toJson<int>(loanRemainingDays),
@@ -517,12 +536,14 @@ class BookTableData extends DataClass implements Insertable<BookTableData> {
   BookTableData copyWith(
           {String? bookUid,
           String? bookName,
+          String? author,
           DateTime? publishDate,
           bool? isBookLoaned,
           int? loanRemainingDays}) =>
       BookTableData(
         bookUid: bookUid ?? this.bookUid,
         bookName: bookName ?? this.bookName,
+        author: author ?? this.author,
         publishDate: publishDate ?? this.publishDate,
         isBookLoaned: isBookLoaned ?? this.isBookLoaned,
         loanRemainingDays: loanRemainingDays ?? this.loanRemainingDays,
@@ -532,6 +553,7 @@ class BookTableData extends DataClass implements Insertable<BookTableData> {
     return (StringBuffer('BookTableData(')
           ..write('bookUid: $bookUid, ')
           ..write('bookName: $bookName, ')
+          ..write('author: $author, ')
           ..write('publishDate: $publishDate, ')
           ..write('isBookLoaned: $isBookLoaned, ')
           ..write('loanRemainingDays: $loanRemainingDays')
@@ -541,13 +563,14 @@ class BookTableData extends DataClass implements Insertable<BookTableData> {
 
   @override
   int get hashCode => Object.hash(
-      bookUid, bookName, publishDate, isBookLoaned, loanRemainingDays);
+      bookUid, bookName, author, publishDate, isBookLoaned, loanRemainingDays);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is BookTableData &&
           other.bookUid == this.bookUid &&
           other.bookName == this.bookName &&
+          other.author == this.author &&
           other.publishDate == this.publishDate &&
           other.isBookLoaned == this.isBookLoaned &&
           other.loanRemainingDays == this.loanRemainingDays);
@@ -556,6 +579,7 @@ class BookTableData extends DataClass implements Insertable<BookTableData> {
 class BookTableCompanion extends UpdateCompanion<BookTableData> {
   final Value<String> bookUid;
   final Value<String> bookName;
+  final Value<String> author;
   final Value<DateTime> publishDate;
   final Value<bool> isBookLoaned;
   final Value<int> loanRemainingDays;
@@ -563,6 +587,7 @@ class BookTableCompanion extends UpdateCompanion<BookTableData> {
   const BookTableCompanion({
     this.bookUid = const Value.absent(),
     this.bookName = const Value.absent(),
+    this.author = const Value.absent(),
     this.publishDate = const Value.absent(),
     this.isBookLoaned = const Value.absent(),
     this.loanRemainingDays = const Value.absent(),
@@ -571,18 +596,21 @@ class BookTableCompanion extends UpdateCompanion<BookTableData> {
   BookTableCompanion.insert({
     required String bookUid,
     required String bookName,
+    required String author,
     required DateTime publishDate,
     required bool isBookLoaned,
     required int loanRemainingDays,
     this.rowid = const Value.absent(),
   })  : bookUid = Value(bookUid),
         bookName = Value(bookName),
+        author = Value(author),
         publishDate = Value(publishDate),
         isBookLoaned = Value(isBookLoaned),
         loanRemainingDays = Value(loanRemainingDays);
   static Insertable<BookTableData> custom({
     Expression<String>? bookUid,
     Expression<String>? bookName,
+    Expression<String>? author,
     Expression<DateTime>? publishDate,
     Expression<bool>? isBookLoaned,
     Expression<int>? loanRemainingDays,
@@ -591,6 +619,7 @@ class BookTableCompanion extends UpdateCompanion<BookTableData> {
     return RawValuesInsertable({
       if (bookUid != null) 'book_uid': bookUid,
       if (bookName != null) 'book_name': bookName,
+      if (author != null) 'author': author,
       if (publishDate != null) 'publish_date': publishDate,
       if (isBookLoaned != null) 'is_book_loaned': isBookLoaned,
       if (loanRemainingDays != null) 'loan_remaining_days': loanRemainingDays,
@@ -601,6 +630,7 @@ class BookTableCompanion extends UpdateCompanion<BookTableData> {
   BookTableCompanion copyWith(
       {Value<String>? bookUid,
       Value<String>? bookName,
+      Value<String>? author,
       Value<DateTime>? publishDate,
       Value<bool>? isBookLoaned,
       Value<int>? loanRemainingDays,
@@ -608,6 +638,7 @@ class BookTableCompanion extends UpdateCompanion<BookTableData> {
     return BookTableCompanion(
       bookUid: bookUid ?? this.bookUid,
       bookName: bookName ?? this.bookName,
+      author: author ?? this.author,
       publishDate: publishDate ?? this.publishDate,
       isBookLoaned: isBookLoaned ?? this.isBookLoaned,
       loanRemainingDays: loanRemainingDays ?? this.loanRemainingDays,
@@ -623,6 +654,9 @@ class BookTableCompanion extends UpdateCompanion<BookTableData> {
     }
     if (bookName.present) {
       map['book_name'] = Variable<String>(bookName.value);
+    }
+    if (author.present) {
+      map['author'] = Variable<String>(author.value);
     }
     if (publishDate.present) {
       map['publish_date'] = Variable<DateTime>(publishDate.value);
@@ -644,6 +678,7 @@ class BookTableCompanion extends UpdateCompanion<BookTableData> {
     return (StringBuffer('BookTableCompanion(')
           ..write('bookUid: $bookUid, ')
           ..write('bookName: $bookName, ')
+          ..write('author: $author, ')
           ..write('publishDate: $publishDate, ')
           ..write('isBookLoaned: $isBookLoaned, ')
           ..write('loanRemainingDays: $loanRemainingDays, ')
@@ -689,9 +724,27 @@ class $LoanTableTable extends LoanTable
   late final GeneratedColumn<DateTime> dueDate = GeneratedColumn<DateTime>(
       'due_date', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _isReturnedMeta =
+      const VerificationMeta('isReturned');
+  @override
+  late final GeneratedColumn<bool> isReturned = GeneratedColumn<bool>(
+      'is_returned', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_returned" IN (0, 1))'));
+  static const VerificationMeta _isExtendedMeta =
+      const VerificationMeta('isExtended');
+  @override
+  late final GeneratedColumn<bool> isExtended = GeneratedColumn<bool>(
+      'is_extended', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_extended" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns =>
-      [loanUid, bookUid, userUid, loanDate, dueDate];
+      [loanUid, bookUid, userUid, loanDate, dueDate, isReturned, isExtended];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -732,6 +785,22 @@ class $LoanTableTable extends LoanTable
     } else if (isInserting) {
       context.missing(_dueDateMeta);
     }
+    if (data.containsKey('is_returned')) {
+      context.handle(
+          _isReturnedMeta,
+          isReturned.isAcceptableOrUnknown(
+              data['is_returned']!, _isReturnedMeta));
+    } else if (isInserting) {
+      context.missing(_isReturnedMeta);
+    }
+    if (data.containsKey('is_extended')) {
+      context.handle(
+          _isExtendedMeta,
+          isExtended.isAcceptableOrUnknown(
+              data['is_extended']!, _isExtendedMeta));
+    } else if (isInserting) {
+      context.missing(_isExtendedMeta);
+    }
     return context;
   }
 
@@ -751,6 +820,10 @@ class $LoanTableTable extends LoanTable
           .read(DriftSqlType.dateTime, data['${effectivePrefix}loan_date'])!,
       dueDate: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}due_date'])!,
+      isReturned: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_returned'])!,
+      isExtended: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_extended'])!,
     );
   }
 
@@ -766,12 +839,16 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
   final String userUid;
   final DateTime loanDate;
   final DateTime dueDate;
+  final bool isReturned;
+  final bool isExtended;
   const LoanTableData(
       {required this.loanUid,
       required this.bookUid,
       required this.userUid,
       required this.loanDate,
-      required this.dueDate});
+      required this.dueDate,
+      required this.isReturned,
+      required this.isExtended});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -780,6 +857,8 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
     map['user_uid'] = Variable<String>(userUid);
     map['loan_date'] = Variable<DateTime>(loanDate);
     map['due_date'] = Variable<DateTime>(dueDate);
+    map['is_returned'] = Variable<bool>(isReturned);
+    map['is_extended'] = Variable<bool>(isExtended);
     return map;
   }
 
@@ -790,6 +869,8 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
       userUid: Value(userUid),
       loanDate: Value(loanDate),
       dueDate: Value(dueDate),
+      isReturned: Value(isReturned),
+      isExtended: Value(isExtended),
     );
   }
 
@@ -802,6 +883,8 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
       userUid: serializer.fromJson<String>(json['userUid']),
       loanDate: serializer.fromJson<DateTime>(json['loanDate']),
       dueDate: serializer.fromJson<DateTime>(json['dueDate']),
+      isReturned: serializer.fromJson<bool>(json['isReturned']),
+      isExtended: serializer.fromJson<bool>(json['isExtended']),
     );
   }
   @override
@@ -813,6 +896,8 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
       'userUid': serializer.toJson<String>(userUid),
       'loanDate': serializer.toJson<DateTime>(loanDate),
       'dueDate': serializer.toJson<DateTime>(dueDate),
+      'isReturned': serializer.toJson<bool>(isReturned),
+      'isExtended': serializer.toJson<bool>(isExtended),
     };
   }
 
@@ -821,13 +906,17 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
           String? bookUid,
           String? userUid,
           DateTime? loanDate,
-          DateTime? dueDate}) =>
+          DateTime? dueDate,
+          bool? isReturned,
+          bool? isExtended}) =>
       LoanTableData(
         loanUid: loanUid ?? this.loanUid,
         bookUid: bookUid ?? this.bookUid,
         userUid: userUid ?? this.userUid,
         loanDate: loanDate ?? this.loanDate,
         dueDate: dueDate ?? this.dueDate,
+        isReturned: isReturned ?? this.isReturned,
+        isExtended: isExtended ?? this.isExtended,
       );
   @override
   String toString() {
@@ -836,13 +925,16 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
           ..write('bookUid: $bookUid, ')
           ..write('userUid: $userUid, ')
           ..write('loanDate: $loanDate, ')
-          ..write('dueDate: $dueDate')
+          ..write('dueDate: $dueDate, ')
+          ..write('isReturned: $isReturned, ')
+          ..write('isExtended: $isExtended')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(loanUid, bookUid, userUid, loanDate, dueDate);
+  int get hashCode => Object.hash(
+      loanUid, bookUid, userUid, loanDate, dueDate, isReturned, isExtended);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -851,7 +943,9 @@ class LoanTableData extends DataClass implements Insertable<LoanTableData> {
           other.bookUid == this.bookUid &&
           other.userUid == this.userUid &&
           other.loanDate == this.loanDate &&
-          other.dueDate == this.dueDate);
+          other.dueDate == this.dueDate &&
+          other.isReturned == this.isReturned &&
+          other.isExtended == this.isExtended);
 }
 
 class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
@@ -860,6 +954,8 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
   final Value<String> userUid;
   final Value<DateTime> loanDate;
   final Value<DateTime> dueDate;
+  final Value<bool> isReturned;
+  final Value<bool> isExtended;
   final Value<int> rowid;
   const LoanTableCompanion({
     this.loanUid = const Value.absent(),
@@ -867,6 +963,8 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
     this.userUid = const Value.absent(),
     this.loanDate = const Value.absent(),
     this.dueDate = const Value.absent(),
+    this.isReturned = const Value.absent(),
+    this.isExtended = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   LoanTableCompanion.insert({
@@ -875,18 +973,24 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
     required String userUid,
     required DateTime loanDate,
     required DateTime dueDate,
+    required bool isReturned,
+    required bool isExtended,
     this.rowid = const Value.absent(),
   })  : loanUid = Value(loanUid),
         bookUid = Value(bookUid),
         userUid = Value(userUid),
         loanDate = Value(loanDate),
-        dueDate = Value(dueDate);
+        dueDate = Value(dueDate),
+        isReturned = Value(isReturned),
+        isExtended = Value(isExtended);
   static Insertable<LoanTableData> custom({
     Expression<String>? loanUid,
     Expression<String>? bookUid,
     Expression<String>? userUid,
     Expression<DateTime>? loanDate,
     Expression<DateTime>? dueDate,
+    Expression<bool>? isReturned,
+    Expression<bool>? isExtended,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -895,6 +999,8 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
       if (userUid != null) 'user_uid': userUid,
       if (loanDate != null) 'loan_date': loanDate,
       if (dueDate != null) 'due_date': dueDate,
+      if (isReturned != null) 'is_returned': isReturned,
+      if (isExtended != null) 'is_extended': isExtended,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -905,6 +1011,8 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
       Value<String>? userUid,
       Value<DateTime>? loanDate,
       Value<DateTime>? dueDate,
+      Value<bool>? isReturned,
+      Value<bool>? isExtended,
       Value<int>? rowid}) {
     return LoanTableCompanion(
       loanUid: loanUid ?? this.loanUid,
@@ -912,6 +1020,8 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
       userUid: userUid ?? this.userUid,
       loanDate: loanDate ?? this.loanDate,
       dueDate: dueDate ?? this.dueDate,
+      isReturned: isReturned ?? this.isReturned,
+      isExtended: isExtended ?? this.isExtended,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -934,6 +1044,12 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
     if (dueDate.present) {
       map['due_date'] = Variable<DateTime>(dueDate.value);
     }
+    if (isReturned.present) {
+      map['is_returned'] = Variable<bool>(isReturned.value);
+    }
+    if (isExtended.present) {
+      map['is_extended'] = Variable<bool>(isExtended.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -948,6 +1064,8 @@ class LoanTableCompanion extends UpdateCompanion<LoanTableData> {
           ..write('userUid: $userUid, ')
           ..write('loanDate: $loanDate, ')
           ..write('dueDate: $dueDate, ')
+          ..write('isReturned: $isReturned, ')
+          ..write('isExtended: $isExtended, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

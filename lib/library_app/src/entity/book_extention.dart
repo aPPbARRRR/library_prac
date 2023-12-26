@@ -10,7 +10,8 @@ extension BookExtention on Book {
       bookUid: d.Value(this.bookUid),
       publishDate: d.Value(this.publishDate),
       isBookLoaned: d.Value(this.isBookLoaned),
-      loanRemainingDays: d.Value(this.loanRemainingDays??-1)
+      loanRemainingDays: d.Value(this.loanRemainingDays??-1),
+      author: d.Value(this.author)
     );
   }
 }

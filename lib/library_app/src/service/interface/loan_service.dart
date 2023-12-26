@@ -11,7 +11,7 @@ abstract interface class LoanService {
   void returnBook({required BookLoan loan});
 
   // 대출 연장 수행
-  void extendLoan({required BookLoan loan});
+  Future<BookLoan> extendLoan({required BookLoan loan, int? day});
   
   // 모든 대출 목록 반환
   Future<List<BookLoan>> getAllLoans ();

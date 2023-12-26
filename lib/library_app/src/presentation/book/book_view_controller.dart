@@ -21,8 +21,9 @@ class BookViewController extends ViewController {
 
   Future<Book> resisterBook(
       {required   String bookName,
+      required String author,
   required DateTime publishDate,}) async {
-    final Book tempBook = Book(bookName: bookName, bookUid: Uuid().v4(), publishDate: publishDate, isBookLoaned: false);
+    final Book tempBook = Book(bookName: bookName, bookUid: Uuid().v4(), publishDate: publishDate, isBookLoaned: false, author: author);
      return await bookService.resisterBook(book: tempBook);
      
 

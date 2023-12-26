@@ -1,8 +1,5 @@
-import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/data/repository/database_repository.dart';
 import 'package:library_manage_app/library_app/src/data/source/drift/database.dart';
 import 'package:library_manage_app/library_app/src/entity/book.dart';
@@ -59,7 +56,9 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
         bookUid: book.bookUid,
         userUid: user.userUid,
         loanDate: DateTime.now(),
-        dueDate: DateTime.now().add(Duration(days: 14)));
+        dueDate: DateTime.now().add(Duration(days: 14)),
+        isReturned: false,
+        isExtended: false);
     LoanTableData? data;
 
     // 로컬 db에 데이터 저장
@@ -71,7 +70,8 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
         : data = value[0]);
 
     // return 전 데이터베이스 최신화 : 도서(서고보관중 -> 대여중)
-    (db.update(db.bookTable)..where((tbl) => tbl.bookUid.equals(data!.bookUid)))
+    await (db.update(db.bookTable)
+          ..where((tbl) => tbl.bookUid.equals(data!.bookUid)))
         .write(BookTableCompanion(isBookLoaned: d.Value(true)));
 
     // BookLoan 객체 생성하여 return
@@ -80,36 +80,36 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
         bookUid: data!.bookUid,
         userUid: data!.userUid,
         loanDate: data!.loanDate,
-        dueDate: data!.dueDate);
+        dueDate: data!.dueDate,
+        isReturned: data!.isReturned,
+        isExtended: data!.isExtended);
   }
 
   @override
   Future<List<BookLoan>> getBookLoans() async {
-    print('drift repository / getBookLoans');
-    // var allUsersDataTable =await db.select(db.userTable).get();
     List<LoanTableData> allLoansDataTable = await db.selectAllLoans();
-    print('done');
     return allLoansDataTable
         .map((loanDataTable) => BookLoan(
             bookUid: loanDataTable.bookUid,
             dueDate: loanDataTable.dueDate,
             loanDate: loanDataTable.loanDate,
             loanUid: loanDataTable.loanUid,
-            userUid: loanDataTable.userUid))
+            userUid: loanDataTable.userUid,
+            isReturned: loanDataTable.isReturned,
+            isExtended: loanDataTable.isExtended))
         .toList();
   }
 
   @override
   Future<List<Book>> getBooks() async {
-    print('drift repository / getBooks');
-    // var allUsersDataTable =await db.select(db.userTable).get();
     List<BookTableData> allBooksDataTable = await db.selectAllBooks();
     return allBooksDataTable
         .map((bookDataTable) => Book(
             bookName: bookDataTable.bookName,
             bookUid: bookDataTable.bookUid,
             publishDate: bookDataTable.publishDate,
-            isBookLoaned: bookDataTable.isBookLoaned))
+            isBookLoaned: bookDataTable.isBookLoaned,
+            author: bookDataTable.author))
         .toList();
   }
 
@@ -127,7 +127,8 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
         bookName: data!.bookName,
         bookUid: data!.bookUid,
         publishDate: data!.publishDate,
-        isBookLoaned: data!.isBookLoaned);
+        isBookLoaned: data!.isBookLoaned,
+        author: data!.author);
   }
 
   @override
@@ -138,9 +139,29 @@ class DriftDBRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<void> returnBookLoan({required BookLoan bookLoan}) {
-    // TODO: implement returnBookLoan
+  Future<BookLoan> returnBookLoan({required BookLoan bookLoan}) {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<BookLoan> extendLoanDueDate({required BookLoan loan, int? day}) async {
+    LoanTableData? data;
+    await (db.update(db.loanTable)
+          ..where((tbl) => tbl.loanUid.equals(loan.loanUid)))
+        .write(LoanTableCompanion(
+            dueDate: d.Value(loan.dueDate.add(Duration(days: day ?? 7))),
+            isExtended: d.Value(true)));
+    await db.getLoan(loan.loanUid).then((value) => value.length < 1
+        ? throw Exception('repository / executeLoan / getLoan : Failed')
+        : data = value[0]);
+    return BookLoan(
+        loanUid: data!.loanUid,
+        bookUid: data!.bookUid,
+        userUid: data!.userUid,
+        loanDate: data!.loanDate,
+        dueDate: data!.dueDate,
+        isReturned: data!.isReturned,
+        isExtended: data!.isExtended);
   }
 
   @override
