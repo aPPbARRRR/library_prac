@@ -63,78 +63,80 @@ class _SearchScreenState extends State<SearchScreen> {
           key: _key,
           drawer: resultLoans != null && widget.searchType == SearchType.loan
               ? Drawer(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text('정렬방식',
-                            style: TextStyle(
-                                fontSize: 26, fontWeight: FontWeight.bold)),
-                        TextButton(
-                            onPressed: () {
-                              setState(() {
-                                resultLoans = resultLoans?.sorted((a, b) =>
-                                    a.remainingDays.compareTo(b.remainingDays));
-
-                                isAscendingSorted = true;
-                              });
-                            },
-                            child: Text(
-                              '오름차순',
-                              style: isAscendingSorted
-                                  ? TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold)
-                                  : null,
-                            )),
-                        TextButton(
-                            onPressed: () {
-                              setState(() {
-                                resultLoans = resultLoans?.sorted((a, b) =>
-                                    b.remainingDays.compareTo(a.remainingDays));
-                                isAscendingSorted = false;
-                              });
-                            },
-                            child: Text(
-                              '내림차순',
-                              style: !isAscendingSorted
-                                  ? TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold)
-                                  : null,
-                            )),
-                        Divider(),
-                        Text('정렬기준',
-                            style: TextStyle(
-                                fontSize: 26, fontWeight: FontWeight.bold)),
-                        TextButton(
-                            onPressed: () {
-                              setState(() {
-                                resultLoans?.sort(
-                                    (a, b) => a.loanDate.compareTo(b.loanDate));
-                                isExpirationDateBasedSort = false;
-                              });
-                            },
-                            child: Text(
-                              '대출 실행일 기준',
-                              style: !isExpirationDateBasedSort
-                                  ? TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold)
-                                  : null,
-                            )),
-                        TextButton(
-                            onPressed: () {
-                              setState(() {
-                                resultLoans?.sort((a, b) =>
-                                    a.remainingDays.compareTo(b.remainingDays));
-                                isExpirationDateBasedSort = true;
-                              });
-                            },
-                            child: Text(
-                              '대출 잔여일 기준',
-                              style: isExpirationDateBasedSort
-                                  ? TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold)
-                                  : null,
-                            )),
-                      ]),
+                  child: SingleChildScrollView(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text('정렬방식',
+                              style: TextStyle(
+                                  fontSize: 26, fontWeight: FontWeight.bold)),
+                          TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  resultLoans = resultLoans?.sorted((a, b) =>
+                                      a.remainingDays.compareTo(b.remainingDays));
+                    
+                                  isAscendingSorted = true;
+                                });
+                              },
+                              child: Text(
+                                '오름차순',
+                                style: isAscendingSorted
+                                    ? TextStyle(
+                                        fontSize: 24, fontWeight: FontWeight.bold)
+                                    : null,
+                              )),
+                          TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  resultLoans = resultLoans?.sorted((a, b) =>
+                                      b.remainingDays.compareTo(a.remainingDays));
+                                  isAscendingSorted = false;
+                                });
+                              },
+                              child: Text(
+                                '내림차순',
+                                style: !isAscendingSorted
+                                    ? TextStyle(
+                                        fontSize: 24, fontWeight: FontWeight.bold)
+                                    : null,
+                              )),
+                          Divider(),
+                          Text('정렬기준',
+                              style: TextStyle(
+                                  fontSize: 26, fontWeight: FontWeight.bold)),
+                          TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  resultLoans?.sort(
+                                      (a, b) => a.loanDate.compareTo(b.loanDate));
+                                  isExpirationDateBasedSort = false;
+                                });
+                              },
+                              child: Text(
+                                '대출 실행일 기준',
+                                style: !isExpirationDateBasedSort
+                                    ? TextStyle(
+                                        fontSize: 24, fontWeight: FontWeight.bold)
+                                    : null,
+                              )),
+                          TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  resultLoans?.sort((a, b) =>
+                                      a.remainingDays.compareTo(b.remainingDays));
+                                  isExpirationDateBasedSort = true;
+                                });
+                              },
+                              child: Text(
+                                '대출 잔여일 기준',
+                                style: isExpirationDateBasedSort
+                                    ? TextStyle(
+                                        fontSize: 24, fontWeight: FontWeight.bold)
+                                    : null,
+                              )),
+                        ]),
+                  ),
                 )
               : null,
           appBar: AppBar(

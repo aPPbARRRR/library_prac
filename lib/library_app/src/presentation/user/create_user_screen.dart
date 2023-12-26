@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
 import 'package:library_manage_app/library_app/src/presentation/user/user_view_controller.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 
+import '../common/widget/custom_text_field_with_label.dart';
 import 'user_single_view.dart';
 
 class CreateUserScreen extends StatefulWidget {
@@ -47,8 +49,8 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                OutlinedButton(
-                    onPressed: () async {
+                CustomButton(
+                    onTap: () async {
                       await showDatePicker(
                               context: context,
                               firstDate: DateTime(1900, 1, 1),
@@ -57,7 +59,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                               value != null ? birthDate = value : birthDate);
                       setState(() {});
                     },
-                    child: Text('생년월일 입력')),
+                    text: '생년월일 입력'),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -67,8 +69,8 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             ),
 
             // Spacer(),
-            ElevatedButton(
-                onPressed: () async {
+            CustomButton(
+                onTap: () async {
                   if (_formKey.currentState!.validate()) {
                     await widget.userController
                         .createUser(
@@ -87,54 +89,12 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                     //등록 완료시 화면 전환 필요
                   }
                 },
-                child: Text('등록')),
+                text: '등록'),
             SizedBox(
               height: 30,
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class CustomTextFieldWithLabel extends StatelessWidget {
-  const CustomTextFieldWithLabel(
-      {super.key,
-      required this.nameTextController,
-      required this.label,
-      this.validator,
-      this.keyboardType,
-      this.isDigitOnly});
-
-  final TextEditingController nameTextController;
-  final String label;
-  final TextInputType? keyboardType;
-  final String? Function(String?)? validator;
-  final bool? isDigitOnly;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(32.0),
-      child: TextFormField(
-        inputFormatters: isDigitOnly != null && isDigitOnly!
-            ? [FilteringTextInputFormatter.digitsOnly]
-            : null,
-        validator: validator ??
-            (value) {
-              if (value == null || value.isEmpty) {
-                return '값을 입력해주세요.'; // 입력값이 없을 경우 에러 메시지 반환
-              }
-              return null; // 입력값이 유효할 경우 null 반환
-            },
-        controller: nameTextController,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-            label: Text(label),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
-                borderRadius: BorderRadius.circular(10))),
       ),
     );
   }

@@ -35,6 +35,7 @@ class CustomTextFieldWithLabel extends StatelessWidget {
         keyboardType: keyboardType,
         decoration: InputDecoration(
             label: Text(label),
+            labelStyle: TextStyle(color: Colors.orange),
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.orange,width: 3),
                 borderRadius: BorderRadius.circular(10)) ,

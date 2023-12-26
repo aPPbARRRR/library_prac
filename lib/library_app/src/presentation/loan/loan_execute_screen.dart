@@ -27,89 +27,91 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                  onTap: () async {
-                    user = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SearchScreen(
-                                  controller: widget.loanController,
-                                  searchType: SearchType.user,
-                                  isBackButtonEnabled: true,
-                                )));
-                    setState(() {});
-                  }, // 회원 검색으로
-                  child: Container(
-                    child: Center(
-                        child: user != null
-                            ? UserTile(
-                                user: user!,
-                                onTap: (_) {
-                                  setState(() {
-                                    user = null;
-                                  });
-                                },
-                              )
-                            : LoanExecuteSearchButton(text: '대상 회원을 선택합니다.')),
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                  onTap: () async {
-                    book = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SearchScreen(
-                                  controller: widget.loanController,
-                                  searchType: SearchType.book,
-                                  isBackButtonEnabled: true,
-                                )));
-                    setState(() {});
-                  }, // 책 검색으로
-                  child: Container(
-                    child: Center(
-                        child: book != null
-                            ? BookTile(
-                                book: book!,
-                                onTap: (_) {
-                                  setState(() {
-                                    book = null;
-                                  });
-                                },
-                              )
-                            : LoanExecuteSearchButton(text: '대상 도서를 선택합니다.')),
-                  )),
-            ),
-            CustomButton(
-                onTap: () {
-                  if (user != null && book != null && !book!.isBookLoaned) {
-                    widget.loanController
-                        .loanRequest(book: book!, user: user!)
-                        .then((loan) => Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return LoanSingleView(
-                                  loan: loan,
-                                  loanViewController: widget.loanController);
-                            })));
-                  }
-                  else if (book !=null && book!.isBookLoaned) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('이미 대출중인 도서입니다.')));
-                  }
-                  
-                  else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('대상 회원과 도서를 선택해주세요.')));
-                  }
-                },
-                text: '대출 실행')
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                    onTap: () async {
+                      user = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchScreen(
+                                    controller: widget.loanController,
+                                    searchType: SearchType.user,
+                                    isBackButtonEnabled: true,
+                                  )));
+                      setState(() {});
+                    }, // 회원 검색으로
+                    child: Container(
+                      child: Center(
+                          child: user != null
+                              ? UserTile(
+                                  user: user!,
+                                  onTap: (_) {
+                                    setState(() {
+                                      user = null;
+                                    });
+                                  },
+                                )
+                              : LoanExecuteSearchButton(text: '대상 회원을 선택합니다.')),
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                    onTap: () async {
+                      book = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchScreen(
+                                    controller: widget.loanController,
+                                    searchType: SearchType.book,
+                                    isBackButtonEnabled: true,
+                                  )));
+                      setState(() {});
+                    }, // 책 검색으로
+                    child: Container(
+                      child: Center(
+                          child: book != null
+                              ? BookTile(
+                                  book: book!,
+                                  onTap: (_) {
+                                    setState(() {
+                                      book = null;
+                                    });
+                                  },
+                                )
+                              : LoanExecuteSearchButton(text: '대상 도서를 선택합니다.')),
+                    )),
+              ),
+              CustomButton(
+                  onTap: () {
+                    if (user != null && book != null && !book!.isBookLoaned) {
+                      widget.loanController
+                          .loanRequest(book: book!, user: user!)
+                          .then((loan) => Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return LoanSingleView(
+                                    loan: loan,
+                                    loanViewController: widget.loanController);
+                              })));
+                    }
+                    else if (book !=null && book!.isBookLoaned) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('이미 대출중인 도서입니다.')));
+                    }
+                    
+                    else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('대상 회원과 도서를 선택해주세요.')));
+                    }
+                  },
+                  text: '대출 실행')
+            ],
+          ),
         ),
       ),
     );
