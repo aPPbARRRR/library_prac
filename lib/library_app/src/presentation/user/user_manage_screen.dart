@@ -24,6 +24,8 @@ class _UserManageScreenState extends State<UserManageScreen> {
           title: Text(currentPageIndex == 0 ? '회원 등록' : '회원 검색'),
         ),
         bottomNavigationBar: NavigationBar(
+          
+          
           onDestinationSelected: (int index) {
             setState(() {
               currentPageIndex = index;

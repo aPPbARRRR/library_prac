@@ -1,4 +1,4 @@
-import 'package:library_manage_app/library_app/src/data/source/drift/database.dart';
+import 'package:library_manage_app/shared/data/drift/drift_database.dart';
 import 'package:drift/drift.dart' as d;
 
 import 'user.dart';

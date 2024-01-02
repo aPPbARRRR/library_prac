@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/view_controller.dart';
-import 'package:library_manage_app/library_app/src/service/interface/book_service.dart';
+import 'package:library_manage_app/feature/book/domain/usecase/book_service.dart';
 
 import '../../entity/book.dart';
 import '../../entity/user.dart';
@@ -47,10 +47,13 @@ class LoanViewController extends ViewController {
     }
   }
 
-  Future<BookLoan?> returnLoan({required BookLoan loan, required BuildContext context}) async {
-    try{
+  Future<BookLoan?> returnLoan(
+      {required BookLoan loan, required BuildContext context}) async {
+    try {
       return await loanService.returnBook(loan: loan);
-    }catch(e){  ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));}
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
 }

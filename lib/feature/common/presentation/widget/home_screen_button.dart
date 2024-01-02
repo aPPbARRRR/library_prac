@@ -1,116 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-
-import 'package:library_manage_app/library_app/src/data/repository/database_repository.dart';
-import 'package:library_manage_app/library_app/src/data/source/drift_db_repository_impl.dart';
-import 'package:library_manage_app/library_app/src/presentation/book/book_manage_screen.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/loading_screen.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
-import 'package:library_manage_app/library_app/src/presentation/user/user_view_controller.dart';
-import 'package:library_manage_app/library_app/src/service/impl/book_service_impl.dart';
-import 'package:library_manage_app/library_app/src/service/impl/loan_service_impl.dart';
-import 'package:library_manage_app/library_app/src/service/interface/book_service.dart';
-import 'package:library_manage_app/library_app/src/service/interface/user_service.dart';
-
-import '../../service/impl/user_service_impl.dart';
-import '../../service/interface/loan_service.dart';
-import '../book/book_view_controller.dart';
-import '../loan/loan_manage_screen.dart';
-import '../loan/loan_view_controller.dart';
-import '../user/user_manage_screen.dart';
-
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
-
-  final DatabaseRepository repository = DriftDBRepositoryImpl();
-  late final BookService bookService = BookServiceImpl(repository: repository);
-  late final UserService userService = UserServiceImpl(repository: repository);
-  late final LoanService loanService = LoanServiceImpl(repository: repository);
-  late final LoanViewController loanController = LoanViewController(
-    bookService: bookService,
-    userService: userService,
-    loanService: loanService,
-  );
-  late final UserViewController userController = UserViewController(
-      userService: userService,
-      bookService: bookService,
-      loanService: loanService);
-  late final BookViewController bookController = BookViewController(
-      userService: userService,
-      bookService: bookService,
-      loanService: loanService);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Future.wait([
-          Future.delayed(Duration(milliseconds: 2000)),
-          bookController.refreshAllDataFromDB(),
-          loanController.refreshAllDataFromDB(),
-          userController.refreshAllDataFromDB()
-        ]),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done)
-            return LoadingScreen();
-          return SafeArea(
-            child: Scaffold(
-              appBar: AppBar(title: Text('도서 대출 관리'),),
-                body: AppTaskButtonSection(
-              bookController: bookController,
-              loanController: loanController,
-              userController: userController,
-            )),
-          );
-        });
-  }
-}
-
-class AppTaskButtonSection extends StatelessWidget {
-  const AppTaskButtonSection({
-    super.key,
-    required this.loanController,
-    required this.userController,
-    required this.bookController,
-  });
-
-  final LoanViewController loanController;
-  final UserViewController userController;
-  final BookViewController bookController;
-
-  @override
-  Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-
-    return ListView(
-      scrollDirection: height > width ? Axis.vertical : Axis.horizontal,
-      children: [
-        HomeScreenButton(
-          padding: 30,
-          assetUri: 'asset/images/open-book.png',
-          leadingText: '도서관리',
-          contentText: '도서를 등록/삭제합니다.',
-          targetScreen: BookManageScreen(bookViewController: bookController),
-        ),
-        HomeScreenButton(
-          padding: 30,
-          assetUri: 'asset/images/group.png',
-          leadingText: '회원관리',
-          contentText: '회원을 등록/삭제합니다.',
-          targetScreen: UserManageScreen(userController: userController),
-        ),
-        HomeScreenButton(
-          padding: 30,
-          assetUri: 'asset/images/digital-library.png',
-          leadingText: '대출관리',
-          contentText: '대출/반납을 실행합니다.',
-          targetScreen: LoanManageScreen(loanController: loanController),
-        ),
-      ],
-    );
-  }
-}
+import 'package:go_router/go_router.dart';
 
 class HomeScreenButton extends StatelessWidget {
   const HomeScreenButton(
@@ -118,12 +8,12 @@ class HomeScreenButton extends StatelessWidget {
       required this.leadingText,
       required this.contentText,
       required this.padding,
-      required this.targetScreen,
+      required this.targetScreenName,
       this.assetUri})
       : super(key: key);
   final String leadingText;
   final String contentText;
-  final Widget targetScreen;
+  final String targetScreenName;
   final String? assetUri;
   final double padding;
   @override
@@ -135,8 +25,7 @@ class HomeScreenButton extends StatelessWidget {
       padding: EdgeInsets.all(padding),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => targetScreen));
+          context.goNamed(targetScreenName);
         },
         child: FadeIn(
           child: Container(
@@ -215,9 +104,7 @@ class HomeScreenButton extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Divider(
-                              indent: 20,
-                              endIndent: 20,
-                              color: Colors.black),
+                              indent: 20, endIndent: 20, color: Colors.black),
                         ),
                         DefaultTextStyle(
                           style: TextStyle(
@@ -232,7 +119,8 @@ class HomeScreenButton extends StatelessWidget {
                                 Text(
                                   leadingText,
                                   style: TextStyle(
-                                      fontSize: width / 28 < 20 ? 20 : width / 28,
+                                      fontSize:
+                                          width / 28 < 20 ? 20 : width / 28,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(

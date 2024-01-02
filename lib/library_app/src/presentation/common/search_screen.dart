@@ -1,12 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan_extention.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/view_controller.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/user_tile.dart';
-import 'package:library_manage_app/library_app/src/presentation/loan/loan_view_controller.dart';
 
 import '../../entity/book.dart';
 import '../../entity/user.dart';
@@ -18,12 +16,10 @@ enum SearchType { user, book, loan }
 class SearchScreen extends StatefulWidget {
   SearchScreen(
       {super.key,
-      required this.controller,
       required this.searchType,
       this.onTileTapped,
       this.isBackButtonEnabled = false});
 
-  final ViewController controller;
   final SearchType searchType;
   final Function? onTileTapped;
   final bool isBackButtonEnabled;
@@ -45,9 +41,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
-    resultUsers = widget.controller.users;
-    resultBooks = widget.controller.books;
-    resultLoans = widget.controller.loans;
+    // resultUsers = widget.controller.users;
+    // resultBooks = widget.controller.books;
+    // resultLoans = widget.controller.loans;
     if (widget.searchType == SearchType.book) searchHintText = '도서명을 입력해주세요.';
     if (widget.searchType == SearchType.user) searchHintText = '회원 이름을 입력해주세요.';
     if (widget.searchType == SearchType.loan) searchHintText = '대출번호를 입력해주세요.';
@@ -56,7 +52,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ViewController controller = widget.controller;
+    // final ViewController controller = widget.controller;
 
     return SafeArea(
       child: Scaffold(
@@ -73,9 +69,10 @@ class _SearchScreenState extends State<SearchScreen> {
                           TextButton(
                               onPressed: () {
                                 setState(() {
-                                  resultLoans = resultLoans?.sorted((a, b) =>
-                                      a.remainingDays.compareTo(b.remainingDays));
-                    
+                                  resultLoans = resultLoans?.sorted((a, b) => a
+                                      .remainingDays
+                                      .compareTo(b.remainingDays));
+
                                   isAscendingSorted = true;
                                 });
                               },
@@ -83,14 +80,16 @@ class _SearchScreenState extends State<SearchScreen> {
                                 '오름차순',
                                 style: isAscendingSorted
                                     ? TextStyle(
-                                        fontSize: 24, fontWeight: FontWeight.bold)
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold)
                                     : null,
                               )),
                           TextButton(
                               onPressed: () {
                                 setState(() {
-                                  resultLoans = resultLoans?.sorted((a, b) =>
-                                      b.remainingDays.compareTo(a.remainingDays));
+                                  resultLoans = resultLoans?.sorted((a, b) => b
+                                      .remainingDays
+                                      .compareTo(a.remainingDays));
                                   isAscendingSorted = false;
                                 });
                               },
@@ -98,7 +97,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                 '내림차순',
                                 style: !isAscendingSorted
                                     ? TextStyle(
-                                        fontSize: 24, fontWeight: FontWeight.bold)
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold)
                                     : null,
                               )),
                           Divider(),
@@ -108,8 +108,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           TextButton(
                               onPressed: () {
                                 setState(() {
-                                  resultLoans?.sort(
-                                      (a, b) => a.loanDate.compareTo(b.loanDate));
+                                  resultLoans?.sort((a, b) =>
+                                      a.loanDate.compareTo(b.loanDate));
                                   isExpirationDateBasedSort = false;
                                 });
                               },
@@ -117,14 +117,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                 '대출 실행일 기준',
                                 style: !isExpirationDateBasedSort
                                     ? TextStyle(
-                                        fontSize: 24, fontWeight: FontWeight.bold)
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold)
                                     : null,
                               )),
                           TextButton(
                               onPressed: () {
                                 setState(() {
-                                  resultLoans?.sort((a, b) =>
-                                      a.remainingDays.compareTo(b.remainingDays));
+                                  resultLoans?.sort((a, b) => a.remainingDays
+                                      .compareTo(b.remainingDays));
                                   isExpirationDateBasedSort = true;
                                 });
                               },
@@ -132,7 +133,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                 '대출 잔여일 기준',
                                 style: isExpirationDateBasedSort
                                     ? TextStyle(
-                                        fontSize: 24, fontWeight: FontWeight.bold)
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold)
                                     : null,
                               )),
                         ]),
@@ -194,16 +196,16 @@ class _SearchScreenState extends State<SearchScreen> {
                     controller: textController,
                     decoration: InputDecoration(hintText: searchHintText),
                     onChanged: (val) {
-                      if (widget.searchType == SearchType.user)
-                        resultUsers =
-                            controller.retrieveUserFromName(name: val);
-                      if (widget.searchType == SearchType.book)
-                        resultBooks =
-                            controller.retrieveBooksFromName(bookName: val);
-                      if (widget.searchType == SearchType.loan)
-                        resultLoans =
-                            controller.retrieveLoansFromLoanUid(loanUid: val);
-                      setState(() {});
+                      // if (widget.searchType == SearchType.user)
+                      //   resultUsers =
+                      //       controller.retrieveUserFromName(name: val);
+                      // if (widget.searchType == SearchType.book)
+                      //   resultBooks =
+                      //       controller.retrieveBooksFromName(bookName: val);
+                      // if (widget.searchType == SearchType.loan)
+                      //   resultLoans =
+                      //       controller.retrieveLoansFromLoanUid(loanUid: val);
+                      // setState(() {});
                     },
                   ),
                 ),
@@ -225,15 +227,15 @@ class _SearchScreenState extends State<SearchScreen> {
                             .map((book) => BookTile(
                                 book: book, onTap: widget.onTileTapped))
                             .toList()
-                      else if (resultLoans != null &&
-                          widget.searchType == SearchType.loan)
-                        ...resultLoans!
-                            .map((loan) => LoanTile(
-                                loan: loan,
-                                onTap: widget.onTileTapped,
-                                users: widget.controller.users,
-                                books: widget.controller.books))
-                            .toList()
+                      // else if (resultLoans != null &&
+                      //     widget.searchType == SearchType.loan)
+                      //   ...resultLoans!
+                      //       .map((loan) => LoanTile(
+                      //           loan: loan,
+                      //           onTap: widget.onTileTapped,
+                      //           users: widget.controller.users,
+                      //           books: widget.controller.books))
+                      //       .toList()
                     ],
                   ),
                 )

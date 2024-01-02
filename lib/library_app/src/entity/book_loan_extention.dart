@@ -11,11 +11,11 @@
 // }
 import 'package:drift/drift.dart' as d;
 
-import 'package:library_manage_app/library_app/src/data/source/drift/database.dart';
+import 'package:library_manage_app/shared/data/drift/drift_database.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 
 extension BookLoanExtention on BookLoan {
-  LoanTableCompanion toTableCompanion(){
+  LoanTableCompanion toTableCompanion() {
     return LoanTableCompanion(
       bookUid: d.Value(bookUid),
       userUid: d.Value(userUid),
@@ -28,5 +28,4 @@ extension BookLoanExtention on BookLoan {
   }
 
   int get remainingDays => this.dueDate.difference(DateTime.now()).inDays;
-
 }

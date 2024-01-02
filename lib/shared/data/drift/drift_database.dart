@@ -7,9 +7,7 @@ import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
-import '../../../entity/user.dart';
-
-part 'database.g.dart';
+part 'drift_database.g.dart';
 
 class UserTable extends Table {
   TextColumn get userUid => text()();
@@ -18,7 +16,6 @@ class UserTable extends Table {
   IntColumn get phoneNum => integer()();
   DateTimeColumn get birthDate => dateTime()();
   DateTimeColumn get resistrationDate => dateTime()();
-  
 }
 
 class BookTable extends Table {
@@ -40,25 +37,22 @@ class LoanTable extends Table {
   BoolColumn get isExtended => boolean()();
 }
 
-
-
-
-
 @DriftDatabase(tables: [UserTable, BookTable, LoanTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   // 유저 생성
-  Future createUser(UserTableCompanion user) => into(userTable).insert(user);
+  // Future createUser(UserTableCompanion user) => into(userTable).insert(user);
 
-  // 유저 삭제
-  Future removeUser(UserTableCompanion user) => (delete(userTable)..where((tbl) => tbl.userUid.equals(user.userUid.value))).go();
-  Future getUser(String userUid) =>  (select(userTable)..where((tbl) => tbl.userUid.equals(userUid))).get();
-  Future getBook(String bookUid) =>  (select(bookTable)..where((tbl) => tbl.bookUid.equals(bookUid))).get();
-  Future getLoan(String loanUid) =>  (select(loanTable)..where((tbl) => tbl.loanUid.equals(loanUid))).get();
-   Future selectAllUsers() => select(this.userTable).get();
-   Future selectAllBooks() => select(this.bookTable).get();
-   Future selectAllLoans() => select(this.loanTable).get();
+  // // 유저 삭제
+  // Future removeUser(UserTableCompanion user) => (delete(userTable)..where((tbl) => tbl.userUid.equals(user.userUid.value))).go();
+  // Future getUser(String userUid) =>  (select(userTable)..where((tbl) => tbl.userUid.equals(userUid))).get();
+  Future getAllBooks(String bookUid) =>
+      (select(bookTable)..where((tbl) => tbl.bookUid.equals(bookUid))).get();
+  // Future getLoan(String loanUid) =>  (select(loanTable)..where((tbl) => tbl.loanUid.equals(loanUid))).get();
+  //  Future selectAllUsers() => select(this.userTable).get();
+  //  Future selectAllBooks() => select(this.bookTable).get();
+  //  Future selectAllLoans() => select(this.loanTable).get();
 
   //  Stream<List<TodoItem>> watchEntriesInCategory(Category c) {
   //   return (select(todos)..where((t) => t.category.equals(c.id))).watch();
@@ -76,7 +70,6 @@ class AppDatabase extends _$AppDatabase {
   //     (delete(schedule)..where((tbl) => tbl.id.equals(id))).go();
   // Future updateSchedule(int id, ScheduleCompanion data) => // 업데이트
   //     (update(schedule)..where((tbl) => tbl.id.equals(id))).write(data);
-
 
   @override
   int get schemaVersion => 1;

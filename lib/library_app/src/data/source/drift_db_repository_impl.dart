@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:library_manage_app/library_app/src/data/repository/database_repository.dart';
-import 'package:library_manage_app/library_app/src/data/source/drift/database.dart';
+import 'package:library_manage_app/shared/data/drift/drift_database.dart';
 import 'package:library_manage_app/library_app/src/entity/book.dart';
 import 'package:library_manage_app/library_app/src/entity/book_extention.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
