@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:library_manage_app/feature/common/presentation/view_model/search_screen_view_model.dart';
+import 'package:library_manage_app/feature/book/presentation/view_model/book_search_screen_view_model.dart';
 import 'package:library_manage_app/feature/common/presentation/widget/custom_text_field_with_label.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/user_tile.dart';
 import 'package:provider/provider.dart';
-import '../../../../library_app/src/presentation/common/widget/book_tile.dart';
-import '../../domain/model/search_type.dart';
+import '../../../../common/domain/enum/search_type.dart';
+import '../../view_model/loan_search_screen_view_model.dart';
 import '../widget/loan_search_screen_drawer.dart';
 
-class SearchScreen extends StatelessWidget {
-  SearchScreen({super.key, this.isBackButtonEnabled = false});
+class LoanSearchScreen extends StatelessWidget {
+  LoanSearchScreen({super.key, this.isBackButtonEnabled = false});
 
   final bool isBackButtonEnabled;
 
@@ -19,27 +19,13 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<SearchScreenViewModel>();
+    final viewModel = context.watch<LoanSearchScreenViewModel>();
 
     return SafeArea(
       child: Scaffold(
           key: _key,
-          drawer: viewModel.resultLoans != null &&
-                  viewModel.searchType == SearchType.loan
-              ? Drawer(
-                  child: LoanSearchScreenDrawer(viewModel: viewModel),
-                )
-              : null,
-          appBar: AppBar(
-            title: Text(switch (viewModel.searchType) {
-              SearchType.user => '회원 검색',
-              SearchType.book => '도서 검색',
-              SearchType.loan => '대출 검색',
-            }),
-            leading: IconButton(
-                onPressed: () => context.pop(), icon: Icon(Icons.arrow_back)),
-            // automaticallyImplyLeading: isBackButtonEnabled,
-            // toolbarHeight: isBackButtonEnabled ? null : 0,
+          drawer: Drawer(
+            child: LoanSearchScreenDrawer(viewModel: viewModel),
           ),
           body: Center(
             child: Column(
@@ -89,7 +75,7 @@ class SearchScreen extends StatelessWidget {
                     textController: textController,
                     hintText: viewModel.searchHintText,
                     onPressed: () {
-                      viewModel.search(searchText: textController.text);
+                      // viewModel.search(searchText: textController.text);
                     },
                     icon: Icon(Icons.search, color: Colors.orange),
                   ),
@@ -97,24 +83,6 @@ class SearchScreen extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      if (viewModel.resultUsers != null &&
-                          viewModel.searchType == SearchType.user)
-                        ...viewModel.resultUsers!
-                            .map((user) => UserTile(
-                                user: user, onTap: viewModel.onTileTapped))
-                            .toList()
-                      else if (viewModel.resultBooks != null &&
-                          viewModel.searchType == SearchType.book)
-                        ...viewModel.resultBooks!
-                            .map((book) => BookTile(
-                                book: book, onTap: viewModel.onTileTapped))
-                            .toList()
-                    ],
-                  ),
-                )
               ],
             ),
           )),

@@ -1,12 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:library_manage_app/config/router/app_routes.dart';
-import 'package:library_manage_app/feature/book/presentation/view/screen/book_manage_screen.dart';
-import 'package:provider/provider.dart';
 
-import '../../../book/presentation/view_model/book_single_view_model.dart';
 import '../widget/home_screen_button.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -49,13 +44,12 @@ class AppTaskButtonSection extends StatelessWidget {
         //   contentText: '회원을 등록/삭제합니다.',
         //   targetScreen: UserManageScreen(userController: userController),
         // // ),
-        // HomeScreenButton(
-        //   padding: 30,
-        //   assetUri: 'asset/images/digital-library.png',
-        //   leadingText: '대출관리',
-        //   contentText: '대출/반납을 실행합니다.',
-        //   targetScreen: LoanManageScreen(loanController: loanController),
-        // ),
+        HomeScreenButton(
+            padding: 30,
+            assetUri: 'asset/images/digital-library.png',
+            leadingText: '대출관리',
+            contentText: '대출/반납을 실행합니다.',
+            targetScreenName: AppRoutes.loanExecute),
       ],
     );
   }

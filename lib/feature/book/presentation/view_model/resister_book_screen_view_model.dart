@@ -8,7 +8,7 @@ import 'package:library_manage_app/feature/book/presentation/view_model/book_sin
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../library_app/src/entity/book.dart';
+import '../../../common/domain/model/book.dart';
 
 class ResisterBookScreenViewModel extends ChangeNotifier {
   ResisterBookScreenViewModel({

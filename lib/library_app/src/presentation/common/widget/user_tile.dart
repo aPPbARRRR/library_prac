@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../entity/user.dart';
+import '../../../../../feature/common/domain/model/user.dart';
 
 class UserTile extends StatelessWidget {
   const UserTile({super.key, required this.user, this.onTap});
@@ -10,7 +10,7 @@ class UserTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: GestureDetector(
         onTap: onTap != null
             ? () => onTap!(user)

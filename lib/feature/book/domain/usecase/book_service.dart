@@ -1,4 +1,4 @@
-import '../../../../library_app/src/entity/book.dart';
+import '../../../common/domain/model/book.dart';
 
 abstract interface class BookService {
   // 도서 등록

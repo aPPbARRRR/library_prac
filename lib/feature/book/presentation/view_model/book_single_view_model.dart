@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../library_app/src/entity/book.dart';
+import '../../../common/domain/model/book.dart';
 
 class BookSingViewModel extends ChangeNotifier {
   Book? _book;

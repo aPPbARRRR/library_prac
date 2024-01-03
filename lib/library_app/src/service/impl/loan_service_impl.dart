@@ -3,7 +3,7 @@ import 'package:library_manage_app/library_app/src/data/repository/database_repo
 import 'package:library_manage_app/library_app/src/entity/book.dart';
 import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
 import 'package:library_manage_app/library_app/src/entity/user.dart';
-import '../interface/loan_service.dart';
+import '../../../../feature/loan/domain/usecase/loan_service.dart';
 
 class LoanServiceImpl implements LoanService {
   final DatabaseRepository repository;
@@ -20,7 +20,7 @@ class LoanServiceImpl implements LoanService {
 
   @override
   Future<BookLoan> extendLoan({required BookLoan loan, int? day}) async {
-    if(loan.isExtended) throw Exception('이미 연장된 대출입니다. 다시 연장할 수 없습니다.');
+    if (loan.isExtended) throw Exception('이미 연장된 대출입니다. 다시 연장할 수 없습니다.');
     BookLoan tempLoan = await repository.extendLoanDueDate(loan: loan);
     return tempLoan;
   }
@@ -32,8 +32,8 @@ class LoanServiceImpl implements LoanService {
 
   @override
   Future<BookLoan> returnBook({required BookLoan loan}) async {
-     if(loan.isReturned) throw Exception('이미 반납된 대출입니다. 다시 연장할 수 없습니다.');
-  return await repository.returnBookLoan(loan: loan);
+    if (loan.isReturned) throw Exception('이미 반납된 대출입니다. 다시 연장할 수 없습니다.');
+    return await repository.returnBookLoan(loan: loan);
   }
 
   @override

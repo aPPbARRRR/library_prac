@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../entity/book.dart';
+import '../../../../../feature/common/domain/model/book.dart';
 
 class BookTile extends StatelessWidget {
   const BookTile({super.key, required this.book, this.onTap});

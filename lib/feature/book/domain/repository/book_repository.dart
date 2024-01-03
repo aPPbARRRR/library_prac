@@ -1,4 +1,4 @@
-import '../../../../library_app/src/entity/book.dart';
+import '../../../common/domain/model/book.dart';
 import '../model/book_search_type.dart';
 
 abstract interface class BookRepository {

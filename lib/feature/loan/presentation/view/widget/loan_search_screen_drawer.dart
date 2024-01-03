@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../view_model/search_screen_view_model.dart';
+import '../../view_model/loan_search_screen_view_model.dart';
 
 class LoanSearchScreenDrawer extends StatelessWidget {
   const LoanSearchScreenDrawer({
@@ -8,7 +8,7 @@ class LoanSearchScreenDrawer extends StatelessWidget {
     required this.viewModel,
   });
 
-  final SearchScreenViewModel viewModel;
+  final LoanSearchScreenViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {

@@ -2,22 +2,22 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:library_manage_app/feature/common/domain/model/book_loan_extention.dart';
 
-import 'package:library_manage_app/library_app/src/entity/book_loan_extention.dart';
 import 'package:library_manage_app/shared/domain/model/app_data.dart';
-import 'package:path/path.dart';
 
 import '../../../../config/router/app_routes.dart';
-import '../../../../library_app/src/entity/book.dart';
-import '../../../../library_app/src/entity/book_loan.dart';
-import '../../../../library_app/src/entity/user.dart';
-import '../../../book/domain/usecase/book_service.dart';
-import '../../domain/model/search_type.dart';
+import '../../../common/domain/enum/search_type.dart';
+import '../../../common/domain/model/book.dart';
+import '../../../common/domain/model/book_loan.dart';
+import '../../../common/domain/model/user.dart';
+import '../../domain/usecase/loan_service.dart';
 
-class SearchScreenViewModel extends ChangeNotifier {
-  SearchScreenViewModel({required this.searchType, required this.bookService});
+class LoanSearchScreenViewModel extends ChangeNotifier {
+  LoanSearchScreenViewModel(
+      {required this.searchType, required this.loanService});
 
-  final BookService bookService;
+  final LoanService loanService;
 
   final SearchType searchType;
   List<User>? resultUsers;
@@ -26,11 +26,8 @@ class SearchScreenViewModel extends ChangeNotifier {
   bool isExpirationDateBasedSort = true;
   bool isAscendingSorted = false;
 
-  String get searchHintText => switch (searchType) {
-        SearchType.book => '도서명을 입력해주세요.',
-        SearchType.user => '회원 이름을 입력해주세요.',
-        SearchType.loan => '대출번호를 입력해주세요.'
-      };
+  String get searchHintText => '대출번호를 입력해주세요.';
+  String get appBarTitleText => '도서대출 검색';
 
   Function? onTileTapped(AppData data, BuildContext context) {
     if (data is Book) {
@@ -53,9 +50,6 @@ class SearchScreenViewModel extends ChangeNotifier {
 //             }
   }
 
-  // if (widget.searchType == SearchType.book) searchHintText = ;
-  // if (widget.searchType == SearchType.user) searchHintText
-  // if (widget.searchType == SearchType.loan) searchHintText =
   void toggleIsAscendingSorted() {
     if (isAscendingSorted == false) {
       resultLoans = resultLoans
@@ -80,10 +74,10 @@ class SearchScreenViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void search({required String searchText}) async {
-    List<Book> retrievedBooks =
-        await bookService.retrieveBooksFromName(bookName: searchText);
-    resultBooks = retrievedBooks;
-    notifyListeners();
-  }
+  // void search({required String searchText}) async {
+  //   List<Book> retrievedBooks =
+  //       await bookService.retrieveBooksFromName(bookName: searchText);
+  //   resultBooks = retrievedBooks;
+  //   notifyListeners();
+  // }
 }

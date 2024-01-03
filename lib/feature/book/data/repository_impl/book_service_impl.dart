@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:library_manage_app/feature/book/data/data_source/drift_book_repository_impl.dart';
 import 'package:library_manage_app/feature/book/domain/model/book_search_type.dart';
 import 'package:library_manage_app/feature/book/domain/repository/book_repository.dart';
-
-import '../../../../library_app/src/entity/book.dart';
+import '../../../common/domain/model/book.dart';
 import '../../domain/usecase/book_service.dart';
 
 class BookServiceProvider extends ChangeNotifier {

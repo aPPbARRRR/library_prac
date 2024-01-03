@@ -4,5 +4,7 @@ class AppRoutes {
   static const String bookManage = 'bookManage';
   static const String bookSingle = 'bookSingle';
   static const String resisterBook = 'resisterBook';
-  static const String search = 'search';
+  static const String bookSearch = 'bookSearch';
+  static const String loanSearch = 'loanSearch';
+  static const String loanExecute = 'loanExecute';
 }
