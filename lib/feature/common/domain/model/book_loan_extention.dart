@@ -12,7 +12,8 @@
 import 'package:drift/drift.dart' as d;
 
 import 'package:library_manage_app/shared/data/drift/drift_database.dart';
-import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
+
+import 'book_loan.dart';
 
 extension BookLoanExtention on BookLoan {
   LoanTableCompanion toTableCompanion() {

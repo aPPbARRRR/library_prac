@@ -1,7 +1,6 @@
-import 'package:library_manage_app/library_app/src/entity/book_loan.dart';
-
-import '../../entity/book.dart';
-import '../../entity/user.dart';
+import '../../../common/domain/model/book.dart';
+import '../../../common/domain/model/book_loan.dart';
+import '../../../common/domain/model/user.dart';
 
 abstract interface class LoanService {
   // 도서 대출 수행
@@ -16,7 +15,7 @@ abstract interface class LoanService {
   // 모든 대출 목록 반환
   Future<List<BookLoan>> getAllLoans();
 
-  // 대출 이름으로 검색
+  // 대출 번호로 검색
   List<BookLoan> retrieveLoansFromLoanUid(
       {required List<BookLoan> loans, required String loanUid});
 }
