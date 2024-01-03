@@ -12,7 +12,6 @@ import 'package:library_manage_app/feature/loan/presentation/view_model/loan_exe
 import 'package:provider/provider.dart';
 
 import '../../feature/book/presentation/view/screen/resister_book_screen.dart';
-import '../../feature/book/presentation/view_model/book_single_view_model.dart';
 import '../../feature/common/domain/enum/search_type.dart';
 import '../../feature/book/presentation/view/screen/book_search_screen.dart';
 import '../../feature/loan/data/repository_impl/loan_service_impl.dart';
@@ -25,6 +24,7 @@ import '../../feature/user/presentation/view/user_manage_screen.dart';
 import '../../feature/user/presentation/view/user_search_screen.dart';
 import '../../feature/user/presentation/view_model/create_user_screen_view_model.dart';
 import '../../feature/user/presentation/view_model/user_search_screen_view_model.dart';
+import '../../shared/data/drift/drift_db_service.dart';
 
 final GoRouter appRouter = GoRouter(
     initialLocation: '/splash',
@@ -41,18 +41,18 @@ final GoRouter appRouter = GoRouter(
       GoRoute(
           path: '/home',
           name: AppRoutes.home,
-          builder: (BuildContext context, GoRouterState state) =>
-              ChangeNotifierProvider(
-                create: (cntxt) => BookSingViewModel(),
-                child: HomeScreen(),
-              ),
+          builder: (BuildContext context, GoRouterState state) => HomeScreen(),
           routes: [
             // 이하 book
             StatefulShellRoute.indexedStack(
               builder: (BuildContext context, GoRouterState state,
                   StatefulNavigationShell navigationShell) {
                 return ChangeNotifierProvider(
-                  create: (cntxt) => BookServiceProvider(),
+                  create: (cntxt) => BookServiceProvider(
+                      db: context
+                          .watch<LoacalDatabaseProvider>()
+                          .driftDbService
+                          .driftDB),
                   child: BookManageScreen(navigationShell: navigationShell),
                 );
               },

@@ -2,24 +2,38 @@
 
 import 'package:library_manage_app/feature/book/domain/model/book_search_type.dart';
 import 'package:library_manage_app/feature/book/domain/repository/book_repository.dart';
+import 'package:library_manage_app/shared/domain/model/result.dart';
 
+import '../../../../shared/data/drift/drift_database.dart';
 import '../../../common/domain/model/book.dart';
 
 class DriftBookRepositoryImpl implements BookRepository {
-  // DriftBookRepositoryImpl._() : this._db = AppDatabase();
+  DriftBookRepositoryImpl({
+    required this.db,
+  });
 
-  // factory DriftBookRepositoryImpl() => DriftBookRepositoryImpl._();
-
-  // final AppDatabase _db;
+  final AppDatabase db;
 
   @override
-  Future<List<Book>> getAllBooks() {
-    // TODO: implement getAllBooks
-    throw UnimplementedError();
+  Future<Result<List<Book>, Exception>> getAllBooks() async {
+    try {
+      List<BookTableData> allBooksDataTable =
+          await db.select(db.bookTable).get();
+      return Success(allBooksDataTable
+          .map((bookDataTable) => Book(
+              bookName: bookDataTable.bookName,
+              bookUid: bookDataTable.bookUid,
+              publishDate: bookDataTable.publishDate,
+              isBookLoaned: bookDataTable.isBookLoaned,
+              author: bookDataTable.author))
+          .toList());
+    } catch (e) {
+      return Error(Exception(e));
+    }
   }
 
   @override
-  Future<List<Book>> retrieveBooks(
+  Future<Result<List<Book>, Exception>> retrieveBooks(
       {required String searchText, required BookSearchType bookSearchType}) {
     // TODO: implement getBook
     // 서치타입이 uid일 경우 한 권만 반환됨. 리스트로 반환하고 한 권을 선택하는 작업은 유즈케이스에서 담당.
@@ -29,19 +43,19 @@ class DriftBookRepositoryImpl implements BookRepository {
   }
 
   @override
-  Future<Book> registerBook({required Book book}) {
-    print(book.bookName);
+  Future<Result<Book, Exception>> registerBook({required Book book}) {
+    // TODO: implement registerBook
     throw UnimplementedError();
   }
 
   @override
-  Future<void> unregisterBook({required Book book}) {
+  Future<Result<void, Exception>> unregisterBook({required Book book}) {
     // TODO: implement unregisterBook
     throw UnimplementedError();
   }
 
   @override
-  Future<Book> updateBook({required Book book}) {
+  Future<Result<Book, Exception>> updateBook({required Book book}) {
     // TODO: implement updateBook
     throw UnimplementedError();
   }
