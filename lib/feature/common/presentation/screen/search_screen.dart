@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:library_manage_app/feature/common/presentation/view_model/search_screen_view_model.dart';
+import 'package:library_manage_app/feature/common/presentation/widget/custom_text_field_with_label.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/user_tile.dart';
 import 'package:provider/provider.dart';
 import '../../../../library_app/src/presentation/common/widget/book_tile.dart';
@@ -34,8 +36,10 @@ class SearchScreen extends StatelessWidget {
               SearchType.book => '도서 검색',
               SearchType.loan => '대출 검색',
             }),
-            automaticallyImplyLeading: isBackButtonEnabled,
-            toolbarHeight: isBackButtonEnabled ? null : 0,
+            leading: IconButton(
+                onPressed: () => context.pop(), icon: Icon(Icons.arrow_back)),
+            // automaticallyImplyLeading: isBackButtonEnabled,
+            // toolbarHeight: isBackButtonEnabled ? null : 0,
           ),
           body: Center(
             child: Column(
@@ -81,22 +85,13 @@ class SearchScreen extends StatelessWidget {
                   ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: textController,
-                    decoration:
-                        InputDecoration(hintText: viewModel.searchHintText),
-                    onChanged: (val) {
-                      // if (viewModel.searchType == SearchType.user)
-                      //   resultUsers =
-                      //       controller.retrieveUserFromName(name: val);
-                      // if (viewModel.searchType == SearchType.book)
-                      //   resultBooks =
-                      //       controller.retrieveBooksFromName(bookName: val);
-                      // if (viewModel.searchType == SearchType.loan)
-                      //   resultLoans =
-                      //       controller.retrieveLoansFromLoanUid(loanUid: val);
-                      // setState(() {});
+                  child: CustomTextFieldWithLabel(
+                    textController: textController,
+                    hintText: viewModel.searchHintText,
+                    onPressed: () {
+                      viewModel.search(searchText: textController.text);
                     },
+                    icon: Icon(Icons.search, color: Colors.orange),
                   ),
                 ),
                 SizedBox(

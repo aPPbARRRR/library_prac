@@ -5,23 +5,26 @@ import 'package:go_router/go_router.dart';
 
 import 'package:library_manage_app/library_app/src/entity/book_loan_extention.dart';
 import 'package:library_manage_app/shared/domain/model/app_data.dart';
+import 'package:path/path.dart';
 
 import '../../../../config/router/app_routes.dart';
 import '../../../../library_app/src/entity/book.dart';
 import '../../../../library_app/src/entity/book_loan.dart';
 import '../../../../library_app/src/entity/user.dart';
+import '../../../book/domain/usecase/book_service.dart';
 import '../../domain/model/search_type.dart';
 
 class SearchScreenViewModel extends ChangeNotifier {
+  SearchScreenViewModel({required this.searchType, required this.bookService});
+
+  final BookService bookService;
+
   final SearchType searchType;
   List<User>? resultUsers;
   List<Book>? resultBooks;
   List<BookLoan>? resultLoans;
   bool isExpirationDateBasedSort = true;
   bool isAscendingSorted = false;
-  SearchScreenViewModel({
-    required this.searchType,
-  });
 
   String get searchHintText => switch (searchType) {
         SearchType.book => '도서명을 입력해주세요.',
@@ -74,6 +77,13 @@ class SearchScreenViewModel extends ChangeNotifier {
       resultLoans?.sort((a, b) => a.remainingDays.compareTo(b.remainingDays));
       isExpirationDateBasedSort = true;
     }
+    notifyListeners();
+  }
+
+  void search({required String searchText}) async {
+    List<Book> retrievedBooks =
+        await bookService.retrieveBooksFromName(bookName: searchText);
+    resultBooks = retrievedBooks;
     notifyListeners();
   }
 }

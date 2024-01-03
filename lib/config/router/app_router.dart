@@ -67,6 +67,9 @@ final GoRouter appRouter = GoRouter(
                         builder: (BuildContext context, GoRouterState state) =>
                             ChangeNotifierProvider(
                               create: (cntxt) => SearchScreenViewModel(
+                                bookService: context
+                                    .watch<BookServiceProvider>()
+                                    .bookService,
                                 searchType: SearchType.book,
                               ),
                               child: SearchScreen(),

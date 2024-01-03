@@ -15,7 +15,7 @@ class ResisterBookScreenViewModel extends ChangeNotifier {
     required this.bookService,
   });
 
-  BookService bookService;
+  final BookService bookService;
   DateTime date = DateTime.now();
 
   Future<void> resisterBook(

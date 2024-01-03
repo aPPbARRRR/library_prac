@@ -4,17 +4,23 @@ import 'package:flutter/services.dart';
 class CustomTextFieldWithLabel extends StatelessWidget {
   const CustomTextFieldWithLabel(
       {super.key,
-      required this.nameTextController,
-      required this.label,
+      required this.textController,
+      this.hintText,
+      this.label,
       this.validator,
       this.keyboardType,
-      this.isDigitOnly});
+      this.isDigitOnly,
+      this.icon,
+      this.onPressed});
 
-  final TextEditingController nameTextController;
-  final String label;
+  final TextEditingController textController;
+  final String? label;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
   final bool? isDigitOnly;
+  final String? hintText;
+  final Function()? onPressed;
+  final Icon? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +37,18 @@ class CustomTextFieldWithLabel extends StatelessWidget {
               }
               return null; // 입력값이 유효할 경우 null 반환
             },
-        controller: nameTextController,
+        controller: textController,
         keyboardType: keyboardType,
         decoration: InputDecoration(
-            label: Text(label),
+            suffixIcon: icon != null
+                ? IconButton(onPressed: onPressed, icon: icon!)
+                : null,
+            hintText: hintText ?? null,
+            label: label != null ? Text(label!) : null,
             labelStyle: TextStyle(color: Colors.orange),
             focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.orange,width: 3),
-                borderRadius: BorderRadius.circular(10)) ,
+                borderSide: BorderSide(color: Colors.orange, width: 3),
+                borderRadius: BorderRadius.circular(10)),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.orange),
                 borderRadius: BorderRadius.circular(10))),

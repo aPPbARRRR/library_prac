@@ -1,11 +1,17 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+
 import 'package:library_manage_app/feature/book/domain/model/book_search_type.dart';
 import 'package:library_manage_app/feature/book/domain/repository/book_repository.dart';
 import 'package:library_manage_app/library_app/src/entity/book.dart';
 import 'package:library_manage_app/shared/data/drift/drift_database.dart';
 
 class DriftBookRepositoryImpl implements BookRepository {
-  final AppDatabase db = AppDatabase();
+  // DriftBookRepositoryImpl._() : this._db = AppDatabase();
+
+  // factory DriftBookRepositoryImpl() => DriftBookRepositoryImpl._();
+
+  // final AppDatabase _db;
 
   @override
   Future<List<Book>> getAllBooks() {
@@ -19,6 +25,7 @@ class DriftBookRepositoryImpl implements BookRepository {
     // TODO: implement getBook
     // 서치타입이 uid일 경우 한 권만 반환됨. 리스트로 반환하고 한 권을 선택하는 작업은 유즈케이스에서 담당.
     // 검색결과가 없는 경우 처리는 유즈케이스에서 하는 것이 맞을듯. 얘는 db랑 통신만 하는거니까
+    print('검색 수행');
     throw UnimplementedError();
   }
 
