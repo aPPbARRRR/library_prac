@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:library_manage_app/feature/user/presentation/view_model/create_user_screen_view_model.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
-import 'package:library_manage_app/library_app/src/presentation/user/user_view_controller.dart';
-import 'package:scroll_date_picker/scroll_date_picker.dart';
+import 'package:provider/provider.dart';
 
-import '../common/widget/custom_text_field_with_label.dart';
-import 'user_single_view.dart';
+import '../../../common/presentation/widget/custom_text_field_with_label.dart';
 
 class CreateUserScreen extends StatefulWidget {
-  CreateUserScreen({super.key, required this.userController});
-  final UserViewController userController;
+  CreateUserScreen({super.key});
 
   @override
   State<CreateUserScreen> createState() => _CreateUserScreenState();
@@ -27,6 +25,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   // userUid,
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<CreateUserScreenViewModel>();
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
@@ -35,13 +34,13 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             CustomTextFieldWithLabel(
-                nameTextController: nameTextController, label: '이름'),
+                textController: nameTextController, label: '이름'),
             CustomTextFieldWithLabel(
-              nameTextController: addressTextController,
+              textController: addressTextController,
               label: '주소',
             ),
             CustomTextFieldWithLabel(
-              nameTextController: phoneNumTextController,
+              textController: phoneNumTextController,
               label: '전화번호(숫자만)',
               keyboardType: TextInputType.phone,
               isDigitOnly: true,
@@ -72,21 +71,21 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             CustomButton(
                 onTap: () async {
                   if (_formKey.currentState!.validate()) {
-                    await widget.userController
-                        .createUser(
-                            name: nameTextController.text,
-                            address: addressTextController.text,
-                            phoneNum: int.parse(phoneNumTextController.text),
-                            birthDate: birthDate)
-                        .then((newUser) {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => UserSingleView(
-                                user: newUser,
-                                controller: widget.userController,
-                              )));
-                    });
-                    widget.userController.retrieveUsers();
-                    //등록 완료시 화면 전환 필요
+                    // await widget.userController
+                    //     .createUser(
+                    //         name: nameTextController.text,
+                    //         address: addressTextController.text,
+                    //         phoneNum: int.parse(phoneNumTextController.text),
+                    //         birthDate: birthDate)
+                    //     .then((newUser) {
+                    //   Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    //       builder: (context) => UserSingleView(
+                    //             user: newUser,
+                    //             controller: widget.userController,
+                    //           )));
+                    // });
+                    // widget.userController.retrieveUsers();
+                    // //등록 완료시 화면 전환 필요
                   }
                 },
                 text: '등록'),

@@ -37,13 +37,13 @@ class AppTaskButtonSection extends StatelessWidget {
           contentText: '도서를 등록/삭제합니다.',
           targetScreenName: AppRoutes.resisterBook,
         ),
-        // HomeScreenButton(
-        //   padding: 30,
-        //   assetUri: 'asset/images/group.png',
-        //   leadingText: '회원관리',
-        //   contentText: '회원을 등록/삭제합니다.',
-        //   targetScreen: UserManageScreen(userController: userController),
-        // // ),
+        HomeScreenButton(
+          padding: 30,
+          assetUri: 'asset/images/group.png',
+          leadingText: '회원관리',
+          contentText: '회원을 등록/삭제합니다.',
+          targetScreenName: AppRoutes.createUser,
+        ),
         HomeScreenButton(
             padding: 30,
             assetUri: 'asset/images/digital-library.png',

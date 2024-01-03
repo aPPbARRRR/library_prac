@@ -19,6 +19,12 @@ import '../../feature/loan/data/repository_impl/loan_service_impl.dart';
 import '../../feature/loan/presentation/view/screen/loan_execute_screen.dart';
 import '../../feature/loan/presentation/view/screen/loan_search_screen.dart';
 import '../../feature/loan/presentation/view_model/loan_search_screen_view_model.dart';
+import '../../feature/user/data/repository_impl/user_service_impl.dart';
+import '../../feature/user/presentation/view/create_user_screen.dart';
+import '../../feature/user/presentation/view/user_manage_screen.dart';
+import '../../feature/user/presentation/view/user_search_screen.dart';
+import '../../feature/user/presentation/view_model/create_user_screen_view_model.dart';
+import '../../feature/user/presentation/view_model/user_search_screen_view_model.dart';
 
 final GoRouter appRouter = GoRouter(
     initialLocation: '/splash',
@@ -119,9 +125,51 @@ final GoRouter appRouter = GoRouter(
                                 loanService: context
                                     .watch<LoanServiceProvider>()
                                     .bookService,
-                                searchType: SearchType.book,
+                                searchType: SearchType.loan,
                               ),
                               child: LoanSearchScreen(),
+                            )),
+                  ],
+                ),
+              ],
+            ),
+
+            // 이하 user
+            StatefulShellRoute.indexedStack(
+              builder: (BuildContext context, GoRouterState state,
+                  StatefulNavigationShell navigationShell) {
+                return ChangeNotifierProvider(
+                  create: (cntxt) => UserServiceProvider(),
+                  child: UserManageScreen(navigationShell: navigationShell),
+                );
+              },
+              branches: <StatefulShellBranch>[
+                StatefulShellBranch(
+                  routes: [
+                    GoRoute(
+                        path: 'create_user',
+                        name: AppRoutes.createUser,
+                        builder: (BuildContext context, GoRouterState state) =>
+                            ChangeNotifierProvider(
+                              create: (cntxt) => CreateUserScreenViewModel(),
+                              child: CreateUserScreen(),
+                            ))
+                  ],
+                ),
+                StatefulShellBranch(
+                  routes: [
+                    GoRoute(
+                        path: 'user_search',
+                        name: AppRoutes.userSearch,
+                        builder: (BuildContext context, GoRouterState state) =>
+                            ChangeNotifierProvider(
+                              create: (cntxt) => UserSearchScreenViewModel(
+                                userService: context
+                                    .watch<UserServiceProvider>()
+                                    .userService,
+                                searchType: SearchType.user,
+                              ),
+                              child: UserSearchScreen(),
                             )),
                   ],
                 ),
