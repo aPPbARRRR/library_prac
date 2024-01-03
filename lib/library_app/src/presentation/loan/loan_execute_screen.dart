@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-import 'package:library_manage_app/library_app/src/presentation/common/search_screen.dart';
+import 'package:library_manage_app/feature/common/presentation/screen/search_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/book_tile.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
 import 'package:library_manage_app/library_app/src/presentation/common/widget/user_tile.dart';
@@ -98,13 +98,10 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
                                     loan: loan,
                                     loanViewController: widget.loanController);
                               })));
-                    }
-                    else if (book !=null && book!.isBookLoaned) {
+                    } else if (book != null && book!.isBookLoaned) {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('이미 대출중인 도서입니다.')));
-                    }
-                    
-                    else {
+                    } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('대상 회원과 도서를 선택해주세요.')));
                     }

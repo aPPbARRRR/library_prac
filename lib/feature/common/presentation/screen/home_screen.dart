@@ -32,36 +32,31 @@ class AppTaskButtonSection extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return MultiProvider(
-      providers: [
-        Provider<BookSingViewModel>(create: (context) => BookSingViewModel())
+    return ListView(
+      scrollDirection: height > width ? Axis.vertical : Axis.horizontal,
+      children: const [
+        HomeScreenButton(
+          padding: 30,
+          assetUri: 'asset/images/open-book.png',
+          leadingText: '도서관리',
+          contentText: '도서를 등록/삭제합니다.',
+          targetScreenName: AppRoutes.resisterBook,
+        ),
+        // HomeScreenButton(
+        //   padding: 30,
+        //   assetUri: 'asset/images/group.png',
+        //   leadingText: '회원관리',
+        //   contentText: '회원을 등록/삭제합니다.',
+        //   targetScreen: UserManageScreen(userController: userController),
+        // // ),
+        // HomeScreenButton(
+        //   padding: 30,
+        //   assetUri: 'asset/images/digital-library.png',
+        //   leadingText: '대출관리',
+        //   contentText: '대출/반납을 실행합니다.',
+        //   targetScreen: LoanManageScreen(loanController: loanController),
+        // ),
       ],
-      child: ListView(
-        scrollDirection: height > width ? Axis.vertical : Axis.horizontal,
-        children: const [
-          HomeScreenButton(
-            padding: 30,
-            assetUri: 'asset/images/open-book.png',
-            leadingText: '도서관리',
-            contentText: '도서를 등록/삭제합니다.',
-            targetScreenName: AppRoutes.bookManage,
-          ),
-          // HomeScreenButton(
-          //   padding: 30,
-          //   assetUri: 'asset/images/group.png',
-          //   leadingText: '회원관리',
-          //   contentText: '회원을 등록/삭제합니다.',
-          //   targetScreen: UserManageScreen(userController: userController),
-          // // ),
-          // HomeScreenButton(
-          //   padding: 30,
-          //   assetUri: 'asset/images/digital-library.png',
-          //   leadingText: '대출관리',
-          //   contentText: '대출/반납을 실행합니다.',
-          //   targetScreen: LoanManageScreen(loanController: loanController),
-          // ),
-        ],
-      ),
     );
   }
 }

@@ -4,9 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:library_manage_app/config/router/app_routes.dart';
 
 import 'package:library_manage_app/feature/book/domain/usecase/book_service.dart';
-import 'package:library_manage_app/feature/book/presentation/view/screen/book_single_view.dart';
 import 'package:library_manage_app/feature/book/presentation/view_model/book_single_view_model.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 

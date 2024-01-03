@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/search_screen.dart';
+import 'package:library_manage_app/feature/common/presentation/screen/search_screen.dart';
 import 'package:library_manage_app/library_app/src/presentation/loan/loan_execute_screen.dart';
 
 import 'loan_single_view.dart';

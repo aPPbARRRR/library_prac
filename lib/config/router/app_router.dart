@@ -6,11 +6,13 @@ import 'package:library_manage_app/feature/book/presentation/view/screen/book_ma
 import 'package:library_manage_app/feature/book/presentation/view_model/resister_book_screen_view_model.dart';
 import 'package:library_manage_app/feature/common/presentation/screen/home_screen.dart';
 import 'package:library_manage_app/feature/common/presentation/screen/splash_screen.dart';
+import 'package:library_manage_app/feature/common/presentation/view_model/search_screen_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../feature/book/presentation/view/screen/book_single_view.dart';
 import '../../feature/book/presentation/view/screen/resister_book_screen.dart';
-import '../../library_app/src/presentation/common/search_screen.dart';
+import '../../feature/book/presentation/view_model/book_single_view_model.dart';
+import '../../feature/common/domain/model/search_type.dart';
+import '../../feature/common/presentation/screen/search_screen.dart';
 
 final GoRouter appRouter = GoRouter(
     initialLocation: '/splash',
@@ -27,50 +29,51 @@ final GoRouter appRouter = GoRouter(
       GoRoute(
           path: '/home',
           name: AppRoutes.home,
-          builder: (BuildContext context, GoRouterState state) => HomeScreen(),
+          builder: (BuildContext context, GoRouterState state) =>
+              ChangeNotifierProvider(
+                create: (cntxt) => BookSingViewModel(),
+                child: HomeScreen(),
+              ),
           routes: [
-            // StatefulShellRoute.indexedStack(
-            //   builder: (BuildContext context, GoRouterState state,
-            //       StatefulNavigationShell navigationShell) {
-            //     return ScaffoldWithNavBar(navigationShell: navigationShell);
-            //   },
-            //   branches: <StatefulShellBranch>[
-            //     StatefulShellBranch(
-            //       routes: [
-            //         GoRoute(
-            //           path: 'resisterBook',
-            //           name: AppRoutes.resisterBook,
-            //           builder: (BuildContext context, GoRouterState state) =>
-            //               ResisterBookScreen(),
-            //         )
-            //       ],
-            //     ),
-            //     StatefulShellBranch(
-            //       routes: [
-            //         GoRoute(
-            //           path: 'search',
-            //           name: AppRoutes.search,
-            //           builder: (BuildContext context, GoRouterState state) =>
-            //               SearchScreen(
-            //             searchType: SearchType.book,
-            //             onTileTapped: (book) {
-            //               // 유저 상세 페이지로 이동(회원관리 / 회원검색 / 회원타일 에 한해서 onTileTapped가 그렇게 작동하는 것임.)
-            //               Navigator.of(context).push(MaterialPageRoute(
-            //                   builder: (context) => BookSingleView()));
-            //             },
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ],
-            // ),
-            GoRoute(
-                path: 'bookmanagescreen',
-                name: AppRoutes.bookManage,
-                builder: (context, state) => BookManageScreen()),
-            GoRoute(
-                path: 'bookSingleView',
-                name: AppRoutes.bookSingle,
-                builder: (context, state) => BookSingleView())
+            StatefulShellRoute.indexedStack(
+              builder: (BuildContext context, GoRouterState state,
+                  StatefulNavigationShell navigationShell) {
+                return ChangeNotifierProvider(
+                  create: (cntxt) => BookServiceProvider(),
+                  child: BookManageScreen(navigationShell: navigationShell),
+                );
+              },
+              branches: <StatefulShellBranch>[
+                StatefulShellBranch(
+                  routes: [
+                    GoRoute(
+                        path: 'resisterBook',
+                        name: AppRoutes.resisterBook,
+                        builder: (BuildContext context, GoRouterState state) =>
+                            ChangeNotifierProvider(
+                              create: (cntxt) => ResisterBookScreenViewModel(
+                                  bookService: context
+                                      .watch<BookServiceProvider>()
+                                      .bookService),
+                              child: ResisterBookScreen(),
+                            ))
+                  ],
+                ),
+                StatefulShellBranch(
+                  routes: [
+                    GoRoute(
+                        path: 'search',
+                        name: AppRoutes.search,
+                        builder: (BuildContext context, GoRouterState state) =>
+                            ChangeNotifierProvider(
+                              create: (cntxt) => SearchScreenViewModel(
+                                searchType: SearchType.book,
+                              ),
+                              child: SearchScreen(),
+                            )),
+                  ],
+                ),
+              ],
+            ),
           ])
     ]);
