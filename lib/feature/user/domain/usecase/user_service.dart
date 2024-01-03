@@ -1,4 +1,4 @@
-import '../../entity/user.dart';
+import '../../../common/domain/model/user.dart';
 
 abstract interface class UserService {
   // 회원 등록
@@ -14,5 +14,6 @@ abstract interface class UserService {
   Future<List<User>> getUsers();
 
   // 회원 이름으로 검색
- List<User> retrieveUserFromName({required List<User> users, required String name});
+  List<User> retrieveUserFromName(
+      {required List<User> users, required String name});
 }

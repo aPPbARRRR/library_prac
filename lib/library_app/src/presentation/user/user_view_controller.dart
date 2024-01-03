@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:library_manage_app/feature/book/domain/usecase/book_service.dart';
 import 'package:library_manage_app/feature/loan/domain/usecase/loan_service.dart';
-import 'package:library_manage_app/library_app/src/service/interface/user_service.dart';
+import 'package:library_manage_app/feature/user/domain/usecase/user_service.dart';
 
 import '../../entity/user.dart';
 import '../common/view_controller.dart';
