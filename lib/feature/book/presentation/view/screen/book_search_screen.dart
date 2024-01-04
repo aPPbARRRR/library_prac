@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:library_manage_app/feature/book/presentation/view_model/book_search_screen_view_model.dart';
 import 'package:library_manage_app/feature/common/presentation/widget/custom_text_field_with_label.dart';
 import 'package:provider/provider.dart';
-import '../../../../common/domain/enum/search_type.dart';
 import '../../../../common/presentation/widget/book_tile.dart';
 
 class BookSearchScreen extends StatelessWidget {
@@ -25,9 +24,8 @@ class BookSearchScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text(viewModel.appBarTitleText),
             leading: IconButton(
-                onPressed: () => context.pop(), icon: Icon(Icons.arrow_back)),
-            // automaticallyImplyLeading: isBackButtonEnabled,
-            // toolbarHeight: isBackButtonEnabled ? null : 0,
+                onPressed: () => context.pop(),
+                icon: const Icon(Icons.arrow_back)),
           ),
           body: Center(
             child: Column(
@@ -38,25 +36,31 @@ class BookSearchScreen extends StatelessWidget {
                     textController: textController,
                     hintText: viewModel.searchHintText,
                     onPressed: () {
-                      if (textController.text == '')
+                      if (textController.text == '') {
                         viewModel.getAllBooks(context: context);
-                      else {
+                      } else {
                         viewModel.search(
                             searchText: textController.text, context: context);
                       }
                     },
-                    icon: Icon(Icons.search, color: Colors.orange),
+                    icon: const Icon(Icons.search, color: Colors.orange),
                   ),
                 ),
                 Expanded(
                   child: ListView(
                     children: [
                       if (viewModel.resultBooks != null &&
-                          viewModel.searchType == SearchType.book)
+                          viewModel.resultBooks!.isNotEmpty)
                         ...viewModel.resultBooks!
                             .map((book) => BookTile(
-                                book: book, onTap: viewModel.onTileTapped))
+                                book: book,
+                                onTap: (book) {
+                                  viewModel.onTileTapped(
+                                      context: context, book: book);
+                                }))
                             .toList()
+                      else
+                        const Center(child: Text('검색결과가 없습니다.'))
                     ],
                   ),
                 )

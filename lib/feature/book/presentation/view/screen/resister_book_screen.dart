@@ -19,39 +19,42 @@ class ResisterBookScreen extends StatelessWidget {
     final viewModel = context.watch<ResisterBookScreenViewModel>();
     return Scaffold(
       appBar: AppBar(
-        title: Text('도서 등록'),
+        title: const Text('도서 등록'),
         leading: IconButton(
-            onPressed: () => context.pop(), icon: Icon(Icons.arrow_back)),
+            onPressed: () => context.pop(), icon: const Icon(Icons.arrow_back)),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CustomTextFieldWithLabel(
-                  textController: bookNameTextController, label: '도서명'),
-              CustomTextFieldWithLabel(
-                  textController: authorTextController, label: '저자'),
-              DatePickerRow(),
-              SizedBox(
-                height: 45,
-                child: CustomButton(
-                    onTap: () async {
-                      await viewModel.resisterBook(
-                          bookName: bookNameTextController.text,
-                          author: authorTextController.text,
-                          publishDate: viewModel.date,
-                          context: context);
-                    },
-                    text: '등록'),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CustomTextFieldWithLabel(
+                        textController: bookNameTextController, label: '도서명'),
+                    CustomTextFieldWithLabel(
+                        textController: authorTextController, label: '저자'),
+                    const DatePickerRow(),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: 30,
-              )
-            ],
-          ),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: CustomButton(
+                  onTap: () async {
+                    await viewModel.resisterBook(
+                        bookName: bookNameTextController.text,
+                        author: authorTextController.text,
+                        publishDate: viewModel.date,
+                        context: context);
+                  },
+                  text: '등록'),
+            ),
+          ],
         ),
       ),
     );

@@ -19,11 +19,11 @@ class BookSingleView extends StatelessWidget {
       ),
       body: Center(
         child: Column(children: [
-          Text('도서 싱글 뷰. 도서 정보, 도서 삭제, 도서 정보 수정 등 제공'),
+          const Text('도서 싱글 뷰. 도서 정보, 도서 삭제, 도서 정보 수정 등 제공'),
           ElevatedButton(
               onPressed: () async =>
                   await viewModel.deleteBook(context: context),
-              child: Text('도서 삭제'))
+              child: const Text('도서 삭제'))
         ]),
       ),
     );

@@ -29,20 +29,31 @@ class ResisterBookScreenViewModel extends ChangeNotifier {
             author: author,
             publishDate: publishDate,
             isBookLoaned: false));
-
-    switch (result) {
-      case Success<Book, Exception>():
-        context.pushNamed(AppRoutes.bookSingle, extra: result.result as Book);
-      // ScaffoldMessenger.of(context)
-      //     .showSnackBar(SnackBar(content: Text('도서 등록 성공')));
-      case Error<Book, Exception>():
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(result.toString())));
+    if (context.mounted) {
+      switch (result) {
+        case Success<Book, Exception>():
+          context.goNamed(AppRoutes.bookSingle, extra: result.result as Book);
+        case Error<Book, Exception>():
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(result.toString())));
+      }
     }
   }
 
   void selectDate(context) async {
     await showDatePicker(
+            builder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: ColorScheme.dark(
+                    primary: Colors.orange[300]!, // <-- SEE HERE
+                    onPrimary: Colors.orange[900]!, // <-- SEE HERE
+                    onSurface: Colors.orange, // <-- SEE HERE
+                  ),
+                ),
+                child: child!,
+              );
+            },
             context: context,
             firstDate: DateTime(1900, 1, 1),
             lastDate: DateTime.now())

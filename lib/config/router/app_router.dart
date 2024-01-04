@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:library_manage_app/config/router/app_routes.dart';
-import 'package:library_manage_app/feature/book/data/repository_impl/book_service_impl.dart';
+import 'package:library_manage_app/feature/book/domain/usecase/book_service_impl.dart';
 import 'package:library_manage_app/feature/book/presentation/view/screen/book_manage_screen.dart';
 import 'package:library_manage_app/feature/book/presentation/view/screen/book_single_view.dart';
 import 'package:library_manage_app/feature/book/presentation/view_model/book_single_view_model.dart';
@@ -28,6 +28,10 @@ import '../../feature/user/presentation/view/user_search_screen.dart';
 import '../../feature/user/presentation/view_model/create_user_screen_view_model.dart';
 import '../../feature/user/presentation/view_model/user_search_screen_view_model.dart';
 import '../../shared/drift/provider/drift_db_service.dart';
+
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>();
 
 final GoRouter appRouter = GoRouter(
     initialLocation: '/splash',
@@ -91,18 +95,31 @@ final GoRouter appRouter = GoRouter(
                 StatefulShellBranch(
                   routes: [
                     GoRoute(
-                        path: 'book_search',
-                        name: AppRoutes.bookSearch,
-                        builder: (BuildContext context, GoRouterState state) =>
-                            ChangeNotifierProvider(
-                              create: (cntxt) => BookSearchScreenViewModel(
-                                bookService: context
-                                    .watch<BookServiceProvider>()
-                                    .bookService,
-                                searchType: SearchType.book,
-                              ),
-                              child: BookSearchScreen(),
-                            )),
+                      path: 'book_search',
+                      name: AppRoutes.bookSearch,
+                      builder: (BuildContext context, GoRouterState state) =>
+                          ChangeNotifierProvider(
+                        create: (cntxt) => BookSearchScreenViewModel(
+                          bookService:
+                              context.watch<BookServiceProvider>().bookService,
+                          searchType: SearchType.book,
+                        ),
+                        child: BookSearchScreen(),
+                      ),
+                      // routes: [
+                      //   GoRoute(
+                      //       path: 'book_single',
+                      //       name: AppRoutes.bookSingle,
+                      //       builder:
+                      //           (BuildContext context, GoRouterState state) {
+                      //         return ChangeNotifierProvider(
+                      //           create: (cntxt) => BookSingViewModel(
+                      //               book: state.extra as Book),
+                      //           child: const BookSingleView(),
+                      //         );
+                      //       }),
+                      // ],
+                    ),
                   ],
                 ),
               ],

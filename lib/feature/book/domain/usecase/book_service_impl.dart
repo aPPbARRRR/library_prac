@@ -7,8 +7,8 @@ import 'package:library_manage_app/feature/common/domain/model/book.dart';
 import 'package:library_manage_app/shared/domain/model/result.dart';
 
 import '../../../../shared/drift/repository/drift_database.dart';
-import '../../domain/model/book_search_type.dart';
-import '../../domain/usecase/book_service.dart';
+import '../model/book_search_type.dart';
+import 'book_service.dart';
 
 class BookServiceProvider extends ChangeNotifier {
   BookServiceProvider({
