@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:library_manage_app/feature/book/presentation/view_model/book_search_screen_view_model.dart';
 import 'package:library_manage_app/feature/common/presentation/widget/custom_text_field_with_label.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
 import 'package:provider/provider.dart';
-import '../../../../../library_app/src/presentation/common/widget/book_tile.dart';
 import '../../../../common/domain/enum/search_type.dart';
+import '../../../../common/presentation/widget/book_tile.dart';
 
 class BookSearchScreen extends StatelessWidget {
   BookSearchScreen({super.key, this.isBackButtonEnabled = false});

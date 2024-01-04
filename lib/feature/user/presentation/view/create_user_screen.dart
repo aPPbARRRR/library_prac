@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:library_manage_app/feature/user/presentation/view_model/create_user_screen_view_model.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
+import 'package:library_manage_app/feature/common/presentation/widget/custom_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/presentation/widget/custom_text_field_with_label.dart';

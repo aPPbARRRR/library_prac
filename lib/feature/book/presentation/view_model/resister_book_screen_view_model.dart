@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:library_manage_app/config/router/app_routes.dart';
 
 import 'package:library_manage_app/feature/book/domain/usecase/book_service.dart';
 import 'package:uuid/uuid.dart';
@@ -20,7 +22,6 @@ class ResisterBookScreenViewModel extends ChangeNotifier {
       required String author,
       required DateTime publishDate,
       required BuildContext context}) async {
-    print(1);
     var result = await bookService.resisterBook(
         book: Book(
             bookName: bookName,
@@ -28,16 +29,15 @@ class ResisterBookScreenViewModel extends ChangeNotifier {
             author: author,
             publishDate: publishDate,
             isBookLoaned: false));
-    print(-1);
-    print(result.toString());
-    if (result is Success<Book, Exception>) {
-      print(-2);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('도서 등록 성공')));
-    } else if (result is Error<Book, Exception>) {
-      print(-2);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(result.toString())));
+
+    switch (result) {
+      case Success<Book, Exception>():
+        context.pushNamed(AppRoutes.bookSingle, extra: result.result as Book);
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text('도서 등록 성공')));
+      case Error<Book, Exception>():
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(result.toString())));
     }
   }
 

@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:library_manage_app/config/router/app_routes.dart';
 import 'package:library_manage_app/feature/book/data/repository_impl/book_service_impl.dart';
 import 'package:library_manage_app/feature/book/presentation/view/screen/book_manage_screen.dart';
+import 'package:library_manage_app/feature/book/presentation/view/screen/book_single_view.dart';
+import 'package:library_manage_app/feature/book/presentation/view_model/book_single_view_model.dart';
 import 'package:library_manage_app/feature/book/presentation/view_model/resister_book_screen_view_model.dart';
 import 'package:library_manage_app/feature/common/presentation/screen/home_screen.dart';
 import 'package:library_manage_app/feature/common/presentation/screen/splash_screen.dart';
@@ -14,6 +16,7 @@ import 'package:provider/provider.dart';
 import '../../feature/book/presentation/view/screen/resister_book_screen.dart';
 import '../../feature/common/domain/enum/search_type.dart';
 import '../../feature/book/presentation/view/screen/book_search_screen.dart';
+import '../../feature/common/domain/model/book.dart';
 import '../../feature/loan/data/repository_impl/loan_service_impl.dart';
 import '../../feature/loan/presentation/view/screen/loan_execute_screen.dart';
 import '../../feature/loan/presentation/view/screen/loan_search_screen.dart';
@@ -69,7 +72,20 @@ final GoRouter appRouter = GoRouter(
                                       .watch<BookServiceProvider>()
                                       .bookService),
                               child: ResisterBookScreen(),
-                            ))
+                            ),
+                        routes: [
+                          GoRoute(
+                              path: 'book_single',
+                              name: AppRoutes.bookSingle,
+                              builder:
+                                  (BuildContext context, GoRouterState state) {
+                                return ChangeNotifierProvider(
+                                  create: (cntxt) => BookSingViewModel(
+                                      book: state.extra as Book),
+                                  child: const BookSingleView(),
+                                );
+                              }),
+                        ])
                   ],
                 ),
                 StatefulShellBranch(
@@ -175,5 +191,5 @@ final GoRouter appRouter = GoRouter(
                 ),
               ],
             ),
-          ])
+          ]),
     ]);

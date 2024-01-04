@@ -39,9 +39,8 @@ class BookServiceImpl implements BookService {
   Future<Result<void, Exception>> deleteBook({required Book book}) async {
     var result = await repository.unregisterBook(book: book);
     return switch (result) {
-      Success<List<Book>, Exception>(:List<Book> result) => Success(null),
-      Error<List<Book>, Exception>(:Exception e) => Error(e),
-      _ => Error(Exception('Unknown Error/ wildcard pattern is matched'))
+      Success<void, Exception>() => Success(null),
+      Error<void, Exception>() => Error(result.e),
     };
   }
 

@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:library_manage_app/feature/loan/presentation/view_model/loan_execute_screen_view_model.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/widget/book_tile.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/widget/user_tile.dart';
+import 'package:library_manage_app/feature/common/presentation/widget/custom_button.dart';
 import 'package:provider/provider.dart';
+import '../../../../common/presentation/widget/book_tile.dart';
+import '../../../../common/presentation/widget/user_tile.dart';
 import '../widget/loan_execute_search_button.dart';
 import 'loan_search_screen.dart';
 

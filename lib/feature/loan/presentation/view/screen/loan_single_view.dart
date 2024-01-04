@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/widget/custom_button.dart';
+import 'package:library_manage_app/feature/common/presentation/widget/custom_button.dart';
 
 import '../../../../common/domain/model/book_loan.dart';
 

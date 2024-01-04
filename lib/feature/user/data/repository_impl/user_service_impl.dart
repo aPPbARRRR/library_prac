@@ -48,3 +48,34 @@ class UserServiceImpl implements UserService {
 
   // 리스트<북> 을 반환하는 함수의 경우, 검색결과 없는 경우를 고려해서 반영해야함.
 }
+
+
+// class UserServiceImpl implements UserService {
+//   UserServiceImpl({required this.repository});
+
+//   final DatabaseRepository repository;
+
+//   @override
+//   Future<User> createUser({required User user}) async {
+//     return await repository.createUser(user: user);
+//   }
+
+//   @override
+//   Future<void> deleteUser({required User user}) async {
+//     await repository.removeUser(user: user);
+//   }
+
+//   @override
+//   Future<List<User>> getUsers() async {
+//     print('UserServiceIpl / getUsers()');
+//     return await repository.getUsers();
+//   }
+
+//   @override
+//   Future<void> updateUser({required User user}) async {}
+
+//   @override
+//   List<User> retrieveUserFromName(
+//           {required List<User> users, required String name}) =>
+//       users.where((user) => user.name.contains(name)).toList();
+// }
