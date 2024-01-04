@@ -2,9 +2,9 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:library_manage_app/feature/common/domain/model/book_loan_extention.dart';
 
 import 'package:library_manage_app/shared/domain/model/app_data.dart';
+import 'package:library_manage_app/shared/drift/model/book_loan_extention.dart';
 
 import '../../../../config/router/app_routes.dart';
 import '../../../common/domain/enum/search_type.dart';

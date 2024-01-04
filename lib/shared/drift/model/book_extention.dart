@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' as d;
-import 'package:library_manage_app/shared/data/drift/drift_database.dart';
 
-import 'book.dart';
+import '../../../feature/common/domain/model/book.dart';
+import '../repository/drift_database.dart';
 
 extension BookExtention on Book {
   BookTableCompanion toTableCompanion() {
@@ -13,4 +13,11 @@ extension BookExtention on Book {
         loanRemainingDays: d.Value(this.loanRemainingDays ?? -1),
         author: d.Value(this.author));
   }
+
+  Book bookfromTableData(BookTableData data) => Book(
+      bookName: data.bookName,
+      bookUid: data.bookUid,
+      publishDate: data.publishDate,
+      isBookLoaned: data.isBookLoaned,
+      author: data.author);
 }

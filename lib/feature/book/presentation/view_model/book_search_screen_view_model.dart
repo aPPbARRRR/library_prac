@@ -2,11 +2,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:library_manage_app/feature/common/domain/model/book_loan_extention.dart';
+import 'package:library_manage_app/feature/book/domain/model/book_search_type.dart';
 
 import 'package:library_manage_app/shared/domain/model/app_data.dart';
+import 'package:library_manage_app/shared/drift/model/book_loan_extention.dart';
 
 import '../../../../config/router/app_routes.dart';
+import '../../../../shared/domain/model/result.dart';
 import '../../domain/usecase/book_service.dart';
 import '../../../common/domain/enum/search_type.dart';
 import '../../../common/domain/model/book.dart';
@@ -25,6 +27,7 @@ class BookSearchScreenViewModel extends ChangeNotifier {
   List<BookLoan>? resultLoans;
   bool isExpirationDateBasedSort = true;
   bool isAscendingSorted = false;
+  BookSearchType currentBookSearchType = BookSearchType.name;
 
   String get searchHintText => '도서명을 입력해주세요.';
   String get appBarTitleText => '도서 검색';
@@ -83,10 +86,33 @@ class BookSearchScreenViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void search({required String searchText}) async {
-    List<Book> retrievedBooks =
-        await bookService.retrieveBooksFromName(bookName: searchText);
-    resultBooks = retrievedBooks;
-    notifyListeners();
+  Future<void> search(
+      {required String searchText, required BuildContext context}) async {
+    var result = await bookService.retrieveBooks(
+        bookSearchType: currentBookSearchType, searchText: searchText);
+
+    // 이렇게밖에 안되나?
+    if (result is Success<List<Book>, Exception>) {
+      resultBooks = result.result;
+      notifyListeners();
+    } else if (result is Error<List<Book>, Exception>) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(result.e.toString())));
+    }
+  }
+
+  Future<void> getAllBooks({required BuildContext context}) async {
+    print('object');
+    var result = await bookService.getAllBooks();
+
+    // 이렇게밖에 안되나?
+    if (result is Success<List<Book>, Exception> &&
+        resultBooks != result.result) {
+      resultBooks = result.result;
+      notifyListeners();
+    } else if (result is Error<List<Book>, Exception>) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(result.e.toString())));
+    }
   }
 }

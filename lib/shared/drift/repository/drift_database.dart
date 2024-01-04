@@ -7,6 +7,8 @@ import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
+import '../../../feature/common/domain/model/book.dart';
+
 part 'drift_database.g.dart';
 
 class UserTable extends Table {
@@ -41,6 +43,12 @@ class LoanTable extends Table {
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
+  Book tableDataToBook(BookTableData data) => Book(
+      bookName: data.bookName,
+      bookUid: data.bookUid,
+      publishDate: data.publishDate,
+      isBookLoaned: data.isBookLoaned,
+      author: data.author);
   // 유저 생성
   // Future createUser(UserTableCompanion user) => into(userTable).insert(user);
 

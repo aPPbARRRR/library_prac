@@ -24,7 +24,7 @@ import '../../feature/user/presentation/view/user_manage_screen.dart';
 import '../../feature/user/presentation/view/user_search_screen.dart';
 import '../../feature/user/presentation/view_model/create_user_screen_view_model.dart';
 import '../../feature/user/presentation/view_model/user_search_screen_view_model.dart';
-import '../../shared/data/drift/drift_db_service.dart';
+import '../../shared/drift/provider/drift_db_service.dart';
 
 final GoRouter appRouter = GoRouter(
     initialLocation: '/splash',

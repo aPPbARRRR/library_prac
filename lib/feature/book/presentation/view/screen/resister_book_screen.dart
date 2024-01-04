@@ -39,7 +39,7 @@ class ResisterBookScreen extends StatelessWidget {
                 height: 45,
                 child: CustomButton(
                     onTap: () async {
-                      viewModel.resisterBook(
+                      await viewModel.resisterBook(
                           bookName: bookNameTextController.text,
                           author: authorTextController.text,
                           publishDate: viewModel.date,

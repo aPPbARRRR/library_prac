@@ -1,7 +1,7 @@
-import 'package:library_manage_app/shared/data/drift/drift_database.dart';
 import 'package:drift/drift.dart' as d;
 
-import 'user.dart';
+import '../../../feature/common/domain/model/user.dart';
+import '../repository/drift_database.dart';
 
 extension UserExtention on User {
   UserTableCompanion toTableCompanion() {

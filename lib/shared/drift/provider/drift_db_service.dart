@@ -1,7 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:flutter/material.dart';
-import 'package:library_manage_app/shared/data/drift/drift_database.dart';
+
+import '../repository/drift_database.dart';
 
 class LoacalDatabaseProvider extends ChangeNotifier {
   final DriftDbService driftDbService = DriftDbService();

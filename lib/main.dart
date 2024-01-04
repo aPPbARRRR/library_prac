@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'config/router/app_router.dart';
-import 'shared/data/drift/drift_db_service.dart';
+import 'shared/drift/provider/drift_db_service.dart';
 
 void main() {
   // 앱 시작시 스플래시 화면에서 db의 데이터 가져와 library service에 넣어주고 활용
