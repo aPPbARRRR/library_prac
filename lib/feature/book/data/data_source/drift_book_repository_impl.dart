@@ -66,8 +66,9 @@ class DriftBookRepositoryImpl implements BookRepository {
   @override
   Future<Result<void, Exception>> unregisterBook({required Book book}) async {
     try {
-      await db.delete(db.bookTable)
-        ..where((tbl) => tbl.bookUid.equals(book.bookUid));
+      await (db.delete(db.bookTable)
+            ..where((tbl) => tbl.bookUid.equals(book.bookUid)))
+          .go();
       return Success(null);
     } catch (e) {
       return Error(Exception(e));

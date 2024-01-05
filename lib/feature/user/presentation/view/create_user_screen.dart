@@ -20,9 +20,6 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   final TextEditingController phoneNumTextController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  DateTime birthDate = DateTime.now();
-
-  // userUid,
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CreateUserScreenViewModel>();
@@ -49,43 +46,24 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CustomButton(
-                    onTap: () async {
-                      await showDatePicker(
-                              context: context,
-                              firstDate: DateTime(1900, 1, 1),
-                              lastDate: DateTime.now())
-                          .then((value) =>
-                              value != null ? birthDate = value : birthDate);
-                      setState(() {});
-                    },
+                    onTap: () async =>
+                        viewModel.selectBirthDate(context: context),
                     text: '생년월일 입력'),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      '생년월일 : ${DateFormat('yyyy년 M월 d일').format(birthDate)}'),
+                      '생년월일 : ${DateFormat('yyyy년 M월 d일').format(viewModel.birthDate)}'),
                 ),
               ],
             ),
-
-            // Spacer(),
             CustomButton(
                 onTap: () async {
                   if (_formKey.currentState!.validate()) {
-                    // await widget.userController
-                    //     .createUser(
-                    //         name: nameTextController.text,
-                    //         address: addressTextController.text,
-                    //         phoneNum: int.parse(phoneNumTextController.text),
-                    //         birthDate: birthDate)
-                    //     .then((newUser) {
-                    //   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    //       builder: (context) => UserSingleView(
-                    //             user: newUser,
-                    //             controller: widget.userController,
-                    //           )));
-                    // });
-                    // widget.userController.retrieveUsers();
-                    // //등록 완료시 화면 전환 필요
+                    viewModel.createUser(
+                        context: context,
+                        name: nameTextController.text,
+                        address: addressTextController.text,
+                        phoneNum: phoneNumTextController.text);
                   }
                 },
                 text: '등록'),

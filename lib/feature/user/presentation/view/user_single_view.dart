@@ -1,30 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:library_manage_app/feature/common/presentation/widget/custom_button.dart';
+import 'package:library_manage_app/feature/user/presentation/view_model/user_single_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/domain/model/user.dart';
 
-class UserSingleView extends StatefulWidget {
-  const UserSingleView({super.key, required this.user});
+class UserSingleView extends StatelessWidget {
+  const UserSingleView({super.key});
 
-  final User user;
-
-  @override
-  State<UserSingleView> createState() => _UserSingleViewState();
-}
-
-class _UserSingleViewState extends State<UserSingleView> {
   @override
   Widget build(BuildContext context) {
-    // final List<BookLoan>? loans = widget.controller.loans;
-    // final List<User>? users = widget.controller.users;
-    // final List<Book>? books = widget.controller.books;
-    final User user = widget.user;
+    final viewModel = context.watch<UserSingleViewModel>();
+    final User user = viewModel.user;
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(user.name),
-        ),
+        // appBar: AppBar(
+        //   title: Text(user.name),
+        // ),
         body: DefaultTextStyle(
           style: TextStyle(
               fontSize: 16,
@@ -42,7 +36,6 @@ class _UserSingleViewState extends State<UserSingleView> {
                     Text('주소 : ${user.address}'),
                     Text(
                         '생일 : ${DateFormat('yyyy년 M월 d일').format(user.birthDate)}'),
-
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
@@ -78,13 +71,9 @@ class _UserSingleViewState extends State<UserSingleView> {
                         ),
                       ),
                     ),
-
-                    // ElevatedButton(
-                    //     onPressed: () async {
-                    //       await widget.controller.removeUser(widget.user);
-                    //       Navigator.pop(context);
-                    //     },
-                    //     child: Text('회원 삭제'))
+                    CustomButton(
+                        onTap: () => viewModel.deleteUser(context),
+                        text: '회원 삭제')
                   ]),
             ),
           ),

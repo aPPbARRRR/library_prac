@@ -39,8 +39,9 @@ class DriftUserRepositoryImpl implements UserRepository {
   @override
   Future<Result<void, Exception>> removeUser({required User user}) async {
     try {
-      await db.delete(db.userTable)
-        ..where((tbl) => tbl.userUid.equals(user.userUid));
+      await (db.delete(db.userTable)
+            ..where((tbl) => tbl.userUid.equals(user.userUid)))
+          .go();
       return Success(null);
     } catch (e) {
       return Error(Exception(e));

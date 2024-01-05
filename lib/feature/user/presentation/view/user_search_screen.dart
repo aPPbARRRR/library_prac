@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:library_manage_app/feature/common/presentation/widget/custom_text_field_with_label.dart';
 import 'package:provider/provider.dart';
-import '../../../common/domain/enum/search_type.dart';
-import '../../../common/presentation/widget/book_tile.dart';
+import '../../../common/presentation/widget/user_tile.dart';
 import '../view_model/user_search_screen_view_model.dart';
 
 class UserSearchScreen extends StatelessWidget {
@@ -29,9 +28,8 @@ class UserSearchScreen extends StatelessWidget {
                   child: CustomTextFieldWithLabel(
                     textController: textController,
                     hintText: viewModel.searchHintText,
-                    onPressed: () {
-                      viewModel.search(searchText: textController.text);
-                    },
+                    onPressed: () => viewModel.search(
+                        searchText: textController.text, context: context),
                     icon: Icon(Icons.search, color: Colors.orange),
                   ),
                 ),
@@ -41,12 +39,16 @@ class UserSearchScreen extends StatelessWidget {
                 Expanded(
                   child: ListView(
                     children: [
-                      if (viewModel.resultBooks != null &&
-                          viewModel.searchType == SearchType.user)
-                        ...viewModel.resultBooks!
-                            .map((book) => BookTile(
-                                book: book, onTap: viewModel.onTileTapped))
+                      if (viewModel.resultUsers != null &&
+                          viewModel.resultUsers!.isNotEmpty)
+                        ...viewModel.resultUsers!
+                            .map((user) => UserTile(
+                                user: user,
+                                onTap: (user) => viewModel.onTileTapped(
+                                    context: context, user: user)))
                             .toList()
+                      else
+                        const Center(child: Text('검색결과가 없습니다.'))
                     ],
                   ),
                 )

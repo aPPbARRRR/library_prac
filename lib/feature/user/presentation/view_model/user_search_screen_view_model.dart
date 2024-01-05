@@ -1,82 +1,60 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:library_manage_app/shared/domain/model/app_data.dart';
-import 'package:library_manage_app/shared/drift/model/book_loan_extention.dart';
-
 import '../../../../config/router/app_routes.dart';
-import '../../../common/domain/enum/search_type.dart';
-import '../../../common/domain/model/book.dart';
-import '../../../common/domain/model/book_loan.dart';
+import '../../../../shared/domain/model/result.dart';
 import '../../../common/domain/model/user.dart';
+import '../../domain/model/user_search_type.dart';
 import '../../domain/usecase/user_service.dart';
 
 class UserSearchScreenViewModel extends ChangeNotifier {
-  UserSearchScreenViewModel(
-      {required this.searchType, required this.userService});
+  UserSearchScreenViewModel({required this.userService});
 
   final UserService userService;
 
-  final SearchType searchType;
   List<User>? resultUsers;
-  List<Book>? resultBooks;
-  List<BookLoan>? resultLoans;
+
+  UserSearchType currentUserSearchType = UserSearchType.name;
   bool isExpirationDateBasedSort = true;
   bool isAscendingSorted = false;
 
   String get searchHintText => '회원 이름을 입력해주세요.';
 
-  Function? onTileTapped(AppData data, BuildContext context) {
-    if (data is Book) {
-      //타일 탭의 뷰모델에 data(book으로 들어온 경우)를 최신화시키는 작업 선행해야함
-      context.goNamed(AppRoutes.bookSingle);
-    }
-// (loan) {
-//                    context.goNamed( LoanSingleView(
-//                                 loan: loan,
-//                                 loanViewController: widget.loanController,
-//                               )); // 론 싱글 뷰 앱 라우츠, 앱 라우터에 추가 요망
-
-//                     }
-// (user) {
-//      context.goNamed( UserSingleView(
-//                         user: user,
-//                         controller: widget.userController,
-//                       )); // 론 싱글 뷰 앱 라우츠, 앱 라우터에 추가 요망
-
-//             }
+  void onTileTapped({required User user, required BuildContext context}) {
+    context.pushNamed(AppRoutes.userSingle, extra: user);
   }
 
-  void toggleIsAscendingSorted() {
-    if (isAscendingSorted == false) {
-      resultLoans = resultLoans
-          ?.sorted((a, b) => a.remainingDays.compareTo(b.remainingDays));
-      isAscendingSorted = true;
-    } else {
-      resultLoans = resultLoans
-          ?.sorted((a, b) => b.remainingDays.compareTo(a.remainingDays));
-      isAscendingSorted = false;
+  Future<void> search(
+      {required String searchText, required BuildContext context}) async {
+    var result = await userService.retrieveUser(
+        searchText: searchText, userSearchType: currentUserSearchType);
+    if (context.mounted) {
+      switch (result) {
+        case Success<List<User>, Exception>():
+          resultUsers = result.result;
+          notifyListeners();
+        case Error<List<User>, Exception>():
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(result.e.toString())));
+      }
     }
-    notifyListeners();
   }
 
-  void toggleIsExpirationDateBasedSort() {
-    if (isExpirationDateBasedSort == true) {
-      resultLoans?.sort((a, b) => a.loanDate.compareTo(b.loanDate));
-      isExpirationDateBasedSort = false;
-    } else {
-      resultLoans?.sort((a, b) => a.remainingDays.compareTo(b.remainingDays));
-      isExpirationDateBasedSort = true;
-    }
-    notifyListeners();
-  }
+  Future<void> getAllUsers({required BuildContext context}) async {
+    var result = await userService.getUsers();
 
-  void search({required String searchText}) async {
-    // List<Book> retrievedBooks =
-    //     await userService.retrieveBooksFromName(bookName: searchText);
-    // resultBooks = retrievedBooks;
-    // notifyListeners();
+    if (context.mounted) {
+      switch (result) {
+        case Success<List<User>, Exception>():
+          if (resultUsers != result.result) {
+            resultUsers = result.result;
+            notifyListeners();
+          }
+        case Error<List<User>, Exception>():
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(result.e.toString())));
+      }
+    }
   }
 }
