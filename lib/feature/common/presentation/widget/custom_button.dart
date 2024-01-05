@@ -7,24 +7,29 @@ class CustomButton extends StatelessWidget {
   final double? fontSize;
   final double? padding;
   const CustomButton(
-      {Key? key, required this.onTap, required this.text, this.fontSize, this.padding})
+      {Key? key,
+      required this.onTap,
+      required this.text,
+      this.fontSize,
+      this.padding})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(padding??0),
+      padding: EdgeInsets.all(padding ?? 0),
       child: ElevatedButton(
         onPressed: () {
           onTap();
         },
         child: Text(text),
         style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             backgroundColor: Colors.orange[900],
             foregroundColor: Colors.black,
-            textStyle:
-                TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize ?? 20)),
+            textStyle: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: fontSize ?? 20)),
       ),
     );
   }
