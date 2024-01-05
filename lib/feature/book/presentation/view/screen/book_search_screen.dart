@@ -6,9 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../../common/presentation/widget/book_tile.dart';
 
 class BookSearchScreen extends StatelessWidget {
-  BookSearchScreen({super.key, this.isBackButtonEnabled = false});
-
-  final bool isBackButtonEnabled;
+  BookSearchScreen({super.key});
 
   final TextEditingController textController = TextEditingController();
 

@@ -18,7 +18,7 @@ import '../../feature/common/domain/enum/search_type.dart';
 import '../../feature/book/presentation/view/screen/book_search_screen.dart';
 import '../../feature/common/domain/model/book.dart';
 import '../../feature/common/domain/model/user.dart';
-import '../../feature/loan/data/repository_impl/loan_service_impl.dart';
+import '../../feature/loan/domain/usecase/loan_service_impl.dart';
 import '../../feature/loan/presentation/view/screen/loan_execute_screen.dart';
 import '../../feature/loan/presentation/view/screen/loan_search_screen.dart';
 import '../../feature/loan/presentation/view_model/loan_search_screen_view_model.dart';
@@ -118,12 +118,31 @@ final GoRouter appRouter = GoRouter(
             StatefulShellRoute.indexedStack(
               builder: (BuildContext context, GoRouterState state,
                   StatefulNavigationShell navigationShell) {
-                return ChangeNotifierProvider(
-                  create: (cntxt) => LoanServiceProvider(),
+                return MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                        create: (cntxt) => LoanServiceProvider(
+                            db: context
+                                .watch<LoacalDatabaseProvider>()
+                                .driftDbService
+                                .driftDB)),
+                    ChangeNotifierProvider<BookServiceProvider>(
+                        create: (cntxt) => BookServiceProvider(
+                            db: context
+                                .watch<LoacalDatabaseProvider>()
+                                .driftDbService
+                                .driftDB)),
+                    ChangeNotifierProvider<UserServiceProvider>(
+                        create: (cntxt) => UserServiceProvider(
+                            db: context
+                                .watch<LoacalDatabaseProvider>()
+                                .driftDbService
+                                .driftDB))
+                  ],
                   child: LoanManageScreen(navigationShell: navigationShell),
                 );
               },
-              branches: <StatefulShellBranch>[
+              branches: [
                 StatefulShellBranch(
                   routes: [
                     GoRoute(
@@ -133,7 +152,37 @@ final GoRouter appRouter = GoRouter(
                             ChangeNotifierProvider(
                               create: (cntxt) => LoanExecuteScreenViewModel(),
                               child: const LoanExecuteScreen(),
-                            ))
+                            ),
+                        routes: [
+                          GoRoute(
+                            path: 'loan_book_search',
+                            name: AppRoutes.loanBookSearch,
+                            builder:
+                                (BuildContext context, GoRouterState state) =>
+                                    ChangeNotifierProvider(
+                              create: (cntxt) => BookSearchScreenViewModel(
+                                bookService: context
+                                    .watch<BookServiceProvider>()
+                                    .bookService,
+                              ),
+                              child: BookSearchScreen(),
+                            ),
+                          ),
+                          GoRoute(
+                              path: 'loan_user_search',
+                              name: AppRoutes.loanUserSearch,
+                              builder:
+                                  (BuildContext context, GoRouterState state) =>
+                                      ChangeNotifierProvider(
+                                        create: (cntxt) =>
+                                            UserSearchScreenViewModel(
+                                          userService: context
+                                              .watch<UserServiceProvider>()
+                                              .userService,
+                                        ),
+                                        child: UserSearchScreen(),
+                                      )),
+                        ])
                   ],
                 ),
                 StatefulShellBranch(
@@ -146,7 +195,7 @@ final GoRouter appRouter = GoRouter(
                               create: (cntxt) => LoanSearchScreenViewModel(
                                 loanService: context
                                     .watch<LoanServiceProvider>()
-                                    .bookService,
+                                    .loanService,
                                 searchType: SearchType.loan,
                               ),
                               child: LoanSearchScreen(),

@@ -9,9 +9,11 @@ import '../../domain/usecase/book_service.dart';
 import '../../../common/domain/model/book.dart';
 
 class BookSearchScreenViewModel extends ChangeNotifier {
-  BookSearchScreenViewModel({required this.bookService});
+  BookSearchScreenViewModel(
+      {required this.bookService, this.isInLoanSreen = false});
 
   final BookService bookService;
+  final bool isInLoanSreen;
 
   List<Book>? resultBooks;
 

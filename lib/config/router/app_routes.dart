@@ -7,6 +7,8 @@ class AppRoutes {
   static const String resisterBook = 'resisterBook';
   static const String bookSearch = 'bookSearch';
   static const String loanSearch = 'loanSearch';
+  static const String loanBookSearch = 'loan_book_search';
+  static const String loanUserSearch = 'loan_user_search';
   static const String userSearch = 'userSearch';
   static const String loanExecute = 'loanExecute';
   static const String createUser = 'createUser';

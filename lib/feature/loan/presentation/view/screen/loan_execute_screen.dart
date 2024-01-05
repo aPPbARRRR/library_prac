@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:library_manage_app/config/router/app_routes.dart';
 
 import 'package:library_manage_app/feature/loan/presentation/view_model/loan_execute_screen_view_model.dart';
 import 'package:library_manage_app/feature/common/presentation/widget/custom_button.dart';
@@ -29,15 +31,8 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
-                    onTap: () async {
-                      // user = await Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => SearchScreen(
-                      //               isBackButtonEnabled: true,
-                      //             )));
-                      // setState(() {});
-                    }, // 회원 검색으로
+                    onTap: () async =>
+                        context.pushNamed(AppRoutes.loanUserSearch), // 회원 검색으로
                     child: Container(
                       child: Center(
                           child: viewModel.user != null
@@ -55,13 +50,8 @@ class _LoanExecuteScreenState extends State<LoanExecuteScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
-                    onTap: () async {
-                      viewModel.book = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoanSearchScreen()));
-                      setState(() {});
-                    }, // 책 검색으로
+                    onTap: () async =>
+                        context.pushNamed(AppRoutes.loanBookSearch), // 책 검색으로
                     child: Container(
                       child: Center(
                           child: viewModel.book != null
