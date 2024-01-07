@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:library_manage_app/feature/common/domain/model/book_loan.dart';
 import 'package:library_manage_app/feature/common/domain/model/user.dart';
 import 'package:library_manage_app/shared/domain/model/result.dart';
 
@@ -79,5 +80,12 @@ class UserServiceImpl implements UserService {
     //   case Error<void, Exception>():
     //     return Error(Exception(result.e));
     throw Exception();
+  }
+
+  @override
+  Future<Result<List<BookLoan>, Exception>> retrieveLoans(
+      {required String searchText}) {
+    // TODO: implement retrieveLoans
+    throw UnimplementedError();
   }
 }

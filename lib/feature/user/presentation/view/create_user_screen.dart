@@ -23,55 +23,66 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CreateUserScreenViewModel>();
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CustomTextFieldWithLabel(
-                textController: nameTextController, label: '이름'),
-            CustomTextFieldWithLabel(
-              textController: addressTextController,
-              label: '주소',
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  CustomTextFieldWithLabel(
+                      textController: nameTextController, label: '이름'),
+                  CustomTextFieldWithLabel(
+                    textController: addressTextController,
+                    label: '주소',
+                  ),
+                  CustomTextFieldWithLabel(
+                    textController: phoneNumTextController,
+                    label: '전화번호(숫자만)',
+                    keyboardType: TextInputType.phone,
+                    isDigitOnly: true,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CustomButton(
+                          onTap: () async =>
+                              viewModel.selectBirthDate(context: context),
+                          text: '생년월일 입력'),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            '생년월일 : ${DateFormat('yyyy년 M월 d일').format(viewModel.birthDate)}'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            CustomTextFieldWithLabel(
-              textController: phoneNumTextController,
-              label: '전화번호(숫자만)',
-              keyboardType: TextInputType.phone,
-              isDigitOnly: true,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CustomButton(
-                    onTap: () async =>
-                        viewModel.selectBirthDate(context: context),
-                    text: '생년월일 입력'),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                      '생년월일 : ${DateFormat('yyyy년 M월 d일').format(viewModel.birthDate)}'),
-                ),
-              ],
-            ),
-            CustomButton(
-                onTap: () async {
-                  if (_formKey.currentState!.validate()) {
-                    viewModel.createUser(
-                        context: context,
-                        name: nameTextController.text,
-                        address: addressTextController.text,
-                        phoneNum: phoneNumTextController.text);
-                  }
-                },
-                text: '등록'),
-            SizedBox(
-              height: 30,
-            )
-          ],
-        ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              CustomButton(
+                  onTap: () async {
+                    if (_formKey.currentState!.validate()) {
+                      viewModel.createUser(
+                          context: context,
+                          name: nameTextController.text,
+                          address: addressTextController.text,
+                          phoneNum: phoneNumTextController.text);
+                    }
+                  },
+                  text: '등록'),
+            ],
+          ),
+          SizedBox(
+            height: 30,
+          )
+        ],
       ),
     );
   }

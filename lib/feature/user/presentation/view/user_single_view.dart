@@ -16,9 +16,6 @@ class UserSingleView extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        // appBar: AppBar(
-        //   title: Text(user.name),
-        // ),
         body: DefaultTextStyle(
           style: TextStyle(
               fontSize: 16,
@@ -44,30 +41,6 @@ class UserSingleView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20)),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text('대출기록'),
-                              ),
-                              // Expanded(
-                              //   child: ListView(
-                              //                 children: loans!
-                              //   .where((loan) => loan.userUid == widget.user.userUid)
-                              //   .map((userLoan) => LoanTile(
-                              //         loan: userLoan,
-                              //         users: users,
-                              //         books: books,
-                              //         onTap: (loan){
-                              //           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('대출 관련 작업은 메인화면 -> 대출관리 에서 실행해주세요')));
-                              //         },
-                              //       ))
-                              //   .toList(),
-                              //               ),
-                              // ),
-                            ],
-                          ),
                         ),
                       ),
                     ),

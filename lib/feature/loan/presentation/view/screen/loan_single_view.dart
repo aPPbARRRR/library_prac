@@ -1,90 +1,91 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:library_manage_app/feature/common/presentation/widget/custom_button.dart';
+import 'package:library_manage_app/feature/loan/presentation/view_model/loan_single_view_model.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../common/domain/model/book.dart';
 import '../../../../common/domain/model/book_loan.dart';
+import '../../../../common/domain/model/user.dart';
 
 class LoanSingleView extends StatelessWidget {
   const LoanSingleView({
     Key? key,
-    required this.loan,
   }) : super(key: key);
-
-  final BookLoan loan;
 
   @override
   Widget build(BuildContext context) {
-    // User user = controller.users!
-    //     .where((user) => user.userUid == loan.userUid)
-    //     .first; // ! 사용 주의
-    // Book book = controller.books!
-    //     .where((book) => book.bookUid == loan.bookUid)
-    //     .first; // ! 사용 주의
-    // int day = 7;
+    final viewModel = context.watch<LoanSingleViewModel>();
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 80,
-          title: Text('대출 상세'),
-          actions: [
-            CustomButton(
-              onTap: () async {
-                // await controller.returnLoan(loan: loan, context: context).then(
-                //     (value) =>
-                //         value != null ? Navigator.of(context).pop() : null);
-              },
-              text: '반납처리',
-              fontSize: 17,
-              padding: 10,
-            )
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Text('대출자 : ${user.name}, (${user.userUid})',
-              //     overflow: TextOverflow.ellipsis),
-              // Text(
-              //   '대출도서 : ${book.bookName}, (${book.bookUid})',
-              //   overflow: TextOverflow.ellipsis,
-              // ),
-              // Text(
-              //     '대출 실행일 : ${DateFormat('yyyy년 M월 d일').format(loan.loanDate)}'),
-              // Text(
-              //     '반납 예정일 : ${DateFormat('yyyy년 M월 d일').format(loan.dueDate)}'),
-              // Spacer(),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //   children: [
-              //     Text('연장일 :'),
-              //     DropdownButton(
-              //         value: day,
-              //         items: List.generate(7, (index) => index + 1)
-              //             .map((e) => DropdownMenuItem(
-              //                   child: Text(e.toString()),
-              //                   value: e,
-              //                 ))
-              //             .toList(),
-              //         onChanged: (value) {
-              //           if (value != null) day = value;
-              //           print(day);
-              //         }),
-              //     CustomButton(
-              //         onTap: () async {
-              //           await controller.extendLoan(
-              //               loan: loan, day: day, context: context);
-              //           Navigator.pop(context);
-              //         },
-              //         text: '대출 연장'),
-              //   ],
-              // )
-            ],
-          ),
-        ),
-      ),
+          body: FutureBuilder(
+              future: viewModel.onBuild(context),
+              builder: (context, snapShot) {
+                if (snapShot.connectionState == ConnectionState.done &&
+                    viewModel.book != null &&
+                    viewModel.user != null) {
+                  User user = viewModel.user!;
+                  Book book = viewModel.book!;
+                  BookLoan loan = viewModel.loan;
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text('대출자 : ${user.name}, (${user.userUid})',
+                            overflow: TextOverflow.ellipsis),
+                        Text(
+                          '대출도서 : ${book.bookName}, (${book.bookUid})',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                            '대출 실행일 : ${DateFormat('yyyy년 M월 d일').format(loan.loanDate)}'),
+                        Text(
+                            '반납 예정일 : ${DateFormat('yyyy년 M월 d일').format(loan.dueDate)}'),
+                        const Spacer(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Text('연장일 :'),
+                            DropdownButton(
+                                value: viewModel.loanExtendDays,
+                                items: viewModel.availableExtendDays
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e.toString()),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) =>
+                                    viewModel.selectExtendDays(value!)),
+                            CustomButton(
+                                onTap: () async => await viewModel.extendsLoan(
+                                    context: context),
+                                text: '대출 연장'),
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                }
+                return Dialog(
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FadeIn(
+                          child: Image.asset(
+                        'asset/images/logo_color_2.png',
+                      )),
+                      LinearProgressIndicator(
+                        color: Colors.orange[700],
+                      )
+                    ],
+                  )),
+                );
+              })),
     );
   }
 }

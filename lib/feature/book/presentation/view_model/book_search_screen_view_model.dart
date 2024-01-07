@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:library_manage_app/feature/book/domain/model/book_search_type.dart';
+import 'package:library_manage_app/feature/loan/presentation/view_model/loan_execute_screen_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../config/router/app_routes.dart';
 import '../../../../shared/domain/model/result.dart';
@@ -9,8 +11,10 @@ import '../../domain/usecase/book_service.dart';
 import '../../../common/domain/model/book.dart';
 
 class BookSearchScreenViewModel extends ChangeNotifier {
-  BookSearchScreenViewModel(
-      {required this.bookService, this.isInLoanSreen = false});
+  BookSearchScreenViewModel({
+    required this.bookService,
+    this.isInLoanSreen = false,
+  });
 
   final BookService bookService;
   final bool isInLoanSreen;
@@ -23,7 +27,11 @@ class BookSearchScreenViewModel extends ChangeNotifier {
   String get appBarTitleText => '도서 검색';
 
   void onTileTapped({required Book book, required BuildContext context}) {
-    context.goNamed(AppRoutes.bookSingle, extra: book);
+    if (isInLoanSreen) {
+      context.pop(book);
+    } else {
+      context.goNamed(AppRoutes.bookSingle, extra: book);
+    }
   }
 
   Future<void> search(

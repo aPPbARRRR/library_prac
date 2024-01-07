@@ -9,9 +9,11 @@ import '../../domain/model/user_search_type.dart';
 import '../../domain/usecase/user_service.dart';
 
 class UserSearchScreenViewModel extends ChangeNotifier {
-  UserSearchScreenViewModel({required this.userService});
+  UserSearchScreenViewModel(
+      {required this.userService, this.isInLoanSreen = false});
 
   final UserService userService;
+  final bool isInLoanSreen;
 
   List<User>? resultUsers;
 
@@ -22,7 +24,11 @@ class UserSearchScreenViewModel extends ChangeNotifier {
   String get searchHintText => '회원 이름을 입력해주세요.';
 
   void onTileTapped({required User user, required BuildContext context}) {
-    context.pushNamed(AppRoutes.userSingle, extra: user);
+    if (isInLoanSreen) {
+      context.pop(user);
+    } else {
+      context.goNamed(AppRoutes.userSingle, extra: user);
+    }
   }
 
   Future<void> search(

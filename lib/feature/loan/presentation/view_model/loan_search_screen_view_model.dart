@@ -1,25 +1,24 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:go_router/go_router.dart';
+import 'package:library_manage_app/feature/loan/domain/model/loan_search_type.dart';
 
-import 'package:library_manage_app/shared/domain/model/app_data.dart';
+import 'package:library_manage_app/shared/domain/model/result.dart';
 import 'package:library_manage_app/shared/drift/model/book_loan_extention.dart';
 
 import '../../../../config/router/app_routes.dart';
-import '../../../common/domain/enum/search_type.dart';
 import '../../../common/domain/model/book.dart';
 import '../../../common/domain/model/book_loan.dart';
 import '../../../common/domain/model/user.dart';
 import '../../domain/usecase/loan_service.dart';
 
 class LoanSearchScreenViewModel extends ChangeNotifier {
-  LoanSearchScreenViewModel(
-      {required this.searchType, required this.loanService});
+  LoanSearchScreenViewModel({required this.loanService});
 
   final LoanService loanService;
 
-  final SearchType searchType;
+  LoanSearchType loanSearchType = LoanSearchType.uid;
   List<User>? resultUsers;
   List<Book>? resultBooks;
   List<BookLoan>? resultLoans;
@@ -29,25 +28,8 @@ class LoanSearchScreenViewModel extends ChangeNotifier {
   String get searchHintText => '대출번호를 입력해주세요.';
   String get appBarTitleText => '도서대출 검색';
 
-  Function? onTileTapped(AppData data, BuildContext context) {
-    if (data is Book) {
-      //타일 탭의 뷰모델에 data(book으로 들어온 경우)를 최신화시키는 작업 선행해야함
-      context.goNamed(AppRoutes.bookSingle);
-    }
-// (loan) {
-//                    context.goNamed( LoanSingleView(
-//                                 loan: loan,
-//                                 loanViewController: widget.loanController,
-//                               )); // 론 싱글 뷰 앱 라우츠, 앱 라우터에 추가 요망
-
-//                     }
-// (user) {
-//      context.goNamed( UserSingleView(
-//                         user: user,
-//                         controller: widget.userController,
-//                       )); // 론 싱글 뷰 앱 라우츠, 앱 라우터에 추가 요망
-
-//             }
+  void onTileTapped({required BookLoan loan, required BuildContext context}) {
+    context.goNamed(AppRoutes.loanSingle, extra: loan);
   }
 
   void toggleIsAscendingSorted() {
@@ -74,93 +56,33 @@ class LoanSearchScreenViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void search({required String searchText}) async {
-  //   List<Book> retrievedBooks =
-  //       await bookService.retrieveBooksFromName(bookName: searchText);
-  //   resultBooks = retrievedBooks;
-  //   notifyListeners();
-  // }
+  void search(
+      {required String searchText, required BuildContext context}) async {
+    if (searchText == '') {
+      var result = await loanService.getAllLoans();
+      if (context.mounted) {
+        switch (result) {
+          case Success<List<BookLoan>, Exception>():
+            resultLoans = result.result;
+            notifyListeners();
+          case Error<List<BookLoan>, Exception>():
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('검색 중 오류가 발생하였습니다.')));
+        }
+      }
+    } else {
+      var result = await loanService.retrieveLoans(
+          loanSearchType: loanSearchType, searchText: searchText);
+      if (context.mounted) {
+        switch (result) {
+          case Success<List<BookLoan>, Exception>():
+            resultLoans = result.result;
+            notifyListeners();
+          case Error<List<BookLoan>, Exception>():
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('검색 중 오류가 발생하였습니다.')));
+        }
+      }
+    }
+  }
 }
-
-
-
-// 이하 기존 통합 서치 뷰 모델 포함했던 이전버저 북 서치 뷰 모델. 참고용
-// class BookSearchScreenViewModel extends ChangeNotifier {
-//   BookSearchScreenViewModel(
-//       {required this.searchType, required this.bookService});
-
-//   final BookService bookService;
-
-//   final SearchType searchType;
-//   List<User>? resultUsers;
-//   List<Book>? resultBooks;
-//   List<BookLoan>? resultLoans;
-//   bool isExpirationDateBasedSort = true;
-//   bool isAscendingSorted = false;
-//   BookSearchType currentBookSearchType = BookSearchType.name;
-
-//   String get searchHintText => '도서명을 입력해주세요.';
-//   String get appBarTitleText => '도서 검색';
-
-//   void onTileTapped({required Book book, required BuildContext context}) {
-//     context.goNamed(AppRoutes.bookSingle, extra: book);
-//   }
-
-//   void toggleIsAscendingSorted() {
-//     if (isAscendingSorted == false) {
-//       resultLoans = resultLoans
-//           ?.sorted((a, b) => a.remainingDays.compareTo(b.remainingDays));
-//       isAscendingSorted = true;
-//     } else {
-//       resultLoans = resultLoans
-//           ?.sorted((a, b) => b.remainingDays.compareTo(a.remainingDays));
-//       isAscendingSorted = false;
-//     }
-//     notifyListeners();
-//   }
-
-//   void toggleIsExpirationDateBasedSort() {
-//     if (isExpirationDateBasedSort == true) {
-//       resultLoans?.sort((a, b) => a.loanDate.compareTo(b.loanDate));
-//       isExpirationDateBasedSort = false;
-//     } else {
-//       resultLoans?.sort((a, b) => a.remainingDays.compareTo(b.remainingDays));
-//       isExpirationDateBasedSort = true;
-//     }
-//     notifyListeners();
-//   }
-
-//   Future<void> search(
-//       {required String searchText, required BuildContext context}) async {
-//     var result = await bookService.retrieveBooks(
-//         bookSearchType: currentBookSearchType, searchText: searchText);
-//     if (context.mounted) {
-//       switch (result) {
-//         case Success<List<Book>, Exception>():
-//           resultBooks = result.result;
-//           notifyListeners();
-//         case Error<List<Book>, Exception>():
-//           ScaffoldMessenger.of(context)
-//               .showSnackBar(SnackBar(content: Text(result.e.toString())));
-//       }
-//     }
-//   }
-
-//   Future<void> getAllBooks({required BuildContext context}) async {
-//     var result = await bookService.getAllBooks();
-
-//     if (context.mounted) {
-//       switch (result) {
-//         case Success<List<Book>, Exception>():
-//           if (resultBooks != result.result) {
-//             resultBooks = result.result;
-//             notifyListeners();
-//           }
-//         case Error<List<Book>, Exception>():
-//           ScaffoldMessenger.of(context)
-//               .showSnackBar(SnackBar(content: Text(result.e.toString())));
-//       }
-//     }
-//   }
-// }
-

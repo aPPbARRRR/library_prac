@@ -6,10 +6,12 @@ import 'package:library_manage_app/feature/book/presentation/view/screen/book_ma
 import 'package:library_manage_app/feature/book/presentation/view/screen/book_single_view.dart';
 import 'package:library_manage_app/feature/book/presentation/view_model/book_single_view_model.dart';
 import 'package:library_manage_app/feature/book/presentation/view_model/resister_book_screen_view_model.dart';
+import 'package:library_manage_app/feature/common/domain/model/book_loan.dart';
 import 'package:library_manage_app/feature/common/presentation/screen/home_screen.dart';
 import 'package:library_manage_app/feature/common/presentation/screen/splash_screen.dart';
 import 'package:library_manage_app/feature/book/presentation/view_model/book_search_screen_view_model.dart';
 import 'package:library_manage_app/feature/loan/presentation/view/screen/loan_manage_screen.dart';
+import 'package:library_manage_app/feature/loan/presentation/view/screen/loan_single_view.dart';
 import 'package:library_manage_app/feature/loan/presentation/view_model/loan_execute_screen_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +24,7 @@ import '../../feature/loan/domain/usecase/loan_service_impl.dart';
 import '../../feature/loan/presentation/view/screen/loan_execute_screen.dart';
 import '../../feature/loan/presentation/view/screen/loan_search_screen.dart';
 import '../../feature/loan/presentation/view_model/loan_search_screen_view_model.dart';
+import '../../feature/loan/presentation/view_model/loan_single_view_model.dart';
 import '../../feature/user/domain/usecase/user_service_impl.dart';
 import '../../feature/user/presentation/view/create_user_screen.dart';
 import '../../feature/user/presentation/view/user_manage_screen.dart';
@@ -32,11 +35,12 @@ import '../../feature/user/presentation/view_model/user_search_screen_view_model
 import '../../feature/user/presentation/view_model/user_single_view_model.dart';
 import '../../shared/drift/provider/drift_db_service.dart';
 
-// final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 // final GlobalKey<NavigatorState> _shellNavigatorKey =
 //     GlobalKey<NavigatorState>();
 
 final GoRouter appRouter = GoRouter(
+    debugLogDiagnostics: true,
     initialLocation: '/splash',
     redirect: (BuildContext context, GoRouterState state) async {
       print('redirection ${state.name}');
@@ -150,7 +154,10 @@ final GoRouter appRouter = GoRouter(
                         name: AppRoutes.loanExecute,
                         builder: (BuildContext context, GoRouterState state) =>
                             ChangeNotifierProvider(
-                              create: (cntxt) => LoanExecuteScreenViewModel(),
+                              create: (cntxt) => LoanExecuteScreenViewModel(
+                                  loanService: context
+                                      .watch<LoanServiceProvider>()
+                                      .loanService),
                               child: const LoanExecuteScreen(),
                             ),
                         routes: [
@@ -161,11 +168,13 @@ final GoRouter appRouter = GoRouter(
                                 (BuildContext context, GoRouterState state) =>
                                     ChangeNotifierProvider(
                               create: (cntxt) => BookSearchScreenViewModel(
+                                isInLoanSreen: true,
                                 bookService: context
                                     .watch<BookServiceProvider>()
                                     .bookService,
                               ),
-                              child: BookSearchScreen(),
+                              child:
+                                  BookSearchScreen(isBackButtonEnabled: false),
                             ),
                           ),
                           GoRoute(
@@ -176,13 +185,16 @@ final GoRouter appRouter = GoRouter(
                                       ChangeNotifierProvider(
                                         create: (cntxt) =>
                                             UserSearchScreenViewModel(
+                                          isInLoanSreen: true,
                                           userService: context
                                               .watch<UserServiceProvider>()
                                               .userService,
                                         ),
-                                        child: UserSearchScreen(),
+                                        child: UserSearchScreen(
+                                          isBackButtonEnabled: false,
+                                        ),
                                       )),
-                        ])
+                        ]),
                   ],
                 ),
                 StatefulShellBranch(
@@ -196,10 +208,17 @@ final GoRouter appRouter = GoRouter(
                                 loanService: context
                                     .watch<LoanServiceProvider>()
                                     .loanService,
-                                searchType: SearchType.loan,
                               ),
                               child: LoanSearchScreen(),
                             )),
+                    GoRoute(
+                      path: 'loan_single',
+                      name: AppRoutes.loanSingle,
+                      builder: (context, state) => ChangeNotifierProvider(
+                          create: (cntxt) => LoanSingleViewModel(
+                              loan: state.extra as BookLoan),
+                          child: const LoanSingleView()),
+                    )
                   ],
                 ),
               ],
@@ -267,3 +286,105 @@ final GoRouter appRouter = GoRouter(
             ),
           ]),
     ]);
+
+// final GoRouter appRouter2 = GoRouter(
+//     debugLogDiagnostics: true,
+//     initialLocation: '/splash',
+//     redirect: (BuildContext context, GoRouterState state) async {
+//       print('redirection ${state.name}');
+//     },
+//     routes: [
+//       GoRoute(
+//           path: '/splash',
+//           name: AppRoutes.splash,
+//           builder: (BuildContext context, GoRouterState state) {
+//             return const SplashScreen();
+//           }),
+//       GoRoute(
+//           path: '/home',
+//           name: AppRoutes.home,
+//           builder: (BuildContext context, GoRouterState state) => HomeScreen(),
+//           routes: [
+//             ShellRoute(
+//               builder: (context, state, child) {
+//                 return MultiProvider(
+//                   providers: [
+//                     ChangeNotifierProvider(
+//                         create: (cntxt) => LoanServiceProvider(
+//                             db: context
+//                                 .watch<LoacalDatabaseProvider>()
+//                                 .driftDbService
+//                                 .driftDB)),
+//                     ChangeNotifierProvider<BookServiceProvider>(
+//                         create: (cntxt) => BookServiceProvider(
+//                             db: context
+//                                 .watch<LoacalDatabaseProvider>()
+//                                 .driftDbService
+//                                 .driftDB)),
+//                     ChangeNotifierProvider<UserServiceProvider>(
+//                         create: (cntxt) => UserServiceProvider(
+//                             db: context
+//                                 .watch<LoacalDatabaseProvider>()
+//                                 .driftDbService
+//                                 .driftDB))
+//                   ],
+//                   child: LoanManageScreen(child: child),
+//                 );
+//               },
+//               routes: [
+//                 GoRoute(
+//                     path: 'loan_execute',
+//                     name: AppRoutes.loanExecute,
+//                     builder: (BuildContext context, GoRouterState state) =>
+//                         ChangeNotifierProvider(
+//                           create: (cntxt) => LoanExecuteScreenViewModel(),
+//                           child: const LoanExecuteScreen(),
+//                         ),
+//                     routes: [
+//                       GoRoute(
+//                         path: 'loan_book_search',
+//                         name: AppRoutes.loanBookSearch,
+//                         builder: (BuildContext context, GoRouterState state) =>
+//                             ChangeNotifierProvider(
+//                           create: (cntxt) => BookSearchScreenViewModel(
+//                             isInLoanSreen: true,
+//                             bookService: context
+//                                 .watch<BookServiceProvider>()
+//                                 .bookService,
+//                           ),
+//                           child: BookSearchScreen(isBackButtonEnabled: false),
+//                         ),
+//                       ),
+//                       GoRoute(
+//                           path: 'loan_user_search',
+//                           name: AppRoutes.loanUserSearch,
+//                           builder: (BuildContext context,
+//                                   GoRouterState state) =>
+//                               ChangeNotifierProvider(
+//                                 create: (cntxt) => UserSearchScreenViewModel(
+//                                   isInLoanSreen: true,
+//                                   userService: context
+//                                       .watch<UserServiceProvider>()
+//                                       .userService,
+//                                 ),
+//                                 child: UserSearchScreen(
+//                                   isBackButtonEnabled: false,
+//                                 ),
+//                               )),
+//                     ]),
+//                 GoRoute(
+//                     path: 'loan_search',
+//                     name: AppRoutes.loanSearch,
+//                     builder: (BuildContext context, GoRouterState state) =>
+//                         ChangeNotifierProvider(
+//                           create: (cntxt) => LoanSearchScreenViewModel(
+//                             loanService: context
+//                                 .watch<LoanServiceProvider>()
+//                                 .loanService,
+//                           ),
+//                           child: LoanSearchScreen(),
+//                         )),
+//               ],
+//             )
+//           ]),
+//     ]);

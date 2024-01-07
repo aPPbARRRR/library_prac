@@ -11,19 +11,13 @@ class LoanTile extends StatelessWidget {
     Key? key,
     required this.loan,
     this.onTap,
-    required this.users,
-    required this.books,
   }) : super(key: key);
 
   final BookLoan loan;
   final Function? onTap;
-  final List<User>? users;
-  final List<Book>? books;
 
   @override
   Widget build(BuildContext context) {
-    User user = users!.where((user) => user.userUid == loan.userUid).first;
-    Book book = books!.where((book) => book.bookUid == loan.bookUid).first;
     int remainingDays = loan.dueDate.difference(DateTime.now()).inDays;
 
     return GestureDetector(
@@ -35,8 +29,8 @@ class LoanTile extends StatelessWidget {
       child: Card(
         color: Colors.grey[700],
         child: ListTile(
-          leading: Text(user.name),
-          title: Text(book.bookName),
+          leading: Text(loan.isReturned ? '보관중' : '대여중'),
+          title: Text('대출번호 : ${loan.loanUid}'),
           subtitle: Text(
               '${DateFormat('yy년 M월 d일 대출 실행').format(loan.loanDate)}\n${loan.loanUid}'),
           trailing: loan.isReturned

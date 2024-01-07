@@ -38,4 +38,3 @@ class LoanManageScreen extends StatelessWidget {
     );
   }
 }
-

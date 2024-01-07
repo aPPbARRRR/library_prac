@@ -1,4 +1,5 @@
 import '../../../../shared/domain/model/result.dart';
+import '../../../common/domain/model/book_loan.dart';
 import '../../../common/domain/model/user.dart';
 import '../model/user_search_type.dart';
 
@@ -18,4 +19,9 @@ abstract interface class UserService {
   // 회원 이름, 등록번호, 연락처로 검색
   Future<Result<List<User>, Exception>> retrieveUser(
       {required String searchText, required UserSearchType userSearchType});
+
+  // 회원 대출 목록 검색
+  // 대출 번호로 검색
+  Future<Result<List<BookLoan>, Exception>> retrieveLoans(
+      {required String searchText});
 }

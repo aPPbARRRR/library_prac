@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import '../../../../common/presentation/widget/book_tile.dart';
 
 class BookSearchScreen extends StatelessWidget {
-  BookSearchScreen({super.key});
+  BookSearchScreen({super.key, this.isBackButtonEnabled = false});
+
+  final bool isBackButtonEnabled;
 
   final TextEditingController textController = TextEditingController();
 
@@ -19,12 +21,14 @@ class BookSearchScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
           key: _key,
-          appBar: AppBar(
-            title: Text(viewModel.appBarTitleText),
-            leading: IconButton(
-                onPressed: () => context.pop(),
-                icon: const Icon(Icons.arrow_back)),
-          ),
+          appBar: isBackButtonEnabled
+              ? AppBar(
+                  title: Text(viewModel.appBarTitleText),
+                  leading: IconButton(
+                      onPressed: () => context.pop(),
+                      icon: const Icon(Icons.arrow_back)),
+                )
+              : null,
           body: Center(
             child: Column(
               children: [
