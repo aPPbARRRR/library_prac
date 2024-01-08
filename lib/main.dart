@@ -1,23 +1,29 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:library_manage_app/library_app/src/presentation/common/home_screen.dart';
+import 'package:provider/provider.dart';
+import 'config/router/app_router.dart';
+import 'shared/drift/provider/drift_db_service.dart';
 
 void main() {
-  // 앱 시작시 스플래시 화면에서 db의 데이터 가져와 library service에 넣어주고 활용
-  // library service의 데이터를 활용하여 모든 task 수행
-  // db에 crud 하는 시점은 백업이 수행되는 시점임. 항상 통으로 백업 진행.
-  // 앱 성능 봐서 결정 -> 모든 task 수행시 백업을 진행 || 요청시에만 백업을 진행
+  WidgetsFlutterBinding.ensureInitialized();
 
-
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<LoacalDatabaseProvider>(
+          create: (cntxt) => LoacalDatabaseProvider()),
+    ],
+    child: const LibraryApp(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class LibraryApp extends StatelessWidget {
+  const LibraryApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home:HomeScreen(),
+    return MaterialApp.router(
+      theme: ThemeData.dark(),
+      routerConfig: appRouter,
     );
   }
 }

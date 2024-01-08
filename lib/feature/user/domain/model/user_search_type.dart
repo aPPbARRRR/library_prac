@@ -1,0 +1,1 @@
+enum UserSearchType { name, uid }
