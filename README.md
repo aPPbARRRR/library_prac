@@ -1,8 +1,18 @@
 # library_manage_app
 
-A new Flutter project.
+보유 도서 관리 앱
 
-## Getting Started
+### 언어 language
+dart
+
+### 프레임워크 framework
+flutter
+
+### 아키텍처 architecture
+clean architecture
+
+### 상태관리
+set-state
 
 This project is a starting point for a Flutter application.
 
